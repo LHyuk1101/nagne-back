@@ -16,13 +16,13 @@ public enum ErrorCode {
   NO_HANDLER_FOUND(404, "C007", "No Handler found", LogLevel.ERROR),
   NO_RESOURCE_FOUND(404, "C008", "No Resource found", LogLevel.ERROR),
 
-  // Domain
+  // USER
+  EMAIL_ALREADY_REGISTERED(400, "U001", "Email already registered", LogLevel.ERROR),
 
-
-  //Domain
-
-  //Domain
-
+  // Secure
+  SECURITY_CONFIGURATION_ERROR(500, "S001", "Security Configuration Error", LogLevel.ERROR),
+  AUTHENTICATION_FAILURE(401, "S002", "Authentication Failure", LogLevel.ERROR),
+  INVALID_REFRESH_TOKEN(401, "S004", "Invalid refresh token", LogLevel.ERROR),
   ;
 
   private final String code;
