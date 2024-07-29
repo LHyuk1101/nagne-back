@@ -18,9 +18,9 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:core;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
-  servlet:
-    multipart:
-      location: D:\\down\\TMP\\image\\image
+#  servlet:
+#    multipart:
+#      location: D:\\down\\TMP\\image\\image
   jpa:
     hibernate:
       ddl-auto: create
@@ -28,10 +28,13 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
-    defer-datasource-initialization: true  #data.sql ??? ??? DB? ???? ? ??? ????? ??
+    defer-datasource-initialization: true  #data.sql 파일의 실행이 DB가 연결되고 난 이후에 실행되도록 설정
   h2:
     console:
-      enabled: true # /h2-console ??
+      enabled: true # /h2-console 설정
+app:
+  base-url: "http://localhost:3000"
+  secure-cookie: false
 
 ---
 spring.config.activate.on-profile: dev
@@ -46,10 +49,10 @@ spring:
     url: jdbc:mysql://localhost:3306/${database.name}?serverTimezone=UTC&characterEncoding=UTF-8
     username: ${database.username}
     password: ${database.password}
-  servlet:
-    multipart:
-      location: /Users/chany/Desktop/image
-  sql: # mysql??? data.sql? ??? ????? ?????.
+#  servlet:
+#    multipart:
+#      location: /Users/chany/Desktop/image
+  sql: # mysql에서는 data.sql를 빌드시 실행하려면 추가해야됨.
     init:
       mode: always
   jpa:
@@ -60,11 +63,15 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
-    defer-datasource-initialization: true #data.sql ??? ??? DB? ???? ? ??? ????? ??
+    defer-datasource-initialization: true #data.sql 파일의 실행이 DB가 연결되고 난 이후에 실행되도록 설정
 
 springdoc:
   swagger-ui:
     enabled:true
+
+app:
+  base-url: "http://localhost:3000"
+  secure-cookie: false
 
 ---
 spring.config.activate.on-profile: prod
@@ -79,9 +86,9 @@ spring:
     url: jdbc:mysql://localhost:3306/${database.name}?serverTimezone=UTC&characterEncoding=UTF-8
     username: ${database.username}
     password: ${database.password}
-  servlet:
-    multipart:
-      location: /srv/upload-files
+#  servlet:
+#    multipart:
+#      location: /srv/upload-files
   jpa:
     hibernate:
       ddl-auto: update
@@ -91,6 +98,9 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
 
+app:
+  base-url: "https://nagne.site"
+  secure-cookie: true
 
 
 
