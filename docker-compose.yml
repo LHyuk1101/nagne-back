@@ -1,0 +1,12 @@
+version: '3.2'
+
+services:
+  nagne-backend:
+    build: .
+    image: nagne-backend:latest
+    container_name: nagne-backend
+    ports:
+      - "8080:8080"
+    network_mode: host
+#    volumes:
+#      - /srv/upload-files:/srv/upload-files
