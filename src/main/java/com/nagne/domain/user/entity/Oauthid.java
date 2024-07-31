@@ -32,7 +32,7 @@ public class Oauthid {
 
   private OauthProvider provider;
 
-  private String access_token;
-  private String refresh_token;
+  private String accessToken;
+  private String refreshToken;
 
 }
