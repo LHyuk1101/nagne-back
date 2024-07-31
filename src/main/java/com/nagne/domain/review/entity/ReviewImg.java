@@ -23,7 +23,6 @@ public class ReviewImg {
     @JoinColumn(name = "review_id")
     private Review review;
 
-    @Column(name = "byte_size")
     private Integer byteSize;
 
     private Integer height;
@@ -36,6 +35,5 @@ public class ReviewImg {
     @Column(length = 500)
     private String domainPath;
 
-    @Column(name = "thumbnail_yn")
     private Boolean thumbnailYn;
 }

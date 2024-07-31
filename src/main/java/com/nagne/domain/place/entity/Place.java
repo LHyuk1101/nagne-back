@@ -35,10 +35,8 @@ public class Place extends BaseEntity {
     @Column(length = 100)
     private String address;
 
-    @Column(name = "content_id")
     private Integer contentId;
 
-    @Column(name = "content_type_id")
     private Long contentTypeId;
 
     @Column(columnDefinition = "LONGTEXT")
@@ -50,21 +48,18 @@ public class Place extends BaseEntity {
 
     private Integer likes;
 
-    @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "api_type")
     private ApiType apiType;
 
+    @Builder.Default
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PlaceImg> placeImgs = new ArrayList<>();
 
     @OneToOne(mappedBy = "place")
     private Store store;
 
-//    @Column(length = 600)
-//    private String thumbnailUrl;
 
     public enum ApiType {
         TOUR, GOOGLE, NONE

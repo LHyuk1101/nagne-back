@@ -23,9 +23,9 @@ public class Store {
     @JoinColumn(name = "place_id")
     private Place place;
 
-    @Column(name = "open_time", length = 1000)
+    @Column(length = 1000)
     private String openTime;
 
-    @Column(name = "info_Center", length = 50)
+    @Column(length = 50)
     private String infoCenter;
 }

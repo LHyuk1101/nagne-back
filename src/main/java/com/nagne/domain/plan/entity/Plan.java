@@ -34,21 +34,20 @@ public class Plan extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "start_day")
     private LocalDate startDay;
 
-    @Column(name = "end_day")
     private LocalDate endDay;
 
-    @Column(name = "area_code")
     private Integer areaCode;
 
     @Column(length = 100)
     private String label;
 
+    @Builder.Default
     @OneToMany(mappedBy = "plan")
     private List<Template> templates = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "plan")
     private List<Review> reviews = new ArrayList<>();
 

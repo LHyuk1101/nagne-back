@@ -41,6 +41,7 @@ public class Review extends BaseEntity {
     @Column(name = "contents_id")
     private Long contentsId;
 
+    @Builder.Default
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewImg> reviewImgs = new ArrayList<>();
 }
