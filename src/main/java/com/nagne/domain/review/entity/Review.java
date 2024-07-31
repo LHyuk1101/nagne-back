@@ -4,6 +4,7 @@ import com.nagne.domain.user.entity.User;
 import com.nagne.domain.plan.entity.Plan;
 import com.nagne.global.util.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @Builder
 @Table(name = "reviews")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Review extends BaseEntity {
 

@@ -1,6 +1,7 @@
 package com.nagne.domain.review.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @Table(name = "review_img")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ReviewImg {
 
@@ -29,11 +30,11 @@ public class ReviewImg {
 
     private Integer width;
 
-    @Column(length = 255)
-    private String url;
+    @Column(length = 100)
+    private String domain;
 
-    @Column(length = 255)
-    private String type;
+    @Column(length = 500)
+    private String domainPath;
 
     @Column(name = "thumbnail_yn")
     private Boolean thumbnailYn;

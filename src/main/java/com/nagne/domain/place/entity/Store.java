@@ -1,6 +1,7 @@
 package com.nagne.domain.place.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @Table(name = "store")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Store {
 
@@ -22,7 +23,7 @@ public class Store {
     @JoinColumn(name = "place_id")
     private Place place;
 
-    @Column(name = "open_time", length = 255)
+    @Column(name = "open_time", length = 1000)
     private String openTime;
 
     @Column(name = "info_Center", length = 50)

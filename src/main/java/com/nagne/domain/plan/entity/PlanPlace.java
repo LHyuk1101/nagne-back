@@ -2,6 +2,7 @@ package com.nagne.domain.plan.entity;
 
 import com.nagne.domain.place.entity.Place;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 @Table(name = "plans_place")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class PlanPlace {
 

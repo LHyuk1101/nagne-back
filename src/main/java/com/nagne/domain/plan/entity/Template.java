@@ -1,6 +1,7 @@
 package com.nagne.domain.plan.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 @Builder
 @Table(name = "templates")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicUpdate
 public class Template {

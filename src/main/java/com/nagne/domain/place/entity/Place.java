@@ -4,6 +4,7 @@ import com.nagne.domain.plan.entity.Plan;
 import com.nagne.domain.plan.entity.PlanPlace;
 import com.nagne.global.util.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter
 @Builder
 @Table(name = "place")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Place extends BaseEntity {
 
@@ -59,12 +60,11 @@ public class Place extends BaseEntity {
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PlaceImg> placeImgs = new ArrayList<>();
 
-    @OneToOne(mappedBy = "place", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "place")
     private Store store;
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PlanPlace> planPlaces = new ArrayList<>();
-
+//    @Column(length = 600)
+//    private String thumbnailUrl;
 
     public enum ApiType {
         TOUR, GOOGLE, NONE
