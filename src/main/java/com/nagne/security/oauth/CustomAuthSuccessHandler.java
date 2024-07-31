@@ -3,11 +3,15 @@ package com.nagne.security.oauth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nagne.config.WebConfig;
 import com.nagne.domain.user.dto.TokenResponseDto;
+import com.nagne.domain.user.entity.Oauthid;
 import com.nagne.domain.user.entity.User;
 import com.nagne.domain.user.entity.UserRole;
+import com.nagne.domain.user.repository.OauthRepository;
 import com.nagne.domain.user.repository.UserRepository;
-import com.nagne.security.jwt.JwtTokenProvider;
+import com.nagne.global.error.ErrorCode;
+import com.nagne.global.error.exception.ApiException;
 import com.nagne.security.config.JwtConfig;
+import com.nagne.security.jwt.JwtTokenProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +20,8 @@ import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -28,6 +34,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final OauthRepository oauthRepository;
     private final ObjectMapper objectMapper;
     private final WebConfig webConfig;
 
@@ -36,10 +43,14 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws ServletException, IOException {
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+        OAuth2AuthorizedClientService authorizedClientService = (OAuth2AuthorizedClientService) oauthToken.getAuthorities();
+        OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
+            ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId(), authentication.getName());
+
         Map<String, Object> attributes = oauthToken.getPrincipal().getAttributes();
         String provider = oauthToken.getAuthorizedClientRegistrationId();
 
-        User user = findOrCreateUser(provider, attributes);
+        User user = findOrCreateUser(provider, attributes, authorizedClient);
 
         String accessToken = jwtTokenProvider.generateAccessToken(user);
         String refreshToken = jwtTokenProvider.generateRefreshToken(user);
@@ -80,7 +91,8 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
         response.sendRedirect(webConfig.getBaseUrl());
     }
 
-    private User findOrCreateUser(String provider, Map<String, Object> attributes) {
+    private User findOrCreateUser(String provider, Map<String, Object> attributes,
+        OAuth2AuthorizedClient authorizedClient) {
         final String providerId;
         final String email;
         final String name;
@@ -98,12 +110,32 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
                 throw new IllegalArgumentException("Unknown provider: " + provider);
         }
 
-        return userRepository.findByProviderId(providerId).orElseGet(() -> {
-            return userRepository.save(User.builder()
-                .email(email)
-                .nickname(nickname)
-                .role(UserRole.USER)
-                .build());
-        });
+        User user = User.builder()
+            .email(email)
+            .nickname(nickname)
+            .role(UserRole.USER)
+            .build();
+
+        // 기존 user가 존재 할 경우
+        User findUser = userRepository.findByEmail(email).get();
+        if(findUser.equals(email)){
+           return findUser;
+        }
+
+        User savedUser = userRepository.save(user);
+
+        if(savedUser == null && savedUser.getId() == null) {
+            throw new ApiException("Error occurred while creating Oauth2 user!", ErrorCode.OAUTH2_CREATE_USER_ERROR);
+        }
+
+        Oauthid oauthid = Oauthid.builder()
+            .accessToken(authorizedClient.getAccessToken().getTokenValue())
+            .refreshToken(authorizedClient.getRefreshToken().getTokenValue())
+            .user(user)
+            .build();
+
+        oauthRepository.save(oauthid);
+
+        return user;
     }
 }

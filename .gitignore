@@ -1,3 +1,6 @@
+.DS_STORE
+application-db.yml
+application-api-key.yml
 HELP.md
 .gradle
 build/
