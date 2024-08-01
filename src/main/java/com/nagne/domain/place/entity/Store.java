@@ -28,4 +28,5 @@ public class Store {
 
     @Column(length = 50)
     private String infoCenter;
+
 }

@@ -39,8 +39,8 @@ public class Place extends BaseEntity {
 
     private Long contentTypeId;
 
-    @Column(columnDefinition = "LONGTEXT")
-    private String content;
+//    @Column(columnDefinition = "LONGTEXT")
+//    private String content;
 
     private Double lat;
 

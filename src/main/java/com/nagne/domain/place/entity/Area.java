@@ -25,7 +25,6 @@ import org.hibernate.annotations.DynamicInsert;
 public class Area {
 
     @Id
-    @Column(name = "area_code")
     private Integer areaCode;
 
     @Column(length = 100)

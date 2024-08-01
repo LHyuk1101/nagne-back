@@ -35,10 +35,8 @@ public class Review extends BaseEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String text;
 
-    @Column(name = "vote_count")
     private Integer voteCount;
 
-    @Column(name = "contents_id")
     private Long contentsId;
 
     @Builder.Default
