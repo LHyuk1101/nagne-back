@@ -3,6 +3,7 @@ package com.nagne.security.oauth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nagne.config.WebConfig;
 import com.nagne.domain.user.dto.TokenResponseDto;
+import com.nagne.domain.user.entity.OauthProvider;
 import com.nagne.domain.user.entity.Oauthid;
 import com.nagne.domain.user.entity.User;
 import com.nagne.domain.user.entity.UserRole;
@@ -37,15 +38,14 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
     private final OauthRepository oauthRepository;
     private final ObjectMapper objectMapper;
     private final WebConfig webConfig;
-
+    private final OAuth2AuthorizedClientService authorizedClientService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) throws ServletException, IOException {
         OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-        OAuth2AuthorizedClientService authorizedClientService = (OAuth2AuthorizedClientService) oauthToken.getAuthorities();
         OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
-            ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId(), authentication.getName());
+            oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
 
         Map<String, Object> attributes = oauthToken.getPrincipal().getAttributes();
         String provider = oauthToken.getAuthorizedClientRegistrationId();
@@ -97,12 +97,14 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
         final String email;
         final String name;
         final String nickname;
+        final String profileImg;
 
         switch (provider) {
             case "google":
                 providerId = (String) attributes.get("sub");
                 email = (String) attributes.get("email");
                 name = (String) attributes.get("name");
+                profileImg = (String) attributes.get("picture");
                 nickname = name; // Google은 nickname 속성을 따로 제공하지 않음
                 break;
 
@@ -110,17 +112,19 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
                 throw new IllegalArgumentException("Unknown provider: " + provider);
         }
 
+
+        // 기존 user가 존재 할 경우
+        User findUser = userRepository.findByEmail(email).orElse(null);
+        if (findUser != null) {
+            return findUser;
+        }
+
         User user = User.builder()
             .email(email)
             .nickname(nickname)
+            .profileImg(profileImg)
             .role(UserRole.USER)
             .build();
-
-        // 기존 user가 존재 할 경우
-        User findUser = userRepository.findByEmail(email).get();
-        if(findUser.equals(email)){
-           return findUser;
-        }
 
         User savedUser = userRepository.save(user);
 
@@ -128,14 +132,26 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
             throw new ApiException("Error occurred while creating Oauth2 user!", ErrorCode.OAUTH2_CREATE_USER_ERROR);
         }
 
+
+        String accessToken = null;
+        String refreshToken = null;
+
+        try{
+            accessToken = authorizedClient.getAccessToken().getTokenValue();
+            refreshToken = authorizedClient.getRefreshToken().getTokenValue();
+        }catch (Exception e)
+        {
+        }
+
         Oauthid oauthid = Oauthid.builder()
-            .accessToken(authorizedClient.getAccessToken().getTokenValue())
-            .refreshToken(authorizedClient.getRefreshToken().getTokenValue())
-            .user(user)
+            .provider(OauthProvider.GOOGLE)
+            .accessToken(accessToken)
+            .refreshToken(refreshToken)
+            .user(savedUser)
             .build();
 
         oauthRepository.save(oauthid);
 
-        return user;
+        return savedUser;
     }
 }
