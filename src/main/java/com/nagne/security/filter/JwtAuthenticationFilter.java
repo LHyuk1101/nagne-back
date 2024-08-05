@@ -1,7 +1,6 @@
 package com.nagne.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nagne.config.WebConfig;
 import com.nagne.domain.user.entity.User;
 import com.nagne.domain.user.repository.UserRepository;
 import com.nagne.security.jwt.JwtTokenProvider;
@@ -29,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final WebConfig webConfig;
+    private final CustomCorsFilter corsFilter;
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
@@ -45,8 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (refreshToken != null && jwtTokenProvider.validateRefreshToken(refreshToken)) {
                 String newAccessToken = jwtTokenProvider.updateAccessToken(refreshToken);
                 setSecurityContext(newAccessToken, request);
-                responseUnauthorized(response,
-                    "Token refreshed, please retry with new access token", newAccessToken);
+                responseUnauthorized(request, response, filterChain,"Token refreshed, please retry with new access token", newAccessToken);
                 return;
             }
         }
@@ -59,24 +57,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         String method = request.getMethod();
         return method.equals("OPTIONS") || //preflight 요청을 처리하기위해 사용
-            path.startsWith("/api/auth") ||
-            path.startsWith("/api/users") ||
-            path.startsWith("/api/categories") && method.equals("GET") ||
-            path.startsWith("/api/products") && method.equals("GET") ||
-            path.startsWith("/api/images");
+            path.startsWith("/api/auth");
     }
 
-    private void responseUnauthorized(HttpServletResponse response, String message,
-        String newAccessToken) throws IOException {
+    private void responseUnauthorized(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, String message, String newAccessToken)
+        throws IOException, ServletException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        response.setHeader("Access-Control-Allow-Origin", webConfig.getBaseUrl());
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With");
-        response.setHeader("Access-Control-Expose-Headers", "Authorization");
         response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + newAccessToken);
 
         Map<String, String> responseBody = new HashMap<>();
@@ -87,6 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jsonResponse = objectMapper.writeValueAsString(responseBody);
 
         response.getWriter().write(jsonResponse);
+        corsFilter.doFilter(request, response, filterChain);
     }
 
     private void setSecurityContext(String token, HttpServletRequest request) {
@@ -94,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         User user = userRepository.findById(userId).orElse(null);
         if (user != null) {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                user, null, List.of(new SimpleGrantedAuthority(user.getRole().getRoleName())));
+                user, null, List.of(new SimpleGrantedAuthority("ROLE_"+ user.getRole().getRoleName())));
             authenticationToken.setDetails(
                 new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);

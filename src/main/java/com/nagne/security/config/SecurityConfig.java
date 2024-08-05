@@ -1,11 +1,11 @@
 package com.nagne.security.config;
 
 import com.nagne.config.WebConfig;
+import com.nagne.domain.user.repository.UserRepository;
 import com.nagne.global.error.exception.SecurityConfigurationException;
 import com.nagne.security.filter.CustomCorsFilter;
-import com.nagne.security.jwt.JwtTokenProvider;
-import com.nagne.domain.user.repository.UserRepository;
 import com.nagne.security.filter.JwtAuthenticationFilter;
+import com.nagne.security.jwt.JwtTokenProvider;
 import com.nagne.security.oauth.CustomAuthSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -54,10 +54,8 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.GET, "/").permitAll()
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() //preflight 요청을 처리하기위해 사용
                             .requestMatchers("/api/auth/**").permitAll()
-//                            .requestMatchers("/api/admin/**").permitAll()
                             .requestMatchers("/api/login/oauth2/**").permitAll()
                             .anyRequest().authenticated()
-
                 )
                 .oauth2Login(oauth2Login ->
                     oauth2Login
@@ -77,8 +75,7 @@ public class SecurityConfig {
                     .invalidateHttpSession(true)
                     .deleteCookies(JwtConfig.REFRESH_JWT_COOKIE_NAME)
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(userRepository, jwtTokenProvider, webConfig),
-                    UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthenticationFilter(userRepository, jwtTokenProvider, customCorsFilter), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable);
 
