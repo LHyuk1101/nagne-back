@@ -21,6 +21,7 @@ public class UserResponseDto {
         .id(user.getId())
         .email(user.getEmail())
         .nickname(user.getNickname())
+        .termsAgreed(user.getTermAgreed())
         .build();
   }
 }
