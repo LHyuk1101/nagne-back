@@ -3,15 +3,17 @@ package com.nagne.domain.user.controller;
 import com.nagne.domain.user.dto.UserJoinDto;
 import com.nagne.domain.user.dto.UserPostDto;
 import com.nagne.domain.user.dto.UserResponseDto;
+import com.nagne.domain.user.entity.User;
 import com.nagne.domain.user.service.UserService;
 import com.nagne.global.error.ErrorCode;
 import com.nagne.global.error.exception.ApiException;
+import com.nagne.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,32 +33,39 @@ public class UserController {
 
     private final UserService userService;
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @GetMapping
+    public ApiResponse<?> getAllUsers(){
+        List<UserPostDto> userList = userService.getAllUsers();
+        return ApiResponse.success(userList);
+    }
+
     @PostMapping
-    public ResponseEntity<Void> saveUser(@RequestBody @Valid UserJoinDto userJoinDto,
+    public ApiResponse<?> saveUser(@RequestBody @Valid UserJoinDto userJoinDto,
         BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new ApiException(ErrorCode.INVALID_INPUT_VALUE);
         }
         userService.saveUser(userJoinDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ApiResponse.success();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
+    public ApiResponse<UserResponseDto> getUserById(@PathVariable Long id) {
         UserResponseDto userResponseDto = userService.getUserById(id);
-        return ResponseEntity.ok(userResponseDto);
+        return ApiResponse.success(userResponseDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id,
+    public ApiResponse<UserResponseDto> updateUser(@PathVariable Long id,
         @RequestBody UserPostDto userPostDto) {
         UserResponseDto updatedUser = userService.updateUser(id, userPostDto);
-        return ResponseEntity.ok(updatedUser);
+        return ApiResponse.success(updatedUser);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ApiResponse<?> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ApiResponse.success();
     }
 }
