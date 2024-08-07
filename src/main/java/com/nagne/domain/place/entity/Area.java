@@ -34,7 +34,4 @@ public class Area {
     @OneToMany(mappedBy = "area")
     private List<Place> places = new ArrayList<>();
 
-    @Builder.Default
-    @OneToMany(mappedBy = "areaCode")
-    private List<Plan> plans = new ArrayList<>();
-}
+    
