@@ -1,12 +1,21 @@
 package com.nagne.domain.plan.entity;
 
-import jakarta.persistence.*;
+import com.nagne.domain.place.entity.Place;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.sql.Time;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
@@ -14,23 +23,24 @@ import org.hibernate.annotations.DynamicUpdate;
 @Table(name = "templates")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@DynamicUpdate
 public class Template {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Integer day;
+
+    @Column(name = "orders")
+    private Integer order;
+
+    private Time moveTime;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plans_id")
+    @JoinColumn(name = "plan_id")
     private Plan plan;
 
-    @Column(length = 255)
-    private String subject;
-
-    @Column(columnDefinition = "LONGTEXT")
-    private String content;
-
-    @Column(columnDefinition = "TEXT")
-    private String route;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_id")
+    private Place place;
 }

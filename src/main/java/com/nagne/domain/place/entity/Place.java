@@ -1,7 +1,5 @@
 package com.nagne.domain.place.entity;
 
-import com.nagne.domain.plan.entity.Plan;
-import com.nagne.domain.plan.entity.PlanPlace;
 import com.nagne.global.util.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
