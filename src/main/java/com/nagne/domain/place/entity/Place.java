@@ -30,14 +30,14 @@ public class Place extends BaseEntity {
     private Area area;
 
     @Column(length = 200)
-    private String title;
+    private String title; // 장소명
 
     @Column(length = 100)
     private String address;
 
     private Integer contentId;
 
-    private Long contentTypeId;
+    private Long contentTypeId; // 숙소(81), 맛집, 관광지
 
 //    @Column(columnDefinition = "LONGTEXT")
 //    private String content;
