@@ -1,20 +1,26 @@
 package com.nagne.domain.place.controller;
 
-import com.nagne.domain.place.dto.DistanceResponse;
-import com.nagne.domain.place.dto.DistanceRequest;
+import com.nagne.domain.place.dto.PlaceDTO;
+import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.service.PlaceService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.nagne.global.response.ApiResponse;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/places")
+@RequiredArgsConstructor
+@RequestMapping("/api/place")
 public class PlaceController {
 
-    @Autowired
-    private PlaceService placeService;
+  private final PlaceService placeService;
 
-    @PostMapping("/distance")
-    public DistanceResponse calculateDistance(@RequestBody DistanceRequest request) {
-        return placeService.calculateDistance(request);
-    }
+  @GetMapping
+  public ApiResponse<List<PlaceDTO>> getPlace() {
+    List<PlaceDTO> places = placeService.fetchPlaceData();
+    return ApiResponse.success(places);
+  }
+
 }

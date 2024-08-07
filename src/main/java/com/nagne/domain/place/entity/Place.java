@@ -21,47 +21,44 @@ import java.util.List;
 @AllArgsConstructor
 public class Place extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "place_id")
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "area_code")
-    private Area area;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "area_code")
+  private Area area;
 
-    @Column(length = 200)
-    private String title; // 장소명
+  @Column(length = 200)
+  private String title;
 
-    @Column(length = 100)
-    private String address;
+  @Column(length = 100)
+  private String address;
 
-    private Integer contentId;
+  private Integer contentId;
 
-    private Long contentTypeId; // 숙소(81), 맛집, 관광지
+  private Long contentTypeId;
 
-//    @Column(columnDefinition = "LONGTEXT")
-//    private String content;
+  @Column(columnDefinition = "LONGTEXT")
+  private String overview;
 
-    private Double lat;
+  private Double lat;
 
-    private Double lng;
+  private Double lng;
 
-    private Integer likes;
+  private Integer likes;
 
-    private LocalDateTime modifiedDate;
+  private LocalDateTime modifiedTime;
 
-    @Enumerated(EnumType.STRING)
-    private ApiType apiType;
+  @Enumerated(EnumType.STRING)
+  private ApiType apiType;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
-    private List<PlaceImg> placeImgs = new ArrayList<>();
+  @Builder.Default
+  @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+  private List<PlaceImg> placeImgs = new ArrayList<>();
 
-    @OneToOne(mappedBy = "place")
-    private Store store;
-
-
-    public enum ApiType {
-        TOUR, GOOGLE, NONE
-    }
+  public enum ApiType {
+    TOUR, GOOGLE, NONE
+  }
 }

@@ -55,6 +55,7 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() //preflight 요청을 처리하기위해 사용
                             .requestMatchers("/api/auth/**").permitAll()
                             .requestMatchers("/api/login/oauth2/**").permitAll()
+                            .requestMatchers("/api/place/**").permitAll()
                             .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2Login ->
