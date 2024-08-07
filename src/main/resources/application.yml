@@ -49,9 +49,9 @@ spring:
       keepalive-time: 30000
       validation-timeout: 1000
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${database.name}?serverTimezone=UTC&characterEncoding=UTF-8
-    username: ${database.username}
-    password: ${database.password}
+    url: jdbc:mysql://${database.dev.ip}/${database.dev.name}?serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${database.dev.username}
+    password: ${database.dev.password}
 #  servlet:
 #    multipart:
 #      location: /Users/chany/Desktop/image
@@ -60,7 +60,7 @@ spring:
       mode: always
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
@@ -87,9 +87,9 @@ spring:
       keepalive-time: 30000
       validation-timeout: 1000
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${database.name}?serverTimezone=UTC&characterEncoding=UTF-8
-    username: ${database.username}
-    password: ${database.password}
+    url: jdbc:mysql://localhost:3306/${database.prod.name}?serverTimezone=UTC&characterEncoding=UTF-8
+    username: ${database.prod.username}
+    password: ${database.prod.password}
 #  servlet:
 #    multipart:
 #      location: /srv/upload-files
