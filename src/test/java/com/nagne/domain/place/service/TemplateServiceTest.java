@@ -18,12 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
-public class PlaceServiceTest {
+public class TemplateServiceTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(PlaceServiceTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(TemplateServiceTest.class);
 
     @InjectMocks
-    private PlaceService placeService;
+    private TemplateService templateService;
 
     @Mock
     private PlaceRepository placeRepository;
@@ -61,7 +61,7 @@ public class PlaceServiceTest {
 
         logger.info("Test request: {}", request);
 
-        DistanceResponse response = placeService.calculateDistance(request);
+        DistanceResponse response = templateService.calculateDistance(request);
 
         logger.info("Test response: {}", response);
 
@@ -90,7 +90,7 @@ public class PlaceServiceTest {
         logger.info("Test request with non-existing places: {}", request);
 
         try {
-            placeService.calculateDistance(request);
+            templateService.calculateDistance(request);
         } catch (IllegalArgumentException e) {
             logger.error("Expected exception: {}", e.getMessage());
             assertEquals("Place not found with id: 1", e.getMessage());
