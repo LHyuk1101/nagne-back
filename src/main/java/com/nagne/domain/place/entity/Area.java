@@ -31,3 +31,4 @@ public class Area {
     private String name;
 
 }
+
