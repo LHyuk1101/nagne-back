@@ -1,9 +1,11 @@
 package com.nagne.domain.plan.entity;
 
+import com.nagne.domain.place.entity.Area;
 import com.nagne.domain.review.entity.Review;
 import com.nagne.domain.user.entity.User;
 import com.nagne.global.util.BaseEntity;
 import jakarta.persistence.*;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -31,6 +33,10 @@ public class Plan extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_code")
+    private Area area;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -38,19 +44,20 @@ public class Plan extends BaseEntity {
 
     private LocalDate endDay;
 
-    private Integer areaCode;
+    private String subject;
 
-    @Column(length = 100)
-    private String label;
+    @Column(columnDefinition = "LONGTEXT")
+    private String overView;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "plan")
-    private List<Template> templates = new ArrayList<>();
+    private String placeSummary;
+
+    private String reasoning;
+
+    private Time totalMoveTime;
 
     @Builder.Default
     @OneToMany(mappedBy = "plan")
     private List<Review> reviews = new ArrayList<>();
-
 
     public enum Status {
         BEGIN, END

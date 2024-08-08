@@ -24,6 +24,8 @@ public class PlanService {
     }
 
     private PlanDto convertToDTO(Plan plan) {
-        return new PlanDto(plan.getId(), plan.getUser().getId(), plan.getStatus().name(), plan.getStartDay(), plan.getEndDay(), plan.getAreaCode(), plan.getLabel());
+        //오류나서 주석처리
+//        return new PlanDto(plan.getId(), plan.getUser().getId(), plan.getStatus().name(), plan.getStartDay(), plan.getEndDay(), plan.getAreaCode(), plan.getLabel());
+        return null;
     }
 }

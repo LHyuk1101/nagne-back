@@ -16,15 +16,15 @@ public class PlaceService {
   private final PlaceRepository placeRepository;
 
   @Transactional
-  public List<PlaceDTO> fetchPlaceData(){
+  public List<PlaceDTO> fetchPlaceData() {
     List<Place> data = placeRepository.findAll();
 
     List<PlaceDTO> dtos = new ArrayList<>();
-    for(Place p : data){
+    for (Place p : data) {
       dtos.add(PlaceDTO.builder()
-              .id(p.getId())
-              .areaCode(p.getArea().getAreaCode())
-              .overview(p.getOverview())
+          .id(p.getId())
+          .areaCode(p.getArea().getAreaCode())
+          .overview(p.getOverview())
           .build());
     }
     return dtos;

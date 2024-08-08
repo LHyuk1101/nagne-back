@@ -1,9 +1,9 @@
 package com.nagne.domain.place.entity;
 
-import com.nagne.domain.plan.entity.Plan;
-import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,11 +30,5 @@ public class Area {
     @Column(length = 100)
     private String name;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "area")
-    private List<Place> places = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "areaCode")
-    private List<Plan> plans = new ArrayList<>();
 }
+

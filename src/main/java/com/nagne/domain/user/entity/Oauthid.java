@@ -26,6 +26,7 @@ public class Oauthid {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "oauth_id")
   private Long id;
 
   @ManyToOne

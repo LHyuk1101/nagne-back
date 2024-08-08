@@ -5,13 +5,13 @@
 
 SET @password = '$2b$12$VUGN6yHZ8aaI2sgL4gKHguWAis/xH9oGF5JwT9.HG6Olt9X0I5NJK';
 
-INSERT INTO users(password, email, nick_name, nation, profile_img, role, term_agreed, created_at, updated_at)
+INSERT INTO users(password, email, nickname, nation, profile_img, role, term_agreed, created_at, updated_at)
 VALUES(@password, 'admin@test.com', '관리자', 410, null, 'ADMIN', true, NOW(), NOW());
 
 /*
   국가별 테스트 계정
 */
-INSERT INTO users(password, email, nick_name, nation, profile_img, role, term_agreed, created_at, updated_at)
+INSERT INTO users(password, email, nickname, nation, profile_img, role, term_agreed, created_at, updated_at)
 VALUES(@password, 'test@test.com', '테스트', 410, null, 'USER', true, NOW(), NOW()),
       (@password, 'test1@test.com', '테스트1', 840, null, 'USER', true, NOW(), NOW()), -- 미국
       (@password, 'test2@test.com', '테스트2', 124, null, 'USER', true, NOW(), NOW()), -- 캐나다
