@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PlanResponseDto {
     private String subject;
-    private String placeSummary;
-    private String reasoning;
     private List<PlanDay> planDayList;
 
 
@@ -34,5 +32,7 @@ public class PlanResponseDto {
         private int order;
         private String title;
         private int moveTime;
+        private String placeSummary;
+        private String reasoning;
     }
 }

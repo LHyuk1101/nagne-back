@@ -1,5 +1,6 @@
 package com.nagne.domain.plan.dto;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PlanRequestDto {
-    private String prompt;
+    private List<String> prompts;
 }
