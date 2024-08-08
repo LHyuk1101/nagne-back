@@ -55,6 +55,7 @@ public class LLMService {
                 .collect(Collectors.toList()));
     }
 
+    @Async
     private CompletableFuture<Plan> processPrompt(String prompt) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -84,24 +85,44 @@ public class LLMService {
 
     private PlanResponseDto parseLLMResponse(String llmResponse) {
         try {
+            log.debug("LLM이 뱉은 응답이에요: {}", llmResponse);
             Yaml yaml = new Yaml();
             Map<String, Object> responseMap = yaml.load(llmResponse);
+            log.debug("YAML 파싱했더니 이렇게 생겼어요: {}", responseMap);
 
             String subject = (String) responseMap.get("subject");
-            List<Map<String, Object>> planDaysRaw = (List<Map<String, Object>>) responseMap.get("plan_days");
+            if (subject == null) {
+                log.error("아니, 제목이 없잖아요? LLM님 실수하신 듯?");
+                throw new RuntimeException("LLM님이 제목을 깜빡하셨네요. 다시 물어볼게요~");
+            }
+
+            Object planDaysObj = responseMap.get("plan_days");
+            if (planDaysObj == null) {
+                log.error("어라? 계획이 없어요. LLM님이 휴가 가신 건가?");
+                throw new RuntimeException("LLM님이 계획을 안 주셨어요. 커피 한잔 마시고 다시 올게요!");
+            }
+
+            if (!(planDaysObj instanceof List)) {
+                log.error("계획이 리스트가 아니에요. 이건 뭐죠?: {}", planDaysObj.getClass().getName());
+                throw new RuntimeException("LLM님이 계획을 이상하게 주셨어요. 리스트로 달라고 다시 부탁해볼게요!");
+            }
+
+            List<Map<String, Object>> planDaysRaw = (List<Map<String, Object>>) planDaysObj;
+            log.debug("날짜별 계획 날것 그대로에요: {}", planDaysRaw);
 
             List<PlanResponseDto.PlanDay> planDays = parsePlanDays(planDaysRaw);
+            log.debug("계획을 예쁘게 정리했어요: {}", planDays);
 
             return new PlanResponseDto(subject, planDays);
         } catch (Exception e) {
-            log.error("파싱이 안됐습니다ㅜㅜ: ", e);
-            throw new RuntimeException("Failed to parse LLM response", e);
+            log.error("헉! LLM 응답 해석하다가 넘어졌어요: ", e);
+            throw new RuntimeException("LLM 응답을 해석하다가 사고가 났어요. 119 불러주세요!", e);
         }
     }
 
     private List<PlanResponseDto.PlanDay> parsePlanDays(List<Map<String, Object>> planDays) {
         return planDays.stream().map(dayMap -> {
-            Integer day = (Integer) dayMap.get("day");
+            Integer day = ((Number) dayMap.get("day")).intValue();
             List<Map<String, Object>> placesRaw = (List<Map<String, Object>>) dayMap.get("places");
 
             List<PlanResponseDto.PlanPlace> places = placesRaw.stream()
@@ -114,9 +135,9 @@ public class LLMService {
 
     private PlanResponseDto.PlanPlace parsePlanPlace(Map<String, Object> placeMap) {
         return PlanResponseDto.PlanPlace.builder()
-            .order((Integer) placeMap.get("order"))
+            .order(((Number) placeMap.get("order")).intValue())
             .title((String) placeMap.get("title"))
-            .moveTime((Integer) placeMap.get("move_time"))
+            .moveTime(((Number) placeMap.get("move_time")).intValue())
             .placeSummary((String) placeMap.get("place_summary"))
             .reasoning((String) placeMap.get("reasoning"))
             .build();
