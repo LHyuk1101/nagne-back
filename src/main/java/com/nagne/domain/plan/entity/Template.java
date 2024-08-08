@@ -29,6 +29,7 @@ public class Template {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "days")
     private Integer day;
 
     @Column(name = "orders")

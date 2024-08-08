@@ -30,11 +30,11 @@ public class Area {
     @Column(length = 100)
     private String name;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "area")
-    private List<Place> places = new ArrayList<>();
-
-    @Builder.Default
-    @OneToMany(mappedBy = "areaCode")
-    private List<Plan> plans = new ArrayList<>();
+//    @Builder.Default
+//    @OneToMany(mappedBy = "area")
+//    private List<Place> places = new ArrayList<>();
+//
+//    @Builder.Default
+//    @OneToMany(mappedBy = "areaCode")
+//    private List<Plan> plans = new ArrayList<>();
 }
