@@ -3,11 +3,10 @@ package com.nagne.domain.plan.service;
 import com.nagne.domain.plan.dto.PlanDto;
 import com.nagne.domain.plan.entity.Plan;
 import com.nagne.domain.plan.repository.PlanRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PlanService {
@@ -24,8 +23,7 @@ public class PlanService {
     }
 
     private PlanDto convertToDTO(Plan plan) {
-        //오류나서 주석처리
-//        return new PlanDto(plan.getId(), plan.getUser().getId(), plan.getStatus().name(), plan.getStartDay(), plan.getEndDay(), plan.getAreaCode(), plan.getLabel());
-        return null;
+        return new PlanDto(plan.getId(), plan.getUser().getId(), plan.getStatus().name(), plan.getStartDay(),
+                plan.getEndDay());
     }
 }

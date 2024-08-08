@@ -1,9 +1,16 @@
 package com.nagne.domain.place.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+
 import com.nagne.domain.place.dto.DistanceRequest;
 import com.nagne.domain.place.dto.DistanceResponse;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
+import java.util.Arrays;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -11,12 +18,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
 
 public class TemplateServiceTest {
 
@@ -34,7 +35,7 @@ public class TemplateServiceTest {
     }
 
     @Test
-    public void calculateDistance_ShouldReturnCorrectDistance() {
+    public void calculateDistance_ShouldReturnCorrectDistances() {
         Place place1 = Place.builder()
                 .id(1L)
                 .lat(37.7749)
@@ -51,31 +52,39 @@ public class TemplateServiceTest {
                 .title("Place 2")
                 .build();
 
+        Place place3 = Place.builder()
+                .id(3L)
+                .lat(36.1699)
+                .lng(-115.1398)
+                .contentTypeId(83L)
+                .title("Place 3")
+                .build();
+
+        // Mock the repository calls
         when(placeRepository.findById(1L)).thenReturn(Optional.of(place1));
         when(placeRepository.findById(2L)).thenReturn(Optional.of(place2));
+        when(placeRepository.findById(3L)).thenReturn(Optional.of(place3));
 
+        // Create a request with a list of place IDs
         DistanceRequest request = DistanceRequest.builder()
-                .placeId1(1L)
-                .placeId2(2L)
+                .placeIds(Arrays.asList(1L, 2L, 3L))
                 .build();
 
         logger.info("Test request: {}", request);
 
+        // Call the service method
         DistanceResponse response = templateService.calculateDistance(request);
 
         logger.info("Test response: {}", response);
 
-        logger.info("Calculated distance: {}", response.getDistance());
-        logger.info("Place 1 Content Type ID: {}", response.getPlace1ContentTypeId());
-        logger.info("Place 1 Title: {}", response.getPlace1Title());
-        logger.info("Place 2 Content Type ID: {}", response.getPlace2ContentTypeId());
-        logger.info("Place 2 Title: {}", response.getPlace2Title());
+        // Validate the distances
+        assertEquals(2, response.getDistances().size());
+        assertEquals(559.0, response.getDistances().get(0), 1.0); // Distance between Place 1 and Place 2
+        assertEquals(368.0, response.getDistances().get(1), 1.0); // Distance between Place 2 and Place 3
 
-        assertEquals(559.0, response.getDistance(), 1.0); // Allowing a delta of 1 km for precision
-        assertEquals(81L, response.getPlace1ContentTypeId());
-        assertEquals("Place 1", response.getPlace1Title());
-        assertEquals(82L, response.getPlace2ContentTypeId());
-        assertEquals("Place 2", response.getPlace2Title());
+        // Validate the titles
+        assertEquals("Place 1 to Place 2", response.getPlaceTitles().get(0));
+        assertEquals("Place 2 to Place 3", response.getPlaceTitles().get(1));
     }
 
     @Test
@@ -83,17 +92,16 @@ public class TemplateServiceTest {
         when(placeRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         DistanceRequest request = DistanceRequest.builder()
-                .placeId1(1L)
-                .placeId2(2L)
+                .placeIds(Arrays.asList(1L, 2L, 3L))
                 .build();
 
         logger.info("Test request with non-existing places: {}", request);
 
-        try {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             templateService.calculateDistance(request);
-        } catch (IllegalArgumentException e) {
-            logger.error("Expected exception: {}", e.getMessage());
-            assertEquals("Place not found with id: 1", e.getMessage());
-        }
+        });
+
+        logger.error("Expected exception: {}", exception.getMessage());
+        assertEquals("Place not found with id: 1", exception.getMessage());
     }
 }

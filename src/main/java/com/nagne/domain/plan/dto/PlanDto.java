@@ -1,8 +1,8 @@
 package com.nagne.domain.plan.dto;
 
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -16,18 +16,17 @@ public class PlanDto {
     private String label;
     private int duration;
 
-    public PlanDto(Long id, Long userId, String status, LocalDate startDay, LocalDate endDay, Integer areaCode, String label) {
+    public PlanDto(Long id, Long userId, String status, LocalDate startDay, LocalDate endDay) {
         this.id = id;
         this.userId = userId;
         this.status = status;
         this.startDay = startDay;
         this.endDay = endDay;
-        this.areaCode = areaCode;
-        this.label = label;
         this.duration = calculateDuration();
     }
 
     private int calculateDuration() {
-        return endDay != null && startDay != null ? (int) java.time.temporal.ChronoUnit.DAYS.between(startDay, endDay) + 1 : 0;
+        return endDay != null && startDay != null ? (int) java.time.temporal.ChronoUnit.DAYS.between(startDay, endDay)
+                + 1 : 0;
     }
 }
