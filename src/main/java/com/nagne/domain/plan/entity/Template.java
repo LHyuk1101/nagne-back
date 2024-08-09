@@ -35,7 +35,13 @@ public class Template {
     @Column(name = "orders")
     private Integer order;
 
-    private Time moveTime;
+    private Integer moveTime;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String placeSummary;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String reasoning;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plan_id")

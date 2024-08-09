@@ -1,34 +1,26 @@
 package com.nagne.domain.plan.dto;
 
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class PlanResponseDto {
     private String subject;
-    private List<PlanDay> planDayList;
-
+    private List<PlanDay> planDays;
 
     @Getter
     @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
     public static class PlanDay {
         private int day;
-        private List<PlanPlace> planPlaceList;
+        private List<Place> places;
     }
 
     @Getter
     @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class PlanPlace {
+    public static class Place {
         private int order;
         private String title;
         private int moveTime;

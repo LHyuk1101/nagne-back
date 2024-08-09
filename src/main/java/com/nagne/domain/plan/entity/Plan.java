@@ -5,7 +5,6 @@ import com.nagne.domain.review.entity.Review;
 import com.nagne.domain.user.entity.User;
 import com.nagne.global.util.BaseEntity;
 import jakarta.persistence.*;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -49,11 +48,6 @@ public class Plan extends BaseEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String overView;
 
-    private String placeSummary;
-
-    private String reasoning;
-
-    private Time totalMoveTime;
 
     @Builder.Default
     @OneToMany(mappedBy = "plan")
