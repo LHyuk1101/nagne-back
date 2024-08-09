@@ -9,5 +9,5 @@ import lombok.Getter;
 public class DistanceResponse {
     private List<Double> distances;
     private List<String> placeTitles;
-    private List<Long> placeContentTypeIds;
+    private List<String> placeContentTypeNames;
 }

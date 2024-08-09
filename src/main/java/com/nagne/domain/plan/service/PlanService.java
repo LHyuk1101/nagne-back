@@ -1,5 +1,7 @@
 package com.nagne.domain.plan.service;
 
+import com.nagne.domain.place.entity.ContentType;
+import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.plan.dto.PlanDto;
 import com.nagne.domain.plan.entity.Plan;
 import com.nagne.domain.plan.repository.PlanRepository;
@@ -14,6 +16,9 @@ public class PlanService {
     @Autowired
     private PlanRepository planRepository;
 
+    @Autowired
+    private PlaceRepository placeRepository; // Inject PlaceRepository to fetch places
+
     public List<PlanDto> getAllPlans() {
         return planRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
@@ -23,7 +28,17 @@ public class PlanService {
     }
 
     private PlanDto convertToDTO(Plan plan) {
+        // Fetch associated places for the plan
+        List<PlanDto.PlaceDetail> placeDetails = placeRepository.findAllByPlanId(plan.getId()).stream()
+                .map(place -> new PlanDto.PlaceDetail(place.getTitle(), getContentTypeName(place.getContentTypeId())))
+                .collect(Collectors.toList());
+
         return new PlanDto(plan.getId(), plan.getUser().getId(), plan.getStatus().name(), plan.getStartDay(),
-                plan.getEndDay());
+                plan.getEndDay(), placeDetails);
+    }
+
+    private String getContentTypeName(Long contentTypeId) {
+        // This assumes you have a method to get the content type name by its ID
+        return ContentType.getNameById(contentTypeId);
     }
 }

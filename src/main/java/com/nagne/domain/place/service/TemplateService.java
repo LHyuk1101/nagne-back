@@ -2,6 +2,7 @@ package com.nagne.domain.place.service;
 
 import com.nagne.domain.place.dto.DistanceRequest;
 import com.nagne.domain.place.dto.DistanceResponse;
+import com.nagne.domain.place.entity.ContentType;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class TemplateService {
         List<Long> placeIds = request.getPlaceIds();
         List<Double> distances = new ArrayList<>();
         List<String> placeTitles = new ArrayList<>();
-        List<Long> placeContentTypeIds = new ArrayList<>();
+        List<String> placeContentTypeNames = new ArrayList<>(); // Changed to store ContentType names
 
         for (int i = 0; i < placeIds.size() - 1; i++) {
             final int index = i;
@@ -34,15 +35,19 @@ public class TemplateService {
 
             placeTitles.add(place1.getTitle() + " to " + place2.getTitle());
 
-            placeContentTypeIds.add(place1.getContentTypeId());
-            placeContentTypeIds.add(place2.getContentTypeId());
+            placeContentTypeNames.add(getContentTypeName(place1.getContentTypeId()));
+            placeContentTypeNames.add(getContentTypeName(place2.getContentTypeId()));
         }
 
         return DistanceResponse.builder()
                 .distances(distances)
                 .placeTitles(placeTitles)
-                .placeContentTypeIds(placeContentTypeIds)
+                .placeContentTypeNames(placeContentTypeNames) // Updated to return ContentType names
                 .build();
+    }
+
+    private String getContentTypeName(Long contentTypeId) {
+        return ContentType.getNameById(contentTypeId);
     }
 
     private double haversine(double lat1, double lon1, double lat2, double lon2) {

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import com.nagne.domain.place.dto.DistanceRequest;
 import com.nagne.domain.place.dto.DistanceResponse;
+import com.nagne.domain.place.entity.ContentType;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
 import java.util.Arrays;
@@ -40,7 +41,7 @@ public class TemplateServiceTest {
                 .id(1L)
                 .lat(37.7749)
                 .lng(-122.4194)
-                .contentTypeId(81L)
+                .contentTypeId(76L)  // Matches ContentType.A (관광지)
                 .title("Place 1")
                 .build();
 
@@ -48,7 +49,7 @@ public class TemplateServiceTest {
                 .id(2L)
                 .lat(34.0522)
                 .lng(-118.2437)
-                .contentTypeId(82L)
+                .contentTypeId(82L)  // Matches ContentType.C (맛집)
                 .title("Place 2")
                 .build();
 
@@ -56,35 +57,37 @@ public class TemplateServiceTest {
                 .id(3L)
                 .lat(36.1699)
                 .lng(-115.1398)
-                .contentTypeId(83L)
+                .contentTypeId(85L)  // Matches ContentType.D (축제)
                 .title("Place 3")
                 .build();
 
-        // Mock the repository calls
         when(placeRepository.findById(1L)).thenReturn(Optional.of(place1));
         when(placeRepository.findById(2L)).thenReturn(Optional.of(place2));
         when(placeRepository.findById(3L)).thenReturn(Optional.of(place3));
 
-        // Create a request with a list of place IDs
         DistanceRequest request = DistanceRequest.builder()
                 .placeIds(Arrays.asList(1L, 2L, 3L))
                 .build();
 
         logger.info("Test request: {}", request);
 
-        // Call the service method
         DistanceResponse response = templateService.calculateDistance(request);
 
         logger.info("Test response: {}", response);
 
-        // Validate the distances
         assertEquals(2, response.getDistances().size());
         assertEquals(559.0, response.getDistances().get(0), 1.0); // Distance between Place 1 and Place 2
         assertEquals(368.0, response.getDistances().get(1), 1.0); // Distance between Place 2 and Place 3
 
-        // Validate the titles
         assertEquals("Place 1 to Place 2", response.getPlaceTitles().get(0));
         assertEquals("Place 2 to Place 3", response.getPlaceTitles().get(1));
+
+        // Check the content type names
+        assertEquals(ContentType.A.getName(), response.getPlaceContentTypeNames().get(0)); // 관광지
+        assertEquals(ContentType.C.getName(), response.getPlaceContentTypeNames().get(1)); // 맛집
+        assertEquals(ContentType.C.getName(),
+                response.getPlaceContentTypeNames().get(2)); // 맛집 (again, since it's between Place 2 and 3)
+        assertEquals(ContentType.D.getName(), response.getPlaceContentTypeNames().get(3)); // 축제
     }
 
     @Test
