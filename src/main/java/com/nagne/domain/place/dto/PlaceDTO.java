@@ -11,4 +11,7 @@ public class PlaceDTO {
   private String name;
   private int areaCode;
   private String overview;
+  private String address;
+  private String infocenter;
+  private Long contentTypeId;
 }
