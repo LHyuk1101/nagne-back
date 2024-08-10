@@ -113,7 +113,7 @@ public class GlobalExceptionHandler {
       case WARN -> log.warn(errorCode.getMessage());
       default -> log.info(errorCode.getMessage());
     }
-    return new ResponseEntity<>(ApiResponse.error(e.getErrorCode()), HttpStatus.valueOf(e.getErrorCode().getCode()));
+    return new ResponseEntity<>(ApiResponse.error(e.getErrorCode()), HttpStatus.valueOf(e.getErrorCode().getStatus()));
   }
 
   /**
