@@ -10,15 +10,17 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/place")
 public class LikeController {
 
   private final PlaceRepository placeRepository;
 
-  @GetMapping("/api/place/find/{contentTypeId}/{areaCode}")
+  @GetMapping("/find/{contentTypeId}/{areaCode}")
   public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
       @PathVariable Integer areaCode) {
 
@@ -34,7 +36,7 @@ public class LikeController {
             .build()).collect(Collectors.toList());
   }
 
-  @GetMapping("/api/place/find/{areaCode}")
+  @GetMapping("/find/{areaCode}")
   public List<PlaceDTO> findPlaecsByAreaCode(@PathVariable Integer areaCode) {
 
     List<Place> places = placeRepository.findByArea_AreaCode(areaCode);
@@ -44,10 +46,12 @@ public class LikeController {
         .name(place.getTitle())
         .areaCode(place.getArea().getAreaCode())
         .overview(place.getOverview())
+        .address(place.getAddress())
+        .infocenter("031-123-123")
         .build()).collect(Collectors.toList());
   }
 
-  @GetMapping("/api/place/findall")
+  @GetMapping("/findall")
   public List<PlaceDTO> findAllPlaces() {
     List<Place> places = placeRepository.findAll();
 
