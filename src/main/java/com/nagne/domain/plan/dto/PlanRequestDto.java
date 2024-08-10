@@ -1,15 +1,30 @@
 package com.nagne.domain.plan.dto;
 
-import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class PlanRequestDto {
-    private List<String> prompts;
+    private String duration; // "X days" 형식
+    private List<PlaceInfo> places;
+    private List<PlaceDistance> placeDistances;
+
+    @Getter
+    @Builder
+    public static class PlaceInfo {
+        private Long id;
+        private String name;
+        private String type; // ContentTypeId 값
+    }
+
+    @Getter
+    @Builder
+    public static class PlaceDistance {
+        private Long fromPlaceId;
+        private Long toPlaceId;
+        private double distance;
+    }
 }

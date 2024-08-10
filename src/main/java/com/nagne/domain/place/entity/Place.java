@@ -64,6 +64,9 @@ public class Place extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ApiType apiType;
 
+    @Column(length = 500)
+    private String thumbnailUrl;
+
     @Builder.Default
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<PlaceImg> placeImgs = new ArrayList<>();
