@@ -25,47 +25,47 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Plan extends BaseEntity {
 
-    @Id
-    @Column(name = "plans_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(name = "plans_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "area_code")
-    private Area area;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "area_code")
+  private Area area;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+  @Enumerated(EnumType.STRING)
+  private Status status;
 
-    @Enumerated(EnumType.ORDINAL)
-    @Column(columnDefinition = "TINYINT")
-    private PlanType type;
+  @Enumerated(EnumType.ORDINAL)
+  @Column(columnDefinition = "TINYINT")
+  private PlanType type;
 
-    private LocalDate startDay;
+  private LocalDate startDay;
 
-    private LocalDate endDay;
+  private LocalDate endDay;
 
-    private String subject;
+  private String subject;
 
-    @Column(columnDefinition = "LONGTEXT")
-    private String overview;
+  @Column(columnDefinition = "LONGTEXT")
+  private String overview;
 
-    @Column(length = 500)
-    private String thumbnailUrl;
+  @Column(length = 500)
+  private String thumbnailUrl;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "plan")
-    private List<Review> reviews = new ArrayList<>();
+  @Builder.Default
+  @OneToMany(mappedBy = "plan")
+  private List<Review> reviews = new ArrayList<>();
 
-    public enum Status {
-        BEGIN, END
-    }
+  public enum Status {
+    BEGIN, END
+  }
 
-    public enum PlanType {
-        LLM, CUSTOM
-    }
+  public enum PlanType {
+    LLM, CUSTOM
+  }
 }

@@ -15,25 +15,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReviewImg {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id")
-    private Review review;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "review_id")
+  private Review review;
 
-    private Integer byteSize;
+  private Integer byteSize;
 
-    private Integer height;
+  private Integer height;
 
-    private Integer width;
+  private Integer width;
 
-    @Column(length = 100)
-    private String domain;
+  @Column(length = 100)
+  private String domain;
 
-    @Column(length = 500)
-    private String domainPath;
+  @Column(length = 500)
+  private String domainPath;
 
-    private Boolean thumbnailYn;
+  private Boolean thumbnailYn;
 }

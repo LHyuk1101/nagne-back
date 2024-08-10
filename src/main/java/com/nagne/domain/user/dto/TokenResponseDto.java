@@ -9,10 +9,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class TokenResponseDto {
 
-    private String accessToken;
-    private Long userId;
-    private String nickname;
-    private String email;
-    private String role;
-    private String userProfileImg;
+  private String accessToken;
+  private Long userId;
+  private String nickname;
+  private String email;
+  private String role;
+  private String userProfileImg;
 }

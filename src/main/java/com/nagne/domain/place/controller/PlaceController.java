@@ -19,10 +19,10 @@ public class PlaceController {
 
   @GetMapping
   public ApiResponse<List<PlaceDTO>> getPlaceById(
-      @RequestParam String[] regions,
-      @RequestParam int page,
-      @RequestParam int size
-  ){
+    @RequestParam String[] regions,
+    @RequestParam int page,
+    @RequestParam int size
+  ) {
     List<PlaceDTO> places = placeService.fetchPlaceByRegion(regions);
     return ApiResponse.success(places);
   }

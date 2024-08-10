@@ -9,28 +9,31 @@ import java.util.List;
 @Getter
 @Builder
 public class PlanRequestDto {
-    private String duration; // "X days" 형식
-    private List<PlaceInfo> places;
-    private List<PlaceDistance> placeDistances;
 
-    // New fields to support existing logic
-    private LocalDate startDay;
-    private LocalDate endDay;
-    private Integer areaCode;
+  private String duration; // "X days" 형식
+  private List<PlaceInfo> places;
+  private List<PlaceDistance> placeDistances;
 
-    @Getter
-    @Builder
-    public static class PlaceInfo {
-        private Long id;
-        private String name;
-        private String type; // ContentTypeId 값
-    }
+  // New fields to support existing logic
+  private LocalDate startDay;
+  private LocalDate endDay;
+  private Integer areaCode;
 
-    @Getter
-    @Builder
-    public static class PlaceDistance {
-        private Long fromPlaceId;
-        private Long toPlaceId;
-        private double distance;
-    }
+  @Getter
+  @Builder
+  public static class PlaceInfo {
+
+    private Long id;
+    private String name;
+    private String type; // ContentTypeId 값
+  }
+
+  @Getter
+  @Builder
+  public static class PlaceDistance {
+
+    private Long fromPlaceId;
+    private Long toPlaceId;
+    private double distance;
+  }
 }
