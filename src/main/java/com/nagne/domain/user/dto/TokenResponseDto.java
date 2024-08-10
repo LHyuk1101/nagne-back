@@ -14,4 +14,5 @@ public class TokenResponseDto {
     private String nickname;
     private String email;
     private String role;
+    private String userProfileImg;
 }

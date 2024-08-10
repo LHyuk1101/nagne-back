@@ -63,6 +63,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .role(user.getRole().getRoleName())
+                .userProfileImg(user.getProfileImg())
                 .build();
 
         // JSON 데이터를 HTML 페이지에 포함시켜 부모 창으로 메시지를 보냅니다
