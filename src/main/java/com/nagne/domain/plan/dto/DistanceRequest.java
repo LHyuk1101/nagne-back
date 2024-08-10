@@ -1,11 +1,12 @@
-package com.nagne.domain.place.dto;
+package com.nagne.domain.plan.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import java.util.List;
 
 @Getter
 @Builder
 public class DistanceRequest {
-    private Long placeId1;
-    private Long placeId2;
+
+  private List<Long> placeIds;
 }

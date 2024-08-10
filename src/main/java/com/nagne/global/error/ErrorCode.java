@@ -18,7 +18,8 @@ public enum ErrorCode {
 
   // USER
   EMAIL_ALREADY_REGISTERED(400, "U001", "Email already registered", LogLevel.ERROR),
-  OAUTH2_CREATE_USER_ERROR(500, "U002", "Error occurred while creating OAuth2 user", LogLevel.ERROR),
+  OAUTH2_CREATE_USER_ERROR(500, "U002", "Error occurred while creating OAuth2 user",
+    LogLevel.ERROR),
 
   // Secure
   SECURITY_CONFIGURATION_ERROR(500, "S001", "Security Configuration Error", LogLevel.ERROR),

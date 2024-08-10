@@ -21,17 +21,17 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Festival {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "festival_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "festival_id")
+  private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id")
-    private Place place;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "place_id")
+  private Place place;
 
-    private LocalDate eventStartDate;
+  private LocalDate eventStartDate;
 
-    private LocalDate eventEndDate;
+  private LocalDate eventEndDate;
 
 }

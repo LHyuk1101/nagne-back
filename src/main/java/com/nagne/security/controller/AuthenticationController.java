@@ -26,65 +26,67 @@ import com.nagne.domain.user.repository.UserRepository;
 @Slf4j
 public class AuthenticationController {
 
-    private final AuthenticationService authenticationService;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final UserRepository userRepository;
+  private final AuthenticationService authenticationService;
+  private final JwtTokenProvider jwtTokenProvider;
+  private final UserRepository userRepository;
 
-    @PostMapping("/login")
-    public ResponseEntity<TokenResponseDto> login(@Valid @RequestBody UserLoginDto userLoginDto,
-                                                  HttpServletResponse response) {
-        User user = authenticationService.login(userLoginDto);
+  @PostMapping("/login")
+  public ResponseEntity<TokenResponseDto> login(@Valid @RequestBody UserLoginDto userLoginDto,
+    HttpServletResponse response) {
+    User user = authenticationService.login(userLoginDto);
 
-        String accessToken = jwtTokenProvider.generateAccessToken(user);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(user);
+    String accessToken = jwtTokenProvider.generateAccessToken(user);
+    String refreshToken = jwtTokenProvider.generateRefreshToken(user);
 
-        response.addCookie(jwtTokenProvider.setRefreshTokenToCookies(refreshToken));
+    response.addCookie(jwtTokenProvider.setRefreshTokenToCookies(refreshToken));
+    TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
+      .accessToken(accessToken)
+      .userId(user.getId())
+      .nickname(user.getNickname())
+      .email(user.getEmail())
+      .role(user.getRole().getRoleName())
+      .build();
+    return ResponseEntity.ok(tokenResponseDto);
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<Void> logout(HttpServletResponse response) {
+    log.info("Logout request received");
+
+    response.addCookie(jwtTokenProvider.setRefreshTokenToCookies(null));
+    return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("/refresh")
+  public ResponseEntity<TokenResponseDto> refresh(HttpServletRequest request,
+    HttpServletResponse response) {
+    String refreshToken = jwtTokenProvider.getRefreshTokenFromCookies(request);
+
+    try {
+      if (refreshToken != null && jwtTokenProvider.validateRefreshToken(refreshToken)) {
+        String newAccessToken = jwtTokenProvider.updateAccessToken(refreshToken);
+        String newRefreshToken = jwtTokenProvider.updateRefreshToken(refreshToken);
+        response.addCookie(jwtTokenProvider.setRefreshTokenToCookies(newRefreshToken));
+
+        Long userId = Long.valueOf(jwtTokenProvider.getUserId(newAccessToken));
+        User user = userRepository.findById(userId)
+          .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
         TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-            .accessToken(accessToken)
-            .userId(user.getId())
-            .nickname(user.getNickname())
-            .email(user.getEmail())
-            .role(user.getRole().getRoleName())
-            .build();
+          .accessToken(newAccessToken)
+          .userId(user.getId())
+          .nickname(user.getNickname())
+          .email(user.getEmail())
+          .role(user.getRole().getRoleName())
+          .build();
         return ResponseEntity.ok(tokenResponseDto);
+      } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+      }
+    } catch (JwtException e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletResponse response) {
-        log.info("Logout request received");
-
-        response.addCookie(jwtTokenProvider.setRefreshTokenToCookies(null));
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/refresh")
-    public ResponseEntity<TokenResponseDto> refresh(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = jwtTokenProvider.getRefreshTokenFromCookies(request);
-
-        try {
-            if (refreshToken != null && jwtTokenProvider.validateRefreshToken(refreshToken)) {
-                String newAccessToken = jwtTokenProvider.updateAccessToken(refreshToken);
-                String newRefreshToken = jwtTokenProvider.updateRefreshToken(refreshToken);
-                response.addCookie(jwtTokenProvider.setRefreshTokenToCookies(newRefreshToken));
-
-                Long userId = Long.valueOf(jwtTokenProvider.getUserId(newAccessToken));
-                User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
-
-                TokenResponseDto tokenResponseDto = TokenResponseDto.builder()
-                    .accessToken(newAccessToken)
-                    .userId(user.getId())
-                    .nickname(user.getNickname())
-                    .email(user.getEmail())
-                    .role(user.getRole().getRoleName())
-                    .build();
-                return ResponseEntity.ok(tokenResponseDto);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-        } catch (JwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-    }
+  }
 }
 
 

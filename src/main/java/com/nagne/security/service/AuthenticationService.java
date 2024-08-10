@@ -14,17 +14,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
-    public User login(UserLoginDto userLoginDto) throws ApiException {
-        User user = userRepository.findByEmail(userLoginDto.getEmail())
-            .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+  public User login(UserLoginDto userLoginDto) throws ApiException {
+    User user = userRepository.findByEmail(userLoginDto.getEmail())
+      .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
-        if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-            throw new ApiException("Invalid credentials", ErrorCode.AUTHENTICATION_FAILURE);
-        }
-
-        return user;
+    if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+      throw new ApiException("Invalid credentials", ErrorCode.AUTHENTICATION_FAILURE);
     }
+
+    return user;
+  }
 }

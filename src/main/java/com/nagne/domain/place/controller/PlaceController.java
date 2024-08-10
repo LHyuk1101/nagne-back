@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,8 +18,12 @@ public class PlaceController {
   private final PlaceService placeService;
 
   @GetMapping
-  public ApiResponse<List<PlaceDTO>> getPlace() {
-    List<PlaceDTO> places = placeService.fetchPlaceData();
+  public ApiResponse<List<PlaceDTO>> getPlaceById(
+    @RequestParam String[] regions,
+    @RequestParam int page,
+    @RequestParam int size
+  ) {
+    List<PlaceDTO> places = placeService.fetchPlaceByRegion(regions);
     return ApiResponse.success(places);
   }
 

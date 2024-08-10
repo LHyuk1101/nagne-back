@@ -13,8 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${app.base-url}")
-    private String baseUrl;
+  @Value("${app.base-url}")
+  private String baseUrl;
 //    추후 img updloade 기능 구현 시 사용
 //    @Value("${app.base-image-uri}")
 //    private String baseImageUri;

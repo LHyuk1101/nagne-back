@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponseDto {
+
   private Long id;
   private String email;
   private String nickname;
@@ -18,10 +19,10 @@ public class UserResponseDto {
 
   public static UserResponseDto fromEntity(User user) {
     return UserResponseDto.builder()
-        .id(user.getId())
-        .email(user.getEmail())
-        .nickname(user.getNickname())
-        .termsAgreed(user.getTermAgreed())
-        .build();
+      .id(user.getId())
+      .email(user.getEmail())
+      .nickname(user.getNickname())
+      .termsAgreed(user.getTermAgreed())
+      .build();
   }
 }

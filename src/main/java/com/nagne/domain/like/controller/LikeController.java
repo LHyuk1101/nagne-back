@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +31,8 @@ public class LikeController {
     return places.stream().map(place ->
         PlaceDTO.builder()
             .id(place.getId())
-            .name(place.getTitle())
-            .areaCode(place.getArea().getAreaCode())
+            .title(place.getTitle())
+            .area(place.getArea())
             .overview(place.getOverview())
             .build()).collect(Collectors.toList());
   }
@@ -43,8 +44,9 @@ public class LikeController {
 
     return places.stream().map(place -> PlaceDTO.builder()
         .id(place.getId())
-        .name(place.getTitle())
-        .areaCode(place.getArea().getAreaCode())
+        .title(place.getTitle())
+        .area(place.getArea())
+        .contentTypeId(place.getContentTypeId())
         .overview(place.getOverview())
         .address(place.getAddress())
         .infocenter("031-123-123")
@@ -52,12 +54,13 @@ public class LikeController {
   }
 
   @GetMapping("/findall")
+  @Transactional(readOnly = true)
   public List<PlaceDTO> findAllPlaces() {
     List<Place> places = placeRepository.findAll();
 
     return places.stream().map(place -> PlaceDTO.builder()
         .id(place.getId())
-        .name(place.getTitle())
+        .title(place.getTitle())
         .areaCode(place.getArea().getAreaCode())
         .overview(place.getOverview())
         .address(place.getAddress())

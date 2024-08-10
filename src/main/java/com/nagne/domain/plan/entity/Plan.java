@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.Length;
 import org.hibernate.annotations.DynamicUpdate;
 import java.time.LocalDate;
 
@@ -24,36 +25,47 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Plan extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(name = "plans_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "area_code")
-    private Area area;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "area_code")
+  private Area area;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+  @Enumerated(EnumType.STRING)
+  private Status status;
 
-    private LocalDate startDay;
+  @Enumerated(EnumType.ORDINAL)
+  @Column(columnDefinition = "TINYINT")
+  private PlanType type;
 
-    private LocalDate endDay;
+  private LocalDate startDay;
 
-    private String subject;
+  private LocalDate endDay;
 
-    @Column(columnDefinition = "LONGTEXT")
-    private String overView;
+  private String subject;
 
+  @Column(columnDefinition = "LONGTEXT")
+  private String overview;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "plan")
-    private List<Review> reviews = new ArrayList<>();
+  @Column(length = 500)
+  private String thumbnailUrl;
 
-    public enum Status {
-        BEGIN, END
-    };
+  @Builder.Default
+  @OneToMany(mappedBy = "plan")
+  private List<Review> reviews = new ArrayList<>();
+
+  public enum Status {
+    BEGIN, END
+  }
+
+  public enum PlanType {
+    LLM, CUSTOM
+  }
 }

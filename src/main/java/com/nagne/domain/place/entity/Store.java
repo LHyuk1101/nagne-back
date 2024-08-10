@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Store {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id")
-    private Place place;
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "place_id")
+  private Place place;
 
-    @Column(length = 1000)
-    private String openTime;
+  @Column(length = 1000)
+  private String openTime;
 
-    @Column(length = 50)
-    private String infoCenter;
+  @Column(length = 50)
+  private String infoCenter;
 
 }
