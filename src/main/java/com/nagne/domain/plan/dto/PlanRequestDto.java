@@ -3,6 +3,7 @@ package com.nagne.domain.plan.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -11,6 +12,11 @@ public class PlanRequestDto {
     private String duration; // "X days" 형식
     private List<PlaceInfo> places;
     private List<PlaceDistance> placeDistances;
+
+    // New fields to support existing logic
+    private LocalDate startDay;
+    private LocalDate endDay;
+    private Integer areaCode;
 
     @Getter
     @Builder
