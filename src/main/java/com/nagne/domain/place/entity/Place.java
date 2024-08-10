@@ -31,47 +31,49 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Place extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "place_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "place_id")
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "area_code")
-    private Area area;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "area_code")
+  private Area area;
 
-    @Column(length = 200)
-    private String title;
+  @Column(length = 200)
+  private String title;
 
-    @Column(length = 100)
-    private String address;
+  @Column(length = 100)
+  private String address;
 
-    private Integer contentId;
+  private Integer contentId;
 
-    private Long contentTypeId;
+  private Long contentTypeId;
 
-    @Column(columnDefinition = "LONGTEXT")
-    private String overview;
+  @Column(columnDefinition = "LONGTEXT")
+  private String overview;
 
-    private Double lat;
+  private Double lat;
 
-    private Double lng;
+  private Double lng;
 
-    private Integer likes;
+  private Integer likes;
 
-    private LocalDateTime modifiedTime;
+  private LocalDateTime modifiedTime;
 
-    @Enumerated(EnumType.STRING)
-    private ApiType apiType;
+  @Enumerated(EnumType.STRING)
+  private ApiType apiType;
 
-    @Column(length = 500)
-    private String thumbnailUrl;
+  @Column(length = 500)
+  private String thumbnailUrl;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
-    private List<PlaceImg> placeImgs = new ArrayList<>();
+  public enum ApiType {
+    TOUR, GOOGLE, NONE
+  }
 
-    public enum ApiType {
-        TOUR, GOOGLE, NONE
-    }
+  @Builder.Default
+  @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+  private List<PlaceImg> placeImgs = new ArrayList<>();
+
+
 }

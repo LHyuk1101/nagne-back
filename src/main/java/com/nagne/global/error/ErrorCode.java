@@ -24,6 +24,11 @@ public enum ErrorCode {
   SECURITY_CONFIGURATION_ERROR(500, "S001", "Security Configuration Error", LogLevel.ERROR),
   AUTHENTICATION_FAILURE(401, "S002", "Authentication Failure", LogLevel.ERROR),
   INVALID_REFRESH_TOKEN(401, "S004", "Invalid refresh token", LogLevel.ERROR),
+
+
+  // Place
+  PLACE_FOUND_NOT_ERROR(404, "P001", "Place Entity Not Found", LogLevel.ERROR),
+
   ;
 
   private final String code;
