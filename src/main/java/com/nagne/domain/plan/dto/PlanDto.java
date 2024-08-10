@@ -18,7 +18,7 @@ public class PlanDto {
     private int duration;
     private List<PlaceDetail> places; // New field to store place details
 
-    // Constructor
+
     public PlanDto(Long id, Long userId, String status, LocalDate startDay, LocalDate endDay,
                    List<PlaceDetail> places) {
         this.id = id;
