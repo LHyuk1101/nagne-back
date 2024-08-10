@@ -14,8 +14,8 @@ public class PlaceService {
 
   public List<PlaceDTO> fetchPlaceByRegion(String[] regions) {
 
-    return  placeReader.readPlace(regions);
+    return placeReader.readPlace(regions);
   }
-  
+
 
 }

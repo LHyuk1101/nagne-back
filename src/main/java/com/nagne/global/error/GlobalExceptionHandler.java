@@ -25,10 +25,10 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
-      MethodArgumentNotValidException e) {
+    MethodArgumentNotValidException e) {
     log.error("handleMethodArgumentNotValidException", e);
     final ErrorResponse response = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE,
-        e.getBindingResult());
+      e.getBindingResult());
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
   protected ResponseEntity<ErrorResponse> handleBindException(BindException e) {
     log.error("handleBindException", e);
     final ErrorResponse response = ErrorResponse.of(
-        ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
+      ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
 
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(MethodArgumentTypeMismatchException.class)
   protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
-      MethodArgumentTypeMismatchException e) {
+    MethodArgumentTypeMismatchException e) {
     log.error("handleMethodArgumentTypeMismatchException", e);
     final ErrorResponse response = ErrorResponse.of(e);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -60,10 +60,10 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
   protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
-      HttpRequestMethodNotSupportedException e) {
+    HttpRequestMethodNotSupportedException e) {
     log.error("handleHttpRequestMethodNotSupportedException", e);
     final ErrorResponse response = ErrorResponse.of(
-        ErrorCode.METHOD_NOT_ALLOWED);
+      ErrorCode.METHOD_NOT_ALLOWED);
     return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
   }
 
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException e) {
     log.error("handleNoHandlerFoundException", e);
     final ErrorResponse response = ErrorResponse.of(
-        ErrorCode.NO_HANDLER_FOUND);
+      ErrorCode.NO_HANDLER_FOUND);
     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
   }
 
@@ -85,7 +85,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException e) {
     log.error("handleNoResourceFoundException", e);
     final ErrorResponse response = ErrorResponse.of(
-        ErrorCode.NO_RESOURCE_FOUND);
+      ErrorCode.NO_RESOURCE_FOUND);
     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
   }
 
@@ -96,9 +96,9 @@ public class GlobalExceptionHandler {
   protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException e) {
     log.error("handleAccessDeniedException", e);
     final ErrorResponse response = ErrorResponse.of(
-        ErrorCode.HANDLE_ACCESS_DENIED);
+      ErrorCode.HANDLE_ACCESS_DENIED);
     return new ResponseEntity<>(response, HttpStatus.valueOf(
-        ErrorCode.HANDLE_ACCESS_DENIED.getStatus()));
+      ErrorCode.HANDLE_ACCESS_DENIED.getStatus()));
   }
 
   /**
@@ -113,7 +113,8 @@ public class GlobalExceptionHandler {
       case WARN -> log.warn(errorCode.getMessage());
       default -> log.info(errorCode.getMessage());
     }
-    return new ResponseEntity<>(ApiResponse.error(e.getErrorCode()), HttpStatus.valueOf(e.getErrorCode().getStatus()));
+    return new ResponseEntity<>(ApiResponse.error(e.getErrorCode()),
+      HttpStatus.valueOf(e.getErrorCode().getStatus()));
   }
 
   /**

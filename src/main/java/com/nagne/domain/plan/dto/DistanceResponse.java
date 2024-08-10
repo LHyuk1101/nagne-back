@@ -7,7 +7,8 @@ import java.util.List;
 @Getter
 @Builder
 public class DistanceResponse {
-    private List<Double> distances;
-    private List<String> placeTitles;
-    private List<String> placeContentTypeNames;
+
+  private List<Double> distances;
+  private List<String> placeTitles;
+  private List<String> placeContentTypeNames;
 }

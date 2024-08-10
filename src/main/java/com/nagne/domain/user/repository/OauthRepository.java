@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OauthRepository extends JpaRepository<Oauthid, Long> {
 
-    Optional<Oauthid> findByUser(@Param("user") User user);
+  Optional<Oauthid> findByUser(@Param("user") User user);
 }

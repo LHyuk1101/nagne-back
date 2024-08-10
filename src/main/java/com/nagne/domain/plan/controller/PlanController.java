@@ -12,18 +12,18 @@ import java.util.List;
 @RequestMapping("/api/plans")
 public class PlanController {
 
-    @Autowired
-    private PlanService planService;
+  @Autowired
+  private PlanService planService;
 
-    @GetMapping
-    public ResponseEntity<List<PlanDto>> getAllPlans() {
-        List<PlanDto> plans = planService.getAllPlans();
-        return ResponseEntity.ok(plans);
-    }
+  @GetMapping
+  public ResponseEntity<List<PlanDto>> getAllPlans() {
+    List<PlanDto> plans = planService.getAllPlans();
+    return ResponseEntity.ok(plans);
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PlanDto> getPlanById(@PathVariable Long id) {
-        PlanDto plan = planService.getPlanById(id);
-        return plan != null ? ResponseEntity.ok(plan) : ResponseEntity.notFound().build();
-    }
+  @GetMapping("/{id}")
+  public ResponseEntity<PlanDto> getPlanById(@PathVariable Long id) {
+    PlanDto plan = planService.getPlanById(id);
+    return plan != null ? ResponseEntity.ok(plan) : ResponseEntity.notFound().build();
+  }
 }

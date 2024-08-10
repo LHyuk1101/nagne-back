@@ -15,19 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/llm")
 public class LLMController {
-    private final LLMService llmService;
 
-    public LLMController(LLMService llmService) {
-        this.llmService = llmService;
-    }
+  private final LLMService llmService;
 
-    @PostMapping("/create-plan")
-    public CompletableFuture<ResponseEntity<List<Plan>>> generatePlans(@RequestBody PlanRequestDto request) {
-        return llmService.generateAndSavePlans(request)
-            .thenApply(ResponseEntity::ok)
-            .exceptionally(ex -> {
-                // Log the exception
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            });
-    }
+  public LLMController(LLMService llmService) {
+    this.llmService = llmService;
+  }
+
+  @PostMapping("/create-plan")
+  public CompletableFuture<ResponseEntity<List<Plan>>> generatePlans(
+    @RequestBody PlanRequestDto request) {
+    return llmService.generateAndSavePlans(request).thenApply(ResponseEntity::ok)
+      .exceptionally(ex -> {
+        // Log the exception
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+      });
+  }
 }

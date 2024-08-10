@@ -12,15 +12,12 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 
 
   @Query("SELECT p "
-      + "FROM Place p "
-      + "JOIN FETCH p.placeImgs "
-      + "WHERE p.contentTypeId IN :regionIds "
-      + "ORDER BY p.likes, p.id")
+    + "FROM Place p "
+    + "JOIN FETCH p.placeImgs "
+    + "WHERE p.contentTypeId IN :regionIds "
+    + "ORDER BY p.likes, p.id")
   List<Place> findByRegion(@Param("regionIds") Long[] regionIds, Pageable pageable);
 
-    @Query("SELECT p FROM Place p JOIN Template t ON p.id = t.place.id WHERE t.plan.id = :planId")
-    List<Place> findAllByPlanId(@Param("planId") Long planId);
-
-    Optional<Place> findByTitle(String title);
+  Optional<Place> findByTitle(String title);
 
 }

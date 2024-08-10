@@ -25,23 +25,23 @@ public class PlaceReader {
   private final PlaceMapper placeMapper = PlaceMapper.INSTANCE;
 
 
-  public List<PlaceDTO> readPlace(String [] regions) {
+  public List<PlaceDTO> readPlace(String[] regions) {
 
     Long[] convertRegions = Arrays.stream(regions)
-        .map(convertToLong)
-        .filter(Objects::nonNull)
-        .toArray(Long[]::new);
+      .map(convertToLong)
+      .filter(Objects::nonNull)
+      .toArray(Long[]::new);
     PageRequest pageRequest = PageRequest.of(1, 3);
 
     List<Place> byRegion = placeRepository.findByRegion(convertRegions, pageRequest);
 
-    if(byRegion.isEmpty()) {
+    if (byRegion.isEmpty()) {
       throw new ApiException(ErrorCode.PLACE_FOUND_NOT_ERROR);
     }
 
     return byRegion.stream()
-        .map(placeMapper::placeToPlaceDTO)
-        .toList();
+      .map(placeMapper::placeToPlaceDTO)
+      .toList();
   }
 
 

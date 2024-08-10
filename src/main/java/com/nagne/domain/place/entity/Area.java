@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 
 /**
- *  연관관계 주인이 되는 엔티티 .
+ * 연관관계 주인이 되는 엔티티 .
  */
 
 @Entity
@@ -24,11 +24,11 @@ import org.hibernate.annotations.DynamicInsert;
 @AllArgsConstructor
 public class Area {
 
-    @Id
-    private Integer areaCode;
+  @Id
+  private Integer areaCode;
 
-    @Column(length = 100)
-    private String name;
+  @Column(length = 100)
+  private String name;
 
 }
 

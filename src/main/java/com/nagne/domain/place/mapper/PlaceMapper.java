@@ -12,6 +12,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface PlaceMapper {
+
   PlaceMapper INSTANCE = Mappers.getMapper(PlaceMapper.class);
 
   @Mapping(source = "placeImgs", target = "placeUrlImages", qualifiedByName = "placeImgsToUrls")
@@ -22,8 +23,8 @@ public interface PlaceMapper {
   @Named("placeImgsToUrls")
   default List<String> placeImgsToUrls(List<PlaceImg> placeImgs) {
     return placeImgs.stream()
-        .map(PlaceImg::getImgUrl)
-        .toList();
+      .map(PlaceImg::getImgUrl)
+      .toList();
   }
 
 }

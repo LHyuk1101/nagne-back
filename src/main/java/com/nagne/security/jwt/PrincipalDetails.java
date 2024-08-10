@@ -18,7 +18,7 @@ public class PrincipalDetails implements UserDetails {
   public Collection<? extends GrantedAuthority> getAuthorities() {
     Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
     authorities.add(() ->
-        user.getRole().getRoleName()
+      user.getRole().getRoleName()
     );
 
     return authorities;
@@ -54,5 +54,7 @@ public class PrincipalDetails implements UserDetails {
     return true;
   }
 
-  public User getUser() {return user;}
+  public User getUser() {
+    return user;
+  }
 }

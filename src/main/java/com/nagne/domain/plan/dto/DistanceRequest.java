@@ -7,5 +7,6 @@ import java.util.List;
 @Getter
 @Builder
 public class DistanceRequest {
-    private List<Long> placeIds;
+
+  private List<Long> placeIds;
 }
