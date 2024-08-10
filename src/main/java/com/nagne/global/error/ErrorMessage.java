@@ -2,20 +2,20 @@ package com.nagne.global.error;
 
 public class ErrorMessage {
 
-  private final String code;
+  private final int code;
 
   private final String message;
 
   private final Object data;
 
   public ErrorMessage(ErrorCode errorCode) {
-    this.code = errorCode.getCode();
+    this.code = errorCode.getStatus();
     this.message = errorCode.getMessage();
     this.data = null;
   }
 
   public ErrorMessage(ErrorCode errorCode, Object data) {
-    this.code = errorCode.getCode();
+    this.code = errorCode.getStatus();
     this.message = errorCode.getMessage();
     this.data = data;
   }
@@ -24,7 +24,7 @@ public class ErrorMessage {
     return message;
   }
 
-  public String getCode() {
+  public int getCode() {
     return code;
   }
 
