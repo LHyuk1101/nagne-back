@@ -28,7 +28,6 @@ public class PlanService {
     }
 
     private PlanDto convertToDTO(Plan plan) {
-        // Fetch associated places for the plan
         List<PlanDto.PlaceDetail> placeDetails = placeRepository.findAllByPlanId(plan.getId()).stream()
                 .map(place -> new PlanDto.PlaceDetail(place.getTitle(), getContentTypeName(place.getContentTypeId())))
                 .collect(Collectors.toList());
@@ -38,7 +37,6 @@ public class PlanService {
     }
 
     private String getContentTypeName(Long contentTypeId) {
-        // This assumes you have a method to get the content type name by its ID
         return ContentType.getNameById(contentTypeId);
     }
 }

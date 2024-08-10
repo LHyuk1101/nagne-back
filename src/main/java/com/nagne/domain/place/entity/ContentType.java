@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum ContentType {
-    A(76L, "관광지"),
-    B(80L, "숙소"),
-    C(82L, "맛집"),
-    D(85L, "축제");
+    TOURIST_SPOT(76L, "관광지"),
+    ACCOMMODATION(80L, "숙소"),
+    RESTAURANT(82L, "맛집"),
+    FESTIVAL(85L, "축제");
 
     private final Long type;
     private final String name;

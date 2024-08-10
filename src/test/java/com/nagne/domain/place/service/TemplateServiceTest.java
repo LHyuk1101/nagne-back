@@ -83,11 +83,11 @@ public class TemplateServiceTest {
         assertEquals("Place 2 to Place 3", response.getPlaceTitles().get(1));
 
         // Check the content type names
-        assertEquals(ContentType.A.getName(), response.getPlaceContentTypeNames().get(0)); // 관광지
-        assertEquals(ContentType.C.getName(), response.getPlaceContentTypeNames().get(1)); // 맛집
-        assertEquals(ContentType.C.getName(),
+        assertEquals(ContentType.TOURIST_SPOT.getName(), response.getPlaceContentTypeNames().get(0)); // 관광지
+        assertEquals(ContentType.RESTAURANT.getName(), response.getPlaceContentTypeNames().get(1)); // 맛집
+        assertEquals(ContentType.RESTAURANT.getName(),
                 response.getPlaceContentTypeNames().get(2)); // 맛집 (again, since it's between Place 2 and 3)
-        assertEquals(ContentType.D.getName(), response.getPlaceContentTypeNames().get(3)); // 축제
+        assertEquals(ContentType.FESTIVAL.getName(), response.getPlaceContentTypeNames().get(3)); // 축제
     }
 
     @Test
