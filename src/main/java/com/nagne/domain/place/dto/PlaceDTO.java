@@ -1,5 +1,7 @@
 package com.nagne.domain.place.dto;
 
+import com.nagne.domain.place.entity.Area;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,7 +10,15 @@ import lombok.Getter;
 public class PlaceDTO {
 
   private Long id;
-  private String name;
-  private int areaCode;
+  private Area area;
+  private String title;
+  private String address;
+  private Long contentTypeId;
   private String overview;
+  private Double lat;
+  private Double lng;
+  private int likes;
+  private String thumbnailUrl;
+  private List<String> placeUrlImages;
+
 }

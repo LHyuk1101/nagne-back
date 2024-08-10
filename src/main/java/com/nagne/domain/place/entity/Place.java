@@ -1,15 +1,27 @@
 package com.nagne.domain.place.entity;
 
 import com.nagne.global.util.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -52,11 +64,16 @@ public class Place extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private ApiType apiType;
 
-  @Builder.Default
-  @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
-  private List<PlaceImg> placeImgs = new ArrayList<>();
+  @Column(length = 500)
+  private String thumbnailUrl;
 
   public enum ApiType {
     TOUR, GOOGLE, NONE
   }
+
+  @Builder.Default
+  @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+  private List<PlaceImg> placeImgs = new ArrayList<>();
+
+
 }

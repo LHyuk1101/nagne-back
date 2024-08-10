@@ -1,38 +1,42 @@
 package com.nagne.domain.plan.dto;
 
-import java.util.List;
-import lombok.AllArgsConstructor;
+import com.nagne.domain.plan.entity.Plan;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class PlanResponseDto {
+    private Long id;
+    private Long userId;
+    private String status;
+    private LocalDate startDay;
+    private LocalDate endDay;
+    private Integer areaCode;
     private String subject;
-    private List<PlanDay> planDayList;
-
+    private Plan.PlanType type;
+    private List<DayPlan> dayPlans;
 
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     @Builder
-    public static class PlanDay {
+    public static class DayPlan {
         private int day;
-        private List<PlanPlace> planPlaceList;
+        private List<PlaceDetail> places;
     }
 
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     @Builder
-    public static class PlanPlace {
-        private int order;
+    public static class PlaceDetail {
+        private Long placeId;
         private String title;
+        private String contentType;
+        private int order;
         private int moveTime;
         private String placeSummary;
         private String reasoning;
+        private String thumbnailUrl;
     }
 }

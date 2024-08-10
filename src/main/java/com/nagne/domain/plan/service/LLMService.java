@@ -1,174 +1,194 @@
 package com.nagne.domain.plan.service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.nagne.domain.place.entity.Place;
+import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.plan.dto.PlanRequestDto;
 import com.nagne.domain.plan.dto.PlanResponseDto;
 import com.nagne.domain.plan.entity.Plan;
 import com.nagne.domain.plan.entity.Template;
+import com.nagne.domain.plan.exception.LLMParsingException;
 import com.nagne.domain.plan.repository.PlanRepository;
 import com.nagne.domain.plan.repository.TemplateRepository;
-import java.util.concurrent.CompletableFuture;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import org.yaml.snakeyaml.Yaml;
-import java.util.Map;
-import java.time.LocalDate;
-import java.sql.Time;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class LLMService {
-    private final RestTemplate restTemplate;
+
+    private final RestTemplate llmRestTemplate;
     private final PlanRepository planRepository;
     private final TemplateRepository templateRepository;
-    private final String apiUrl;
+    private final PlaceRepository placeRepository;
+    private final DistanceCalculationService distanceCalculationService;
 
-    public LLMService(@Value("${llm.api.url}") String apiUrl,
+    @Value("${llm.api.url}")
+    private String apiUrl;
+
+    public LLMService(@Qualifier("llmRestTemplate") RestTemplate llmRestTemplate,
         PlanRepository planRepository,
         TemplateRepository templateRepository,
-        RestTemplate restTemplate) {
-        this.apiUrl = apiUrl;
+        PlaceRepository placeRepository,
+        DistanceCalculationService distanceCalculationService) {
+        this.llmRestTemplate = llmRestTemplate;
         this.planRepository = planRepository;
         this.templateRepository = templateRepository;
-        this.restTemplate = restTemplate;
+        this.placeRepository = placeRepository;
+        this.distanceCalculationService = distanceCalculationService;
     }
 
-    @Async
     public CompletableFuture<List<Plan>> generateAndSavePlans(PlanRequestDto request) {
-        List<CompletableFuture<Plan>> futures = request.getPrompts().stream()
-            .map(this::processPrompt)
-            .collect(Collectors.toList());
-
-        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
-            .thenApply(v -> futures.stream()
-                .map(CompletableFuture::join)
-                .collect(Collectors.toList()));
-    }
-
-    private CompletableFuture<Plan> processPrompt(String prompt) {
         return CompletableFuture.supplyAsync(() -> {
-            try {
-                String llmResponse = callLLMApi(prompt);
-                PlanResponseDto dto = parseLLMResponse(llmResponse);
-                return savePlanAndTemplates(dto);
-            } catch (Exception e) {
-                log.error("Error processing prompt: ", e);
-                throw new RuntimeException("Failed to process prompt", e);
-            }
+            List<PlanRequestDto.PlaceDistance> distances = distanceCalculationService.calculateDistances(request.getPlaces());
+            String llmInput = createLLMInput(request, distances);
+            String llmResponse = callLLMApi(llmInput);
+            PlanResponseDto planResponse = parseLLMResponse(llmResponse);
+            Plan savedPlan = savePlanAndTemplates(planResponse, request);
+            return List.of(savedPlan);
+        }).exceptionally(ex -> {
+            log.error("Error generating and saving plans", ex);
+            return List.of(); // 빈 리스트를 반환하여 예외 상황 처리
         });
     }
 
-    private String callLLMApi(String prompt) {
+    private String createLLMInput(PlanRequestDto request, List<PlanRequestDto.PlaceDistance> distances) {
+        StringBuilder input = new StringBuilder();
+        input.append("Duration: ").append(request.getDuration()).append("\n");
+        input.append("Places:\n");
+
+        Map<Long, PlanRequestDto.PlaceInfo> placeMap = request.getPlaces().stream()
+            .collect(Collectors.toMap(PlanRequestDto.PlaceInfo::getId, p -> p));
+
+        PlanRequestDto.PlaceInfo basePlace = placeMap.get(distances.get(0).getFromPlaceId());
+        input.append("Base Location: ").append(basePlace.getName()).append(" (").append(basePlace.getType()).append(")\n\n");
+
+        for (PlanRequestDto.PlaceDistance distance : distances) {
+            PlanRequestDto.PlaceInfo place = placeMap.get(distance.getToPlaceId());
+            input.append("- ").append(place.getName()).append(" (").append(place.getType()).append(")\n");
+            input.append("  Distance from base: ").append(distance.getDistance()).append(" km\n");
+        }
+
+        return input.toString();
+    }
+
+    private String callLLMApi(String input) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, String>> request = new HttpEntity<>(Map.of("question", prompt), headers);
+        HttpEntity<Map<String, String>> request = new HttpEntity<>(Map.of("question", input), headers);
 
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, request, String.class);
+            ResponseEntity<String> response = llmRestTemplate.postForEntity(apiUrl, request, String.class);
             return response.getBody();
-        } catch (RestClientException e) {
-            log.error("호출 안됨: ", e);
-            throw new RuntimeException("Failed to call LLM API", e);
+        } catch (Exception e) {
+            log.error("Failed to call LLM API: ", e);
+            throw new RuntimeException("Error occurred while calling LLM API", e);
         }
     }
 
     private PlanResponseDto parseLLMResponse(String llmResponse) {
         try {
-            Yaml yaml = new Yaml();
-            Map<String, Object> responseMap = yaml.load(llmResponse);
+            log.debug("LLM response: {}", llmResponse);
 
-            String subject = (String) responseMap.get("subject");
-            List<Map<String, Object>> planDaysRaw = (List<Map<String, Object>>) responseMap.get("plan_days");
+            ObjectMapper jsonMapper = new ObjectMapper();
+            JsonNode jsonNode = jsonMapper.readTree(llmResponse);
+            String yamlString = jsonNode.get("text").asText();
 
-            List<PlanResponseDto.PlanDay> planDays = parsePlanDays(planDaysRaw);
+            yamlString = yamlString.replaceAll("```yaml\\n", "").replaceAll("```", "");
 
-            return new PlanResponseDto(subject, planDays);
+            ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
+            yamlMapper.findAndRegisterModules();
+            yamlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            yamlMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+
+            PlanResponseDto planResponseDto = yamlMapper.readValue(yamlString, PlanResponseDto.class);
+
+            // Debugging 추가
+            if (planResponseDto.getDayPlans() == null || planResponseDto.getDayPlans().isEmpty()) {
+                log.error("Day plans are missing or empty in the LLM response: {}", yamlString);
+                throw new LLMParsingException("Day plans are missing in the LLM response.");
+            }
+
+            log.debug("Parsed plan: {}", planResponseDto);
+            return planResponseDto;
         } catch (Exception e) {
-            log.error("파싱이 안됐습니다ㅜㅜ: ", e);
-            throw new RuntimeException("Failed to parse LLM response", e);
+            log.error("Failed to parse response: {}. Error: {}", llmResponse, e.getMessage(), e);
+            throw new LLMParsingException("Error occurred while parsing LLM response", e);
         }
     }
 
-    private List<PlanResponseDto.PlanDay> parsePlanDays(List<Map<String, Object>> planDays) {
-        return planDays.stream().map(dayMap -> {
-            Integer day = (Integer) dayMap.get("day");
-            List<Map<String, Object>> placesRaw = (List<Map<String, Object>>) dayMap.get("places");
 
-            List<PlanResponseDto.PlanPlace> places = placesRaw.stream()
-                .map(this::parsePlanPlace)
-                .collect(Collectors.toList());
 
-            return new PlanResponseDto.PlanDay(day, places);
-        }).collect(Collectors.toList());
-    }
-
-    private PlanResponseDto.PlanPlace parsePlanPlace(Map<String, Object> placeMap) {
-        return PlanResponseDto.PlanPlace.builder()
-            .order((Integer) placeMap.get("order"))
-            .title((String) placeMap.get("title"))
-            .moveTime((Integer) placeMap.get("move_time"))
-            .placeSummary((String) placeMap.get("place_summary"))
-            .reasoning((String) placeMap.get("reasoning"))
-            .build();
-    }
 
     @Transactional
-    public Plan savePlanAndTemplates(PlanResponseDto dto) {
-        String placeSummary = dto.getPlanDayList().stream()
-            .flatMap(day -> day.getPlanPlaceList().stream())
-            .map(PlanResponseDto.PlanPlace::getPlaceSummary)
-            .collect(Collectors.joining(", "));
-
-        String reasoning = dto.getPlanDayList().stream()
-            .flatMap(day -> day.getPlanPlaceList().stream())
-            .map(PlanResponseDto.PlanPlace::getReasoning)
-            .collect(Collectors.joining(", "));
-
+    public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request) {
         Plan plan = Plan.builder()
             .subject(dto.getSubject())
-            .placeSummary(placeSummary)
-            .reasoning(reasoning)
-            .startDay(LocalDate.now())
-            .endDay(LocalDate.now().plusDays(dto.getPlanDayList().size() - 1))
+            .startDay(request.getStartDay())
+            .endDay(request.getEndDay())
             .status(Plan.Status.BEGIN)
-            .totalMoveTime(calculateTotalMoveTime(dto.getPlanDayList()))
+            .type(Plan.PlanType.LLM)
             .build();
 
         Plan savedPlan = planRepository.save(plan);
 
-        List<Template> templates = dto.getPlanDayList().stream()
-            .flatMap(day -> day.getPlanPlaceList().stream()
-                .map(place -> Template.builder()
-                    .plan(savedPlan)
-                    .day(day.getDay())
-                    .order(place.getOrder())
-                    .moveTime(Time.valueOf(String.format("%02d:00:00", place.getMoveTime())))
-                    .build()))
-            .collect(Collectors.toList());
-
+        List<Template> templates = createTemplates(dto, savedPlan);
         templateRepository.saveAll(templates);
 
         return savedPlan;
     }
 
-    private Time calculateTotalMoveTime(List<PlanResponseDto.PlanDay> planDays) {
-        int totalMinutes = planDays.stream()
-            .flatMap(day -> day.getPlanPlaceList().stream())
-            .mapToInt(PlanResponseDto.PlanPlace::getMoveTime)
-            .sum();
+    private List<Template> createTemplates(PlanResponseDto dto, Plan savedPlan) {
+        List<Template> templates = new ArrayList<>();
+        for (PlanResponseDto.DayPlan dayPlan : dto.getDayPlans()) {
+            for (PlanResponseDto.PlaceDetail placeDetail : dayPlan.getPlaces()) {
+                // title로 Place 검색
+                Place place = placeRepository.findByTitle(placeDetail.getTitle())
+                    .orElseThrow(() -> new IllegalArgumentException("Place not found with title: " + placeDetail.getTitle()));
 
-        int hours = totalMinutes / 60;
-        int minutes = totalMinutes % 60;
-        return Time.valueOf(String.format("%02d:%02d:00", hours, minutes));
+                Template template = Template.builder()
+                    .plan(savedPlan)
+                    .place(place)
+                    .day(dayPlan.getDay())
+                    .order(placeDetail.getOrder())
+                    .moveTime(placeDetail.getMoveTime())
+                    .placeSummary(placeDetail.getPlaceSummary())
+                    .reasoning(placeDetail.getReasoning())
+                    .build();
+                templates.add(template);
+            }
+        }
+        return templates;
+    }
+
+    private PlanResponseDto createFinalResponse(Plan savedPlan, PlanResponseDto planResponse) {
+        return PlanResponseDto.builder()
+            .id(savedPlan.getId())
+            .userId(savedPlan.getUser().getId())
+            .status(savedPlan.getStatus().name())
+            .startDay(savedPlan.getStartDay())
+            .endDay(savedPlan.getEndDay())
+            .subject(planResponse.getSubject())
+            .type(planResponse.getType())
+            .dayPlans(planResponse.getDayPlans())
+            .build();
     }
 }

@@ -5,7 +5,6 @@ import com.nagne.domain.review.entity.Review;
 import com.nagne.domain.user.entity.User;
 import com.nagne.global.util.BaseEntity;
 import jakarta.persistence.*;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -13,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.Length;
 import org.hibernate.annotations.DynamicUpdate;
 import java.time.LocalDate;
 
@@ -26,6 +26,7 @@ import java.time.LocalDate;
 public class Plan extends BaseEntity {
 
     @Id
+    @Column(name = "plans_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -40,6 +41,10 @@ public class Plan extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Enumerated(EnumType.ORDINAL)
+    @Column(columnDefinition = "TINYINT")
+    private PlanType type;
+
     private LocalDate startDay;
 
     private LocalDate endDay;
@@ -47,13 +52,10 @@ public class Plan extends BaseEntity {
     private String subject;
 
     @Column(columnDefinition = "LONGTEXT")
-    private String overView;
+    private String overview;
 
-    private String placeSummary;
-
-    private String reasoning;
-
-    private Time totalMoveTime;
+    @Column(length = 500)
+    private String thumbnailUrl;
 
     @Builder.Default
     @OneToMany(mappedBy = "plan")
@@ -61,5 +63,9 @@ public class Plan extends BaseEntity {
 
     public enum Status {
         BEGIN, END
-    };
+    }
+
+    public enum PlanType {
+        LLM, CUSTOM
+    }
 }
