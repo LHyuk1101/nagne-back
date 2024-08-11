@@ -26,6 +26,6 @@ public class Store {
   private String openTime;
 
   @Column(length = 50)
-  private String infoCenter;
+  private String contactNumber;
 
 }
