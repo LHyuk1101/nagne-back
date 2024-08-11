@@ -23,7 +23,7 @@ public class PlanRequestDto {
     private Long id;
     private String name;
     private String contentType;
-    private String overview;// ContentTypeId 값
+    private String overview;
   }
   
   @Getter

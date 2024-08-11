@@ -144,11 +144,25 @@ public class LLMService {
   
   @Transactional
   public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request) {
+    String thumbnailUrl = null;
+    
+    if (!dto.getDayPlans().isEmpty() && dto.getDayPlans().get(0).getPlaces().size() > 1) {
+      Long secondPlaceId = dto.getDayPlans().get(0).getPlaces().get(1).getPlaceId();
+      Place secondPlace = placeRepository.findById(secondPlaceId)
+        .orElseThrow(
+          () -> new IllegalArgumentException("Place not found with id: " + secondPlaceId));
+      thumbnailUrl = secondPlace.getThumbnailUrl();
+    } else {
+      thumbnailUrl = "default thumbnailUrl";
+      
+    }
+    
     Plan plan = Plan.builder()
       .subject(dto.getSubject())
       .startDay(request.getStartDay())
       .endDay(request.getEndDay())
       .status(Plan.Status.BEGIN)
+      .thumbnailUrl(thumbnailUrl)
       .type(Plan.PlanType.LLM)
       .build();
     
