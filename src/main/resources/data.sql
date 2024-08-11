@@ -90,7 +90,52 @@ INSERT INTO place (area_code, title, address, content_id, content_type_id, overv
 (4, 'Biseulsan Recreational Forest (비슬산자연휴양림)', '99 Iryeonseonsa-gil, Yuga-eup, Dalseong-gun, Daegu', 615831, 76, 'Biseulsan Recreational Forest is located near Daegyeonbong Peak, between Johwabong and Gwanggibong Peaks, and is beautiful all year round. The largest charm of this forest is the ability to enjoy the beautiful scenery in comfort thanks to the amenities. The valley features many uniquely shaped rocks. Every year in late spring, the field near the summit of Biseulsan Mountain blooms with wildflowers. The forest is a popular location for youth retreats during school vacations. Additional facilities include cabins, a campground, pond, and more.', 35.69005271, 128.5129249161, 0, '2024-02-07 01:12:25', 'TOUR', ''),
 (4, 'Bongsan Culture Street (봉산문화거리)', '38, Bongsanmunhwa-gil, Jung-gu, Daegu', 1178697, 76, 'Bongsan Culture Street is a landmark culture & arts place in Daegu. The street, which stretches all the way from Daegu Hakwon to Bongsan Yukgeori (six-way intersection), has over 20 galleries of various sizes. It was 1991 when the small alley with several art galleries started to turn into a breeding ground for culture and the arts. Soon after, the street was officially designated ''Bongsan Culture Street'' and subsequently, the roads were neatly paved, artistic street lamps were installed, and streetside gardens were created. With the opening of Bongsan Culture Center and Cultural House for Teens, the street became increasingly frequently by citizens, not just professional artists. At Bongsan Culture Street, artwork os on display throughout the year and every October  (when the Bongsan Art Festival is held) the whole street is filled with artistic passion.', 35.8618042938, 128.5980293412, 0, '2020-03-24 13:35:48', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/41/1026241_image3_1.jpg'),
 (4, 'Buinsa Temple (Daegu) (부인사(대구))', '967-28 Palgongsan-ro, Dong-gu, Daegu', 3105357, 76, 'Buinsa Temple is a temple nestled on the southern slopes of Palgongsan Mountain, with a deep historical connection to Queen Seondeok of Silla (580–647). The temple is renowned for preserving the woodblocks of the First Tripitaka Koreana, a collection of Buddhist scriptures carved in the 11th century. The current Buinsa Temple encompasses significant structures, including Daeungjeon Hall, Queen Seondeok''s Memorial Hall, and Samseonggak Shrine. Visitors have the opportunity to appreciate the scenic beauty of nature while exploring the cultural and architectural heritage from the Silla and Goryeo periods.', 35.9949489511, 128.6740022555, 0, '2024-02-23 09:42:52', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/22/1574222_image3_1.jpg'),
-(4, 'Daegu Apsan Park (대구앞산공원)', '574-87 Apsansunhwan-ro, Nam-gu, Daegu', 1252669, 76, 'Daegu Apsan Park, as its name suggests, is a mountain park located in front of Daegu. It is a natural park where visitors can take a cable car to the summit observation deck and enjoy a panoramic view of the cityscape below. The park features numerous valleys, springs, as well as landmarks such as the Nakdong River Victory Memorial Hall, Chunghontap tower, youth training center, archery range, riding facilities, children''s playground, library, museum, and botanical garden.', 35.8290189503, 128.5890560428, 0, '2024-03-15 01:49:45', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/09/2363709_image3_1.jpg');
+(4, 'Daegu Apsan Park (대구앞산공원)', '574-87 Apsansunhwan-ro, Nam-gu, Daegu', 1252669, 82, 'Daegu Apsan Park, as its name suggests, is a mountain park located in front of Daegu. It is a natural park where visitors can take a cable car to the summit observation deck and enjoy a panoramic view of the cityscape below. The park features numerous valleys, springs, as well as landmarks such as the Nakdong River Victory Memorial Hall, Chunghontap tower, youth training center, archery range, riding facilities, children''s playground, library, museum, and botanical garden.', 35.8290189503, 128.5890560428, 0, '2024-03-15 01:49:45', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/09/2363709_image3_1.jpg');
+
+--store 데이터 삽입
+INSERT INTO store (store_id, contact_number, open_time, place_id)
+VALUES
+(1, 'contact_number 1', '09:00', 1),
+(2, 'contact_number 2', '10:00', 2),
+(3, 'contact_number 3', '11:00', 3),
+(4, 'contact_number 4', '09:00', 4),
+(5, 'contact_number 5', '10:00', 5),
+(6, 'contact_number 6', '11:00', 6),
+(7, 'contact_number 7', '09:00', 7),
+(8, 'contact_number 8', '10:00', 8),
+(9, 'contact_number 9', '11:00', 9),
+(10, 'contact_number 10', '09:00', 10),
+(11, 'contact_number 11', '10:00', 11),
+(12, 'contact_number 12', '11:00', 12),
+(13, 'contact_number 13', '09:00', 13),
+(14, 'contact_number 14', '10:00', 14),
+(15, 'contact_number 15', '11:00', 15),
+(16, 'contact_number 16', '09:00', 16),
+(17, 'contact_number 17', '10:00', 17),
+(18, 'contact_number 18', '11:00', 18),
+(19, 'contact_number 19', '09:00', 19),
+(20, 'contact_number 20', '10:00', 20),
+(21, 'contact_number 21', '11:00', 21),
+(22, 'contact_number 22', '09:00', 22),
+(23, 'contact_number 23', '10:00', 23),
+(24, 'contact_number 24', '11:00', 24),
+(25, 'contact_number 25', '09:00', 25),
+(26, 'contact_number 26', '10:00', 26),
+(27, 'contact_number 27', '11:00', 27),
+(28, 'contact_number 28', '09:00', 28),
+(29, 'contact_number 29', '10:00', 29),
+(30, 'contact_number 30', '11:00', 30),
+(31, 'contact_number 31', '09:00', 31),
+(32, 'contact_number 32', '10:00', 32),
+(33, 'contact_number 33', '11:00', 33),
+(34, 'contact_number 34', '09:00', 34),
+(35, 'contact_number 35', '10:00', 35),
+(36, 'contact_number 36', '11:00', 36),
+(37, 'contact_number 37', '09:00', 37),
+(38, 'contact_number 38', '10:00', 38),
+(39, 'contact_number 39', '11:00', 39),
+(40, 'contact_number 40', '09:00', 40);
+
 --placeImg 데이터 삽입
 INSERT INTO place_img (place_id, img_url)
 VALUES
