@@ -1,12 +1,11 @@
 package com.nagne.domain.place.repository;
 
 import com.nagne.domain.place.dto.PlaceDTO;
-import com.nagne.domain.place.entity.Area;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.entity.PlaceImg;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,7 +34,35 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     + "WHERE pi.place.id = :id")
   List<PlaceImg> findByPlaceId(Long id);
 
-
   Optional<Place> findByTitle(String title);
+
+  // 새로운 메서드들 추가
+  @Query("SELECT new com.nagne.domain.place.dto.PlaceDTO(p.id, p.area, p.title, p.address, " +
+    "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl) "
+    +
+    "FROM Place p " +
+    "LEFT JOIN Store s ON s.place.id = p.id " +
+    "LEFT JOIN Area a ON p.area.id = a.id " +
+    "WHERE a.name = :region " +
+    "AND p.contentTypeId = 76 " +
+    "ORDER BY p.likes DESC, p.id")
+  List<PlaceDTO> findTop10ByRegionAndContentTypeId76OrderByLikes(
+    @Param("region") String region,
+    Pageable pageable
+  );
+
+  @Query("SELECT new com.nagne.domain.place.dto.PlaceDTO(p.id, p.area, p.title, p.address, " +
+    "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl) "
+    +
+    "FROM Place p " +
+    "LEFT JOIN Store s ON s.place.id = p.id " +
+    "LEFT JOIN Area a ON p.area.id = a.id " +
+    "WHERE a.name = :region " +
+    "AND p.contentTypeId = 80 " +
+    "ORDER BY p.likes DESC, p.id")
+  List<PlaceDTO> findTop10ByRegionAndContentTypeId82OrderByLikes(
+    @Param("region") String region,
+    Pageable pageable
+  );
 
 }

@@ -6,9 +6,12 @@ import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.travelinfo.service.TravelInfoService;
 import com.nagne.global.response.ApiResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,47 +27,32 @@ public class TravelInfoController {
   private final PlaceRepository placeRepository;
   private final TravelInfoService travelInfoService;
 
+  @GetMapping("/find/{region}")
+  public List<PlaceDTO> findPlacesByRegion(@PathVariable("region") String region) {
+
+    // 각 contentTypeId에 대해 10건씩 가져오기 위한 Pageable 설정
+    Pageable pageable = PageRequest.of(0, 10);
+
+    // 두 contentTypeId에 대한 상위 10개의 결과를 각각 가져옴
+    List<PlaceDTO> top10ContentTypeId76 = placeRepository.findTop10ByRegionAndContentTypeId76OrderByLikes(
+      region, pageable);
+    List<PlaceDTO> top10ContentTypeId82 = placeRepository.findTop10ByRegionAndContentTypeId82OrderByLikes(
+      region, pageable);
+
+    // 결과를 합침
+    List<PlaceDTO> combinedResults = new ArrayList<>();
+    combinedResults.addAll(top10ContentTypeId76);
+    combinedResults.addAll(top10ContentTypeId82);
+
+    return combinedResults;
+
+  }
+
 
   @GetMapping("/travel")
   public ApiResponse<List<PlaceDTO>> getPlaceById(@ModelAttribute ReqPlaceDto reqPlaceDto) {
     List<PlaceDTO> places = travelInfoService.fetchPlaceByAreaName(reqPlaceDto);
     return ApiResponse.success(places);
-  }
-
-
-  @GetMapping("/find/{contentTypeId}/{areaCode}")
-  public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
-    @PathVariable Integer areaCode) {
-
-    List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
-      areaCode);
-
-    return places.stream().map(place ->
-      PlaceDTO.builder()
-        .id(place.getId())
-        .title(place.getTitle())
-        .area(place.getArea())
-        .overview(place.getOverview())
-        .build()).collect(Collectors.toList());
-
-  }
-
-  @GetMapping("/find/{areaCode}")
-  @Transactional(readOnly = true)
-  public List<PlaceDTO> findPlaecsByAreaCode(@PathVariable Integer areaCode) {
-
-    List<Place> places = placeRepository.findByArea_AreaCode(areaCode);
-
-    return places.stream().map(place -> PlaceDTO.builder()
-
-      .id(place.getId())
-      .title(place.getTitle())
-      .area(place.getArea())
-      .contentTypeId(place.getContentTypeId())
-      .overview(place.getOverview())
-      .address(place.getAddress())
-      .contactNumber("031-123-123")
-      .build()).collect(Collectors.toList());
   }
 
   @GetMapping("/findall")
@@ -82,4 +70,42 @@ public class TravelInfoController {
       .contentTypeId(place.getContentTypeId())
       .build()).collect(Collectors.toList());
   }
+
+//
+//
+//  @GetMapping("/find/{contentTypeId}/{areaCode}")
+//  public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
+//    @PathVariable Integer areaCode) {
+//
+//    List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
+//      areaCode);
+//
+//    return places.stream().map(place ->
+//      PlaceDTO.builder()
+//        .id(place.getId())
+//        .title(place.getTitle())
+//        .area(place.getArea())
+//        .overview(place.getOverview())
+//        .build()).collect(Collectors.toList());
+//
+//  }
+//
+//  @GetMapping("/find/{areaCode}")
+//  @Transactional(readOnly = true)
+//  public List<PlaceDTO> findPlaecsByAreaCode(@PathVariable Integer areaCode) {
+//
+//    List<Place> places = placeRepository.findByArea_AreaCode(areaCode);
+//
+//    return places.stream().map(place -> PlaceDTO.builder()
+//
+//      .id(place.getId())
+//      .title(place.getTitle())
+//      .area(place.getArea())
+//      .contentTypeId(place.getContentTypeId())
+//      .overview(place.getOverview())
+//      .address(place.getAddress())
+//      .contactNumber("031-123-123")
+//      .build()).collect(Collectors.toList());
+//  }
+
 }
