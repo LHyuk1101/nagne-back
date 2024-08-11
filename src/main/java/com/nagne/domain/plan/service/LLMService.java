@@ -17,6 +17,7 @@ import com.nagne.domain.template.repository.TemplateRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -78,26 +79,25 @@ public class LLMService {
     
     Map<Long, PlanRequestDto.PlaceInfo> placeMap = request.getPlaces().stream()
       .collect(Collectors.toMap(PlanRequestDto.PlaceInfo::getId, p -> p));
-    
     PlanRequestDto.PlaceInfo basePlace = placeMap.get(distances.get(0).getFromPlaceId());
     input.append("Base Location: ")
       .append(basePlace.getName())
       .append(" (")
-      .append(basePlace.getContentType())
+      .append(" contentType: ").append(basePlace.getContentType())
       .append(")\n");
-    input.append("ID: ").append(basePlace.getId()).append("\n");
-    input.append("Overview: ").append(basePlace.getOverview()).append("\n\n");
+    input.append("place_id: ").append(basePlace.getId()).append("\n");
+    input.append("overview: ").append(basePlace.getOverview()).append("\n\n");
     
     for (PlanRequestDto.PlaceDistance distance : distances) {
       PlanRequestDto.PlaceInfo place = placeMap.get(distance.getToPlaceId());
       input.append("- ")
         .append(place.getName())
         .append(" (")
-        .append(place.getContentType())
+        .append(" contentType: ").append(place.getContentType())
         .append(")\n");
-      input.append("  ID: ").append(place.getId()).append("\n");
+      input.append("  place_id: ").append(place.getId()).append("\n");
       input.append("  Distance from base: ").append(distance.getDistance()).append(" km\n");
-      input.append("  Overview: ").append(place.getOverview()).append("\n\n");
+      input.append("  overview: ").append(place.getOverview()).append("\n\n");
     }
     
     return input.toString();
@@ -150,9 +150,24 @@ public class LLMService {
     }
   }
   
+  private void validatePlaceIds(PlanResponseDto planResponse,
+    List<PlanRequestDto.PlaceInfo> originalPlaces) {
+    Set<Long> validPlaceIds = originalPlaces.stream()
+      .map(PlanRequestDto.PlaceInfo::getId)
+      .collect(Collectors.toSet());
+    
+    for (PlanResponseDto.DayPlan dayPlan : planResponse.getDayPlans()) {
+      for (PlanResponseDto.PlaceDetail placeDetail : dayPlan.getPlaces()) {
+        if (!validPlaceIds.contains(placeDetail.getPlaceId())) {
+          throw new IllegalArgumentException("Invalid placeId: " + placeDetail.getPlaceId());
+        }
+      }
+    }
+  }
   
   @Transactional
   public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request) {
+    validatePlaceIds(dto, request.getPlaces());
     String thumbnailUrl = "default_thumbnail_url";  // 기본값 설정
     
     if (!dto.getDayPlans().isEmpty() && dto.getDayPlans().get(0).getPlaces().size() > 1) {

@@ -29,10 +29,13 @@ public class PlanRequestDto {
   }
   
   private int calculateDuration(LocalDate startDay, LocalDate endDay) {
-    if (startDay != null && endDay != null) {
-      return (int) ChronoUnit.DAYS.between(startDay, endDay) + 1;
+    if (startDay == null || endDay == null) {
+      throw new IllegalArgumentException("Both startDay and endDay must be provided");
     }
-    return 0; // 또는 적절한 기본값
+    if (endDay.isBefore(startDay)) {
+      throw new IllegalArgumentException("endDay cannot be before startDay");
+    }
+    return (int) ChronoUnit.DAYS.between(startDay, endDay) + 1;
   }
   
   @Getter
