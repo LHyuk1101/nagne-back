@@ -19,14 +19,16 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
   List<Place> findByArea_AreaCode(Integer areaCode);
 
   @Query("SELECT new com.nagne.domain.place.dto.PlaceDTO(p.id, p.area, p.title, p.address, " +
-    "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl " +
+    "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl "
+    +
     ") " +
     "FROM Place p " +
     "LEFT JOIN Store s ON s.place.id = p.id " +
     "WHERE p.contentTypeId IN :regionIds " +
     "AND p.area.areaCode = :areaCode " +
     "ORDER BY p.likes DESC, p.id")
-  List<PlaceDTO> findByRegion(@Param("regionIds") Long[] regionIds,@Param("areaCode") int areaCode,  Pageable pageable);
+  List<PlaceDTO> findByRegion(@Param("regionIds") Long[] regionIds, @Param("areaCode") int areaCode,
+    Pageable pageable);
 
   @Query("SELECT pi "
     + "FROM PlaceImg pi "

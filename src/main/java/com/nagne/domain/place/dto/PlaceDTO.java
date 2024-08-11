@@ -34,7 +34,8 @@ public class PlaceDTO {
   private List<String> placeUrlImages;
 
   public PlaceDTO(Long id, Area area, String title, String address,
-    Long contentTypeId, String overview, String contactNumber, String opentime, Double lat, Double lng,
+    Long contentTypeId, String overview, String contactNumber, String opentime, Double lat,
+    Double lng,
     int likes, String thumbnailUrl) {
     this.id = id;
     this.area = area;
@@ -50,7 +51,7 @@ public class PlaceDTO {
     this.thumbnailUrl = thumbnailUrl;
   }
 
-  public PlaceDTO addPlaceImg(List<PlaceImg> placeImgs){
+  public PlaceDTO addPlaceImg(List<PlaceImg> placeImgs) {
     if (this.placeUrlImages == null) {
       this.placeUrlImages = new ArrayList<>();
     }
