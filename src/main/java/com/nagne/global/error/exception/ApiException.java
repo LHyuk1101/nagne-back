@@ -5,7 +5,7 @@ import com.nagne.global.error.ErrorCode;
 
 public class ApiException extends RuntimeException {
 
-  private ErrorCode errorCode;
+  private final ErrorCode errorCode;
 
   public ApiException(String message, ErrorCode errorCode) {
     super(message);

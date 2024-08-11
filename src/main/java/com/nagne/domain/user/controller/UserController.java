@@ -3,7 +3,6 @@ package com.nagne.domain.user.controller;
 import com.nagne.domain.user.dto.UserJoinDto;
 import com.nagne.domain.user.dto.UserPostDto;
 import com.nagne.domain.user.dto.UserResponseDto;
-import com.nagne.domain.user.entity.User;
 import com.nagne.domain.user.service.UserService;
 import com.nagne.global.error.ErrorCode;
 import com.nagne.global.error.exception.ApiException;
