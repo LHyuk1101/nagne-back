@@ -21,18 +21,19 @@ public class LikeController {
 
   @GetMapping("/find/{contentTypeId}/{areaCode}")
   public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
-      @PathVariable Integer areaCode) {
+    @PathVariable Integer areaCode) {
 
     List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
-        areaCode);
+      areaCode);
 
     return places.stream().map(place ->
-        PlaceDTO.builder()
-            .id(place.getId())
-            .title(place.getTitle())
-            .areaCode(place.getArea().getAreaCode())
-            .overview(place.getOverview())
-            .build()).collect(Collectors.toList());
+      PlaceDTO.builder()
+        .id(place.getId())
+        .title(place.getTitle())
+        .area(place.getArea())
+        .overview(place.getOverview())
+        .build()).collect(Collectors.toList());
+
   }
 
   @GetMapping("/find/{areaCode}")
@@ -42,14 +43,15 @@ public class LikeController {
     List<Place> places = placeRepository.findByArea_AreaCode(areaCode);
 
     return places.stream().map(place -> PlaceDTO.builder()
-        .id(place.getId())
-        .title(place.getTitle())
-        .areaCode(place.getArea().getAreaCode())
-        .contentTypeId(place.getContentTypeId())
-        .overview(place.getOverview())
-        .address(place.getAddress())
-        .contactNumber("031-123-123")
-        .build()).collect(Collectors.toList());
+
+      .id(place.getId())
+      .title(place.getTitle())
+      .area(place.getArea())
+      .contentTypeId(place.getContentTypeId())
+      .overview(place.getOverview())
+      .address(place.getAddress())
+      .contactNumber("031-123-123")
+      .build()).collect(Collectors.toList());
   }
 
   @GetMapping("/findall")
@@ -58,13 +60,13 @@ public class LikeController {
     List<Place> places = placeRepository.findAll();
 
     return places.stream().map(place -> PlaceDTO.builder()
-        .id(place.getId())
-        .title(place.getTitle())
-        .areaCode(place.getArea().getAreaCode())
-        .overview(place.getOverview())
-        .address(place.getAddress())
-        .contactNumber("031-123-123")
-        .contentTypeId(place.getContentTypeId())
-        .build()).collect(Collectors.toList());
+      .id(place.getId())
+      .title(place.getTitle())
+      .areaCode(place.getArea().getAreaCode())
+      .overview(place.getOverview())
+      .address(place.getAddress())
+      .contactNumber("031-123-123")
+      .contentTypeId(place.getContentTypeId())
+      .build()).collect(Collectors.toList());
   }
 }
