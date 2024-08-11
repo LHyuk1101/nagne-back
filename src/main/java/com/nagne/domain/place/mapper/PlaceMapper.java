@@ -2,12 +2,8 @@ package com.nagne.domain.place.mapper;
 
 import com.nagne.domain.place.dto.PlaceDTO;
 import com.nagne.domain.place.entity.Place;
-import com.nagne.domain.place.entity.PlaceImg;
-import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-
 import org.mapstruct.factory.Mappers;
 
 @Mapper

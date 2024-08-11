@@ -1,7 +1,6 @@
 package com.nagne.domain.plan.service;
 
 import com.nagne.domain.place.entity.ContentType;
-import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.plan.dto.PlanDto;
 import com.nagne.domain.plan.entity.Plan;
 import com.nagne.domain.plan.repository.PlanRepository;
@@ -9,7 +8,6 @@ import com.nagne.domain.template.repository.TemplateRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

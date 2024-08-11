@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TravelInfoService {
-  
+
   private final PlaceReader placeReader;
-  
+
   public List<PlaceDTO> fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
     return placeReader.readPlace(reqPlaceDto);
   }
-  
+
 }

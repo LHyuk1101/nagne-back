@@ -34,8 +34,8 @@ public enum ErrorCode {
 
   private final String code;
   private final String message;
-  private int status;
   private final LogLevel logLevel;
+  private final int status;
 
   ErrorCode(final int status, final String code, final String message, LogLevel logLevel) {
     this.status = status;

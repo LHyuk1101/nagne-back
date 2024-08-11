@@ -66,14 +66,13 @@ public class Place extends BaseEntity {
 
   @Column(length = 500)
   private String thumbnailUrl;
+  @Builder.Default
+  @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+  private List<PlaceImg> placeImgs = new ArrayList<>();
 
   public enum ApiType {
     TOUR, GOOGLE, NONE
   }
-
-  @Builder.Default
-  @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
-  private List<PlaceImg> placeImgs = new ArrayList<>();
 
 
 }

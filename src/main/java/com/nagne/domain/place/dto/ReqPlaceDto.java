@@ -1,6 +1,5 @@
 package com.nagne.domain.place.dto;
 
-import com.nagne.domain.place.entity.Area;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
