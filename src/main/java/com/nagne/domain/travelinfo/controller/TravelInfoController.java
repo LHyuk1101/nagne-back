@@ -4,6 +4,7 @@ import com.nagne.domain.place.dto.PlaceDTO;
 import com.nagne.domain.place.dto.ReqPlaceDto;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
+import com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo;
 import com.nagne.domain.travelinfo.service.TravelInfoService;
 import com.nagne.global.response.ApiResponse;
 import java.util.ArrayList;
@@ -28,19 +29,19 @@ public class TravelInfoController {
   private final TravelInfoService travelInfoService;
 
   @GetMapping("/find/{region}")
-  public List<PlaceDTO> findPlacesByRegion(@PathVariable("region") String region) {
+  public List<PlaceDTOforTravelInfo> findPlacesByRegion(@PathVariable("region") String region) {
 
     // 각 contentTypeId에 대해 10건씩 가져오기 위한 Pageable 설정
     Pageable pageable = PageRequest.of(0, 10);
 
     // 두 contentTypeId에 대한 상위 10개의 결과를 각각 가져옴
-    List<PlaceDTO> top10ContentTypeId76 = placeRepository.findTop10ByRegionAndContentTypeId76OrderByLikes(
+    List<PlaceDTOforTravelInfo> top10ContentTypeId76 = placeRepository.findTop10ByRegionAndContentTypeId76OrderByLikes(
       region, pageable);
-    List<PlaceDTO> top10ContentTypeId82 = placeRepository.findTop10ByRegionAndContentTypeId82OrderByLikes(
+    List<PlaceDTOforTravelInfo> top10ContentTypeId82 = placeRepository.findTop10ByRegionAndContentTypeId82OrderByLikes(
       region, pageable);
 
     // 결과를 합침
-    List<PlaceDTO> combinedResults = new ArrayList<>();
+    List<PlaceDTOforTravelInfo> combinedResults = new ArrayList<>();
     combinedResults.addAll(top10ContentTypeId76);
     combinedResults.addAll(top10ContentTypeId82);
 

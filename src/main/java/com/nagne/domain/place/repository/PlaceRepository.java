@@ -3,6 +3,7 @@ package com.nagne.domain.place.repository;
 import com.nagne.domain.place.dto.PlaceDTO;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.entity.PlaceImg;
+import com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
@@ -36,31 +37,37 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 
   Optional<Place> findByTitle(String title);
 
-  // 새로운 메서드들 추가
-  @Query("SELECT new com.nagne.domain.place.dto.PlaceDTO(p.id, p.area, p.title, p.address, " +
-    "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl) "
-    +
-    "FROM Place p " +
-    "LEFT JOIN Store s ON s.place.id = p.id " +
-    "LEFT JOIN Area a ON p.area.id = a.id " +
-    "WHERE a.name = :region " +
-    "AND p.contentTypeId = 76 " +
-    "ORDER BY p.likes DESC, p.id")
-  List<PlaceDTO> findTop10ByRegionAndContentTypeId76OrderByLikes(
+  @Query(
+    "SELECT new com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo(p.id, p.area, p.title, p.address, "
+      +
+      "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl, pi.imgUrl) "
+      +
+      "FROM Place p " +
+      "LEFT JOIN Store s ON s.place.id = p.id " +
+      "LEFT JOIN Area a ON p.area.id = a.id " +
+      "LEFT JOIN PlaceImg pi ON pi.place.id = p.id " +
+      "WHERE a.name = :region " +
+      "AND p.contentTypeId = 76 " +
+      "ORDER BY p.likes DESC, p.id")
+  List<PlaceDTOforTravelInfo> findTop10ByRegionAndContentTypeId76OrderByLikes(
     @Param("region") String region,
     Pageable pageable
   );
 
-  @Query("SELECT new com.nagne.domain.place.dto.PlaceDTO(p.id, p.area, p.title, p.address, " +
-    "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl) "
-    +
-    "FROM Place p " +
-    "LEFT JOIN Store s ON s.place.id = p.id " +
-    "LEFT JOIN Area a ON p.area.id = a.id " +
-    "WHERE a.name = :region " +
-    "AND p.contentTypeId = 80 " +
-    "ORDER BY p.likes DESC, p.id")
-  List<PlaceDTO> findTop10ByRegionAndContentTypeId82OrderByLikes(
+  // contentTypeId가 82인 데이터 중 place_img의 img_url 포함
+  @Query(
+    "SELECT new com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo(p.id, p.area, p.title, p.address, "
+      +
+      "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl, pi.imgUrl) "
+      +
+      "FROM Place p " +
+      "LEFT JOIN Store s ON s.place.id = p.id " +
+      "LEFT JOIN Area a ON p.area.id = a.id " +
+      "LEFT JOIN PlaceImg pi ON pi.place.id = p.id " +
+      "WHERE a.name = :region " +
+      "AND p.contentTypeId = 80 " +
+      "ORDER BY p.likes DESC, p.id")
+  List<PlaceDTOforTravelInfo> findTop10ByRegionAndContentTypeId82OrderByLikes(
     @Param("region") String region,
     Pageable pageable
   );
