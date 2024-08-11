@@ -34,9 +34,10 @@ public class PlaceReader {
       .map(convertToLong)
       .filter(Objects::nonNull)
       .toArray(Long[]::new);
-    PageRequest pageRequest = PageRequest.of(1, 3);
+    PageRequest pageRequest = PageRequest.of(reqPlaceDto.getPage() - 1, reqPlaceDto.getSize());
 
-    List<PlaceDTO> byRegion = placeRepository.findByRegion(convertRegions, reqPlaceDto.getAreaCode(), pageRequest);
+    List<PlaceDTO> byRegion = placeRepository.findByRegion(convertRegions,
+      reqPlaceDto.getAreaCode(), pageRequest);
 
     if (byRegion.isEmpty()) {
       throw new ApiException(ErrorCode.PLACE_FOUND_NOT_ERROR);
