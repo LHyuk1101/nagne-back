@@ -32,12 +32,13 @@ public class LikeController {
         PlaceDTO.builder()
             .id(place.getId())
             .title(place.getTitle())
-            .area(place.getArea())
+            .areaCode(place.getArea().getAreaCode())
             .overview(place.getOverview())
             .build()).collect(Collectors.toList());
   }
 
   @GetMapping("/find/{areaCode}")
+  @Transactional(readOnly = true)
   public List<PlaceDTO> findPlaecsByAreaCode(@PathVariable Integer areaCode) {
 
     List<Place> places = placeRepository.findByArea_AreaCode(areaCode);
@@ -45,7 +46,7 @@ public class LikeController {
     return places.stream().map(place -> PlaceDTO.builder()
         .id(place.getId())
         .title(place.getTitle())
-        .area(place.getArea())
+        .areaCode(place.getArea().getAreaCode())
         .contentTypeId(place.getContentTypeId())
         .overview(place.getOverview())
         .address(place.getAddress())
