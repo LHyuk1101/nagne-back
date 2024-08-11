@@ -14,7 +14,6 @@ import org.hibernate.annotations.DynamicInsert;
 /**
  * 연관관계 주인이 되는 엔티티 .
  */
-
 @Entity
 @Getter
 @Builder
@@ -29,6 +28,5 @@ public class Area {
 
   @Column(length = 100)
   private String name;
-
 }
 

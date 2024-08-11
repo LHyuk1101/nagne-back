@@ -15,16 +15,10 @@ public interface PlaceMapper {
 
   PlaceMapper INSTANCE = Mappers.getMapper(PlaceMapper.class);
 
-  @Mapping(source = "placeImgs", target = "placeUrlImages", qualifiedByName = "placeImgsToUrls")
+  @Mapping(target = "placeUrlImages", ignore = true)
   PlaceDTO placeToPlaceDTO(Place place);
 
   Place placeDTOToPlace(PlaceDTO placeDTO);
 
-  @Named("placeImgsToUrls")
-  default List<String> placeImgsToUrls(List<PlaceImg> placeImgs) {
-    return placeImgs.stream()
-      .map(PlaceImg::getImgUrl)
-      .toList();
-  }
 
 }

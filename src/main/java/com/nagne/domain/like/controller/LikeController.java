@@ -6,8 +6,6 @@ import com.nagne.domain.place.repository.PlaceRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +47,7 @@ public class LikeController {
         .contentTypeId(place.getContentTypeId())
         .overview(place.getOverview())
         .address(place.getAddress())
-        .infocenter("031-123-123")
+        .contactNumber("031-123-123")
         .build()).collect(Collectors.toList());
   }
 
@@ -64,7 +62,7 @@ public class LikeController {
         .areaCode(place.getArea().getAreaCode())
         .overview(place.getOverview())
         .address(place.getAddress())
-        .infocenter("031-123-123")
+        .contactNumber("031-123-123")
         .contentTypeId(place.getContentTypeId())
         .build()).collect(Collectors.toList());
   }
