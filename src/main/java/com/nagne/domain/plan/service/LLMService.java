@@ -80,16 +80,24 @@ public class LLMService {
       .collect(Collectors.toMap(PlanRequestDto.PlaceInfo::getId, p -> p));
     
     PlanRequestDto.PlaceInfo basePlace = placeMap.get(distances.get(0).getFromPlaceId());
-    input.append("Base Location: ").append(basePlace.getName()).append(" (")
-      .append(basePlace.getContentType()).append(")\n\n");
+    input.append("Base Location: ")
+      .append(basePlace.getName())
+      .append(" (")
+      .append(basePlace.getContentType())
+      .append(")\n");
+    input.append("ID: ").append(basePlace.getId()).append("\n");
     input.append("Overview: ").append(basePlace.getOverview()).append("\n\n");
     
     for (PlanRequestDto.PlaceDistance distance : distances) {
       PlanRequestDto.PlaceInfo place = placeMap.get(distance.getToPlaceId());
-      input.append("- ").append(place.getName()).append(" (").append(place.getContentType())
+      input.append("- ")
+        .append(place.getName())
+        .append(" (")
+        .append(place.getContentType())
         .append(")\n");
+      input.append("  ID: ").append(place.getId()).append("\n");
       input.append("  Distance from base: ").append(distance.getDistance()).append(" km\n");
-      input.append(" Overview: ").append(place.getOverview()).append("\n\n");
+      input.append("  Overview: ").append(place.getOverview()).append("\n\n");
     }
     
     return input.toString();
@@ -109,6 +117,7 @@ public class LLMService {
       throw new RuntimeException("Error occurred while calling LLM API", e);
     }
   }
+  
   
   private PlanResponseDto parseLLMResponse(String llmResponse) {
     try {
@@ -144,17 +153,27 @@ public class LLMService {
   
   @Transactional
   public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request) {
-    String thumbnailUrl = null;
+    String thumbnailUrl = "default_thumbnail_url";  // 기본값 설정
     
     if (!dto.getDayPlans().isEmpty() && dto.getDayPlans().get(0).getPlaces().size() > 1) {
-      Long secondPlaceId = dto.getDayPlans().get(0).getPlaces().get(1).getPlaceId();
-      Place secondPlace = placeRepository.findById(secondPlaceId)
-        .orElseThrow(
-          () -> new IllegalArgumentException("Place not found with id: " + secondPlaceId));
-      thumbnailUrl = secondPlace.getThumbnailUrl();
-    } else {
-      thumbnailUrl = "default thumbnailUrl";
+      PlanResponseDto.PlaceDetail secondPlace = dto.getDayPlans().get(0).getPlaces().get(1);
+      Long placeId = secondPlace.getPlaceId();
       
+      try {
+        Place place = placeRepository.findById(placeId)
+          .orElseThrow(() -> new IllegalArgumentException("ID가: " + placeId + "인게 없습니다."));
+        
+        if (place.getThumbnailUrl() != null && !place.getThumbnailUrl().isEmpty()) {
+          thumbnailUrl = place.getThumbnailUrl();
+          log.info("두번째 장소 썸네일 url: {}", thumbnailUrl);
+        } else {
+          log.warn("두번째 장소(ID: {} 에 썸네일 url 이 없음", placeId);
+        }
+      } catch (IllegalArgumentException e) {
+        log.error("두 번째 장소 찾는 중 문제가 생김: {}", e.getMessage());
+      }
+    } else {
+      log.info("첫 날 계획안에 장소가 없어 기본 이미지 사용");
     }
     
     Plan plan = Plan.builder()
@@ -167,9 +186,12 @@ public class LLMService {
       .build();
     
     Plan savedPlan = planRepository.save(plan);
+    log.info("Saved plan with id: {} and thumbnail URL: {}", savedPlan.getId(),
+      savedPlan.getThumbnailUrl());
     
     List<Template> templates = createTemplates(dto, savedPlan);
     templateRepository.saveAll(templates);
+    log.info("Saved {} templates for plan id: {}", templates.size(), savedPlan.getId());
     
     return savedPlan;
   }
@@ -178,7 +200,6 @@ public class LLMService {
     List<Template> templates = new ArrayList<>();
     for (PlanResponseDto.DayPlan dayPlan : dto.getDayPlans()) {
       for (PlanResponseDto.PlaceDetail placeDetail : dayPlan.getPlaces()) {
-        // id로 검색
         Place place = placeRepository.findById(placeDetail.getPlaceId())
           .orElseThrow(() -> new IllegalArgumentException(
             "Place not found with title: " + placeDetail.getPlaceId()));

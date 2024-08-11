@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-
+  
   private final String REST_API_ROOT = "/api/v1/**";
   private final String REST_API_GROUP = "REST API";
-
+  
   @Bean
   public OpenAPI springShopOpenAPI() {
     return new OpenAPI()
@@ -26,15 +26,15 @@ public class SwaggerConfig {
         .description("SpringShop Wiki Documentation")
         .url("https://springshop.wiki.github.org/docs"));
   }
-
+  
   @Bean
   public GroupedOpenApi restApi() {
-
+    
     return GroupedOpenApi.builder()
       .pathsToMatch(REST_API_ROOT)
       .group(REST_API_GROUP)
       .build();
   }
-
-
+  
+  
 }
