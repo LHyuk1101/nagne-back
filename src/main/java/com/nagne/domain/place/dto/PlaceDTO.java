@@ -11,10 +11,12 @@ public class PlaceDTO {
 
   private Long id;
   private Area area;
+  private Integer areaCode;
   private String title;
   private String address;
   private Long contentTypeId;
   private String overview;
+  private String infocenter;
   private Double lat;
   private Double lng;
   private int likes;
