@@ -55,9 +55,6 @@ spring:
 #  servlet:
 #    multipart:
 #      location: /Users/chany/Desktop/image
-  sql: # mysql에서는 data.sql를 빌드시 실행하려면 추가해야됨.
-    init:
-      mode: always
   jpa:
     hibernate:
       ddl-auto: none
@@ -66,7 +63,6 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
-    defer-datasource-initialization: true #data.sql 파일의 실행이 DB가 연결되고 난 이후에 실행되도록 설정
 
 springdoc:
   swagger-ui:

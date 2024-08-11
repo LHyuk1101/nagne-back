@@ -16,6 +16,7 @@ public class Store {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "store_id")
   private Long id;
 
   @OneToOne(fetch = FetchType.LAZY)
@@ -26,6 +27,6 @@ public class Store {
   private String openTime;
 
   @Column(length = 50)
-  private String infoCenter;
+  private String contactNumber;
 
 }

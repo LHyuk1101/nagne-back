@@ -1,4 +1,4 @@
-package com.nagne.domain.place.service;
+package com.nagne.domain.travelinfo.service;
 
 import com.nagne.domain.place.dto.PlaceDTO;
 import com.nagne.domain.place.dto.ReqPlaceDto;
@@ -9,14 +9,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PlaceService {
-
+public class TravelInfoService {
+  
   private final PlaceReader placeReader;
-
-  public List<PlaceDTO> fetchPlaceByRegion(ReqPlaceDto reqPlaceDto) {
-
+  
+  public List<PlaceDTO> fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
     return placeReader.readPlace(reqPlaceDto);
   }
-
-
+  
 }

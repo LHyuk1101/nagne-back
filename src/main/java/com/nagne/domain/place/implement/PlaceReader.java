@@ -1,7 +1,10 @@
 package com.nagne.domain.place.implement;
 
 import com.nagne.domain.place.dto.PlaceDTO;
+import com.nagne.domain.place.dto.ReqPlaceDto;
+import com.nagne.domain.place.entity.Area;
 import com.nagne.domain.place.entity.Place;
+import com.nagne.domain.place.entity.PlaceImg;
 import com.nagne.domain.place.mapper.PlaceMapper;
 import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.global.error.ErrorCode;
@@ -25,25 +28,30 @@ public class PlaceReader {
   private final PlaceMapper placeMapper = PlaceMapper.INSTANCE;
 
 
-  public List<PlaceDTO> readPlace(String[] regions) {
+  public List<PlaceDTO> readPlace(ReqPlaceDto reqPlaceDto) {
 
-    Long[] convertRegions = Arrays.stream(regions)
+    Long[] convertRegions = Arrays.stream(reqPlaceDto.getRegions())
       .map(convertToLong)
       .filter(Objects::nonNull)
       .toArray(Long[]::new);
-    PageRequest pageRequest = PageRequest.of(1, 3);
+    PageRequest pageRequest = PageRequest.of(reqPlaceDto.getPage() - 1, reqPlaceDto.getSize());
 
-    List<Place> byRegion = placeRepository.findByRegion(convertRegions, pageRequest);
+    List<PlaceDTO> byRegion = placeRepository.findByRegion(convertRegions,
+      reqPlaceDto.getAreaCode(), pageRequest);
 
     if (byRegion.isEmpty()) {
       throw new ApiException(ErrorCode.PLACE_FOUND_NOT_ERROR);
     }
 
     return byRegion.stream()
-      .map(placeMapper::placeToPlaceDTO)
+      .map(placeDTO -> {
+        List<PlaceImg> byPlaceId = placeRepository.findByPlaceId(placeDTO.getId());
+        System.out.println(byPlaceId);
+        return placeDTO.addPlaceImg(byPlaceId);
+      })
       .toList();
-  }
 
+  }
 
   private static final Function<String, Long> convertToLong = str -> {
     try {
