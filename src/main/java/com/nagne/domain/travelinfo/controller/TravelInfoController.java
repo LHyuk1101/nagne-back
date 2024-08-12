@@ -25,71 +25,69 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/place")
 public class TravelInfoController {
 
-  private final PlaceRepository placeRepository;
-  private final TravelInfoService travelInfoService;
+	private final PlaceRepository placeRepository;
+	private final TravelInfoService travelInfoService;
 
-  @GetMapping("/find/{region}")
-  public List<PlaceDTOforTravelInfo> findPlacesByRegion(@PathVariable("region") String region) {
+	@GetMapping("/find/{region}")
+	public List<PlaceDTOforTravelInfo> findPlacesByRegion(@PathVariable("region") String region) {
 
-    // 각 contentTypeId에 대해 10건씩 가져오기 위한 Pageable 설정
-    Pageable pageable = PageRequest.of(0, 10);
+		// 각 contentTypeId에 대해 10건씩 가져오기 위한 Pageable 설정
+		Pageable pageable = PageRequest.of(0, 10);
 
-    // 두 contentTypeId에 대한 상위 10개의 결과를 각각 가져옴
-    List<PlaceDTOforTravelInfo> top10ContentTypeId76 = placeRepository.findTop10ByRegionAndContentTypeId76OrderByLikes(
-      region, pageable);
-    List<PlaceDTOforTravelInfo> top10ContentTypeId82 = placeRepository.findTop10ByRegionAndContentTypeId82OrderByLikes(
-      region, pageable);
+		// 두 contentTypeId에 대한 상위 10개의 결과를 각각 가져옴
+		List<PlaceDTOforTravelInfo> top10ContentTypeId76 = placeRepository.findTop10ByRegionAndContentTypeId76OrderByLikes(
+			region, pageable);
+		List<PlaceDTOforTravelInfo> top10ContentTypeId82 = placeRepository.findTop10ByRegionAndContentTypeId82OrderByLikes(
+			region, pageable);
 
-    // 결과를 합침
-    List<PlaceDTOforTravelInfo> combinedResults = new ArrayList<>();
-    combinedResults.addAll(top10ContentTypeId76);
-    combinedResults.addAll(top10ContentTypeId82);
+		// 결과를 합침
+		List<PlaceDTOforTravelInfo> combinedResults = new ArrayList<>();
+		combinedResults.addAll(top10ContentTypeId76);
+		combinedResults.addAll(top10ContentTypeId82);
 
-    return combinedResults;
+		return combinedResults;
 
-  }
+	}
 
 
-  @GetMapping("/travel")
-  public ApiResponse<List<PlaceDTO>> getPlaceById(@ModelAttribute ReqPlaceDto reqPlaceDto) {
-    List<PlaceDTO> places = travelInfoService.fetchPlaceByAreaName(reqPlaceDto);
-    return ApiResponse.success(places);
-  }
+	@GetMapping("/travel")
+	public ApiResponse<List<PlaceDTO>> getPlaceById(@ModelAttribute ReqPlaceDto reqPlaceDto) {
+		List<PlaceDTO> places = travelInfoService.fetchPlaceByAreaName(reqPlaceDto);
+		return ApiResponse.success(places);
+	}
 
-  @GetMapping("/findall")
-  @Transactional(readOnly = true)
-  public List<PlaceDTO> findAllPlaces() {
-    List<Place> places = placeRepository.findAll();
+	@GetMapping("/findall")
+	@Transactional(readOnly = true)
+	public List<PlaceDTO> findAllPlaces() {
+		List<Place> places = placeRepository.findAll();
 
-    return places.stream().map(place -> PlaceDTO.builder()
-      .id(place.getId())
-      .title(place.getTitle())
-      .areaCode(place.getArea().getAreaCode())
-      .overview(place.getOverview())
-      .address(place.getAddress())
-      .contactNumber("031-123-123")
-      .contentTypeId(place.getContentTypeId())
-      .build()).collect(Collectors.toList());
-  }
+		return places.stream().map(place -> PlaceDTO.builder()
+			.id(place.getId())
+			.title(place.getTitle())
+			.areaCode(place.getArea().getAreaCode())
+			.overview(place.getOverview())
+			.address(place.getAddress())
+			.contactNumber("031-123-123")
+			.contentTypeId(place.getContentTypeId())
+			.build()).collect(Collectors.toList());
+	}
 
-//
-//
-//  @GetMapping("/find/{contentTypeId}/{areaCode}")
-//  public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
-//    @PathVariable Integer areaCode) {
-//
-//    List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
-//      areaCode);
-//
-//    return places.stream().map(place ->
-//      PlaceDTO.builder()
-//        .id(place.getId())
-//        .title(place.getTitle())
-//        .area(place.getArea())
-//        .overview(place.getOverview())
-//        .build()).collect(Collectors.toList());
-//
-//  }
+	@GetMapping("/find/{contentTypeId}/{areaCode}")
+	public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
+		@PathVariable Integer areaCode) {
+
+		List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
+			areaCode);
+
+		return places.stream().map(place ->
+			PlaceDTO.builder()
+				.id(place.getId())
+				.title(place.getTitle())
+				.areaCode(place.getArea().getAreaCode())
+				.overview(place.getOverview())
+				.build()).collect(Collectors.toList());
+
+	}
 //
 //  @GetMapping("/find/{areaCode}")
 //  @Transactional(readOnly = true)
@@ -108,5 +106,12 @@ public class TravelInfoController {
 //      .contactNumber("031-123-123")
 //      .build()).collect(Collectors.toList());
 //  }
+
+	@GetMapping("/findall/{region}")
+	public List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@PathVariable("region") String region) {
+		// findAllPlacesByRegion 메서드를 호출하여 모든 데이터를 가져옴
+		return placeRepository.findAllPlacesByRegion(region);
+	}
+
 
 }
