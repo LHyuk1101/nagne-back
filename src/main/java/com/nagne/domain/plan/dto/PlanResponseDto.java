@@ -1,11 +1,10 @@
 package com.nagne.domain.plan.dto;
 
 import com.nagne.domain.plan.entity.Plan;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder

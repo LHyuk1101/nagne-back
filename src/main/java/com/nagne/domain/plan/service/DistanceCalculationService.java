@@ -4,14 +4,13 @@ import com.nagne.domain.place.entity.ContentType;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.plan.dto.PlanRequestDto;
-import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j

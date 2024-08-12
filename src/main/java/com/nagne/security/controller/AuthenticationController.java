@@ -3,6 +3,7 @@ package com.nagne.security.controller;
 import com.nagne.domain.user.dto.TokenResponseDto;
 import com.nagne.domain.user.dto.UserLoginDto;
 import com.nagne.domain.user.entity.User;
+import com.nagne.domain.user.repository.UserRepository;
 import com.nagne.global.error.exception.EntityNotFoundException;
 import com.nagne.security.jwt.JwtTokenProvider;
 import com.nagne.security.service.AuthenticationService;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.nagne.domain.user.repository.UserRepository;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")

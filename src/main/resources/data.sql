@@ -5,14 +5,14 @@
 
 SET @password = '$2b$12$VUGN6yHZ8aaI2sgL4gKHguWAis/xH9oGF5JwT9.HG6Olt9X0I5NJK';
 
-INSERT INTO users(password, email, nickname, nation, profile_img, role, term_agreed, created_at, updated_at)
-VALUES(@password, 'admin@test.com', '관리자', 410, null, 'ADMIN', true, NOW(), NOW());
+insert into users(password, email, nickname, nation, profile_img, role, term_agreed, created_at, updated_at)
+values(@password, 'admin@test.com', '관리자', 410, null, 'ADMIN', true, NOW(), NOW());
 
 /*
   국가별 테스트 계정
 */
-INSERT INTO users(password, email, nickname, nation, profile_img, role, term_agreed, created_at, updated_at)
-VALUES(@password, 'test@test.com', '테스트', 410, null, 'USER', true, NOW(), NOW()),
+insert into users(password, email, nickname, nation, profile_img, role, term_agreed, created_at, updated_at)
+values(@password, 'test@test.com', '테스트', 410, null, 'USER', true, NOW(), NOW()),
       (@password, 'test1@test.com', '테스트1', 840, null, 'USER', true, NOW(), NOW()), -- 미국
       (@password, 'test2@test.com', '테스트2', 124, null, 'USER', true, NOW(), NOW()), -- 캐나다
       (@password, 'test3@test.com', '테스트3', 250, null, 'USER', true, NOW(), NOW()), -- 프랑스
@@ -28,9 +28,9 @@ VALUES(@password, 'test@test.com', '테스트', 410, null, 'USER', true, NOW(), 
 
 
  --Area 데이터 삽입
-INSERT INTO area
+insert into area
     (area_code, name)
-VALUES
+values
     (1, 'SEOUL'),
     (2, 'INCHEON'),
     (3, 'DAEJEON'),
@@ -50,7 +50,7 @@ VALUES
     (39, 'JEJUDO');
 
 -- Place 데이터 삽입
-INSERT INTO place (area_code, title, address, content_id, content_type_id, overview, lat, lng, likes, modified_time, api_type, thumbnail_url) VALUES
+insert into place (area_code, title, address, content_id, content_type_id, overview, lat, lng, likes, modified_time, api_type, thumbnail_url) values
 (1, '63 Square (63스퀘어)', '50, 63-ro, Yeongdeungpo-gu, Seoul', 264122, 76, '63 Square is one of the most recognizable landmarks of Korea and the symbol of its rapid economic growth. Like its name, the building has 63 floors, 60 above-ground and 3 underground. The lobby and the outdoor garden exhibits installations created by contemporary artists. 63 Square is known for its golden glass facade, which puts up different ambiences depending on the season and the amount of sunlight. It is the best place to watch the fireworks from the Seoul International Fireworks Festival.', 37.5198673186, 126.9403285961, 0, '2024-03-05 01:35:26', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg'),
 (1, 'A Moment in Time - Live Caricature & Gallery (시간을 담다)', '20-1, Samil-daero 8-gil, Jung-gu, Seoul', 2590011, 76, 'A Moment in Time adds in aspects of Korean traditions, customs, and landmarks like hanbok, Gwanghwamun Gate, and Korean mystical animals into caricature artworks, serving as an excellent souvenir for both locals and travelers. The gallery also offers hands-on programs like coloring caricature and traditional folk art. In addition, original design products from A Moment in Time are also available, making great gifts.', 37.5627326749, 126.9901422899, 0, '2021-03-25 11:18:52', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/90/2589890_image2_1.bmp'),
 (1, 'Achasan Ecological Park (아차산생태공원)', '127, Walkerhill-ro, Gwangjin-gu, Seoul', 1747653, 76, 'Achasan Ecological Park was established under the Seoul Metropolitan Government''s Five Year Plan for Urban Green Expansion. Through various events and activities, the park provides opportunities to experience and learn about nature and its ecology. Major facilities include Eco Park, Rendezvous Square, Red Clay Road, Barefoot Path, Pine Forest, Mineral Spring, Eco Trail and pergolas.', 37.5519609256, 127.1012880282, 0, '2021-05-14 13:39:19', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/60/741860_image3_1.jpg'),
@@ -93,8 +93,8 @@ INSERT INTO place (area_code, title, address, content_id, content_type_id, overv
 (4, 'Daegu Apsan Park (대구앞산공원)', '574-87 Apsansunhwan-ro, Nam-gu, Daegu', 1252669, 82, 'Daegu Apsan Park, as its name suggests, is a mountain park located in front of Daegu. It is a natural park where visitors can take a cable car to the summit observation deck and enjoy a panoramic view of the cityscape below. The park features numerous valleys, springs, as well as landmarks such as the Nakdong River Victory Memorial Hall, Chunghontap tower, youth training center, archery range, riding facilities, children''s playground, library, museum, and botanical garden.', 35.8290189503, 128.5890560428, 0, '2024-03-15 01:49:45', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/09/2363709_image3_1.jpg');
 
 --store 데이터 삽입
-INSERT INTO store (store_id, contact_number, open_time, place_id)
-VALUES
+insert into store (store_id, contact_number, open_time, place_id)
+values
 (1, 'contact_number 1', '09:00', 1),
 (2, 'contact_number 2', '10:00', 2),
 (3, 'contact_number 3', '11:00', 3),
@@ -137,8 +137,8 @@ VALUES
 (40, 'contact_number 40', '09:00', 40);
 
 --placeImg 데이터 삽입
-INSERT INTO place_img (place_id, img_url)
-VALUES
+insert into place_img (place_id, img_url)
+values
 (1, 'http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg'),
 (2, 'http://tong.visitkorea.or.kr/cms/resource/90/2589890_image2_1.bmp'),
 (3, 'http://tong.visitkorea.or.kr/cms/resource/60/741860_image3_1.jpg'),

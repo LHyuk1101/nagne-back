@@ -24,6 +24,15 @@ public class UserPostDto {
 
   private Integer nation;
 
+  public static UserPostDto toDto(User user) {
+    return UserPostDto.builder()
+      .email(user.getEmail())
+      .nickname(user.getNickname())
+      .profileImg(user.getProfileImg())
+      .nation(user.getNation())
+      .build();
+  }
+
   public User toEntity() {
     return User.builder()
       .email(this.email)
@@ -39,15 +48,6 @@ public class UserPostDto {
       .email(this.email != null ? this.email : user.getEmail())
       .nickname(this.nickname != null ? this.nickname : user.getNickname())
       .role(user.getRole())
-      .build();
-  }
-
-  public static UserPostDto toDto(User user) {
-    return UserPostDto.builder()
-      .email(user.getEmail())
-      .nickname(user.getNickname())
-      .profileImg(user.getProfileImg())
-      .nation(user.getNation())
       .build();
   }
 }

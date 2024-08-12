@@ -10,10 +10,15 @@ import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.plan.dto.PlanRequestDto;
 import com.nagne.domain.plan.dto.PlanResponseDto;
 import com.nagne.domain.plan.entity.Plan;
-import com.nagne.domain.template.entity.Template;
 import com.nagne.domain.plan.exception.LLMParsingException;
 import com.nagne.domain.plan.repository.PlanRepository;
+import com.nagne.domain.template.entity.Template;
 import com.nagne.domain.template.repository.TemplateRepository;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,12 +29,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j

@@ -23,15 +23,14 @@ public class TravelInfoController {
 
   private final PlaceRepository placeRepository;
   private final TravelInfoService travelInfoService;
-  
-  
+
+
   @GetMapping("/travel")
   public ApiResponse<List<PlaceDTO>> getPlaceById(@ModelAttribute ReqPlaceDto reqPlaceDto) {
     List<PlaceDTO> places = travelInfoService.fetchPlaceByAreaName(reqPlaceDto);
     return ApiResponse.success(places);
   }
-  
-  
+
 
   @GetMapping("/find/{contentTypeId}/{areaCode}")
   public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
