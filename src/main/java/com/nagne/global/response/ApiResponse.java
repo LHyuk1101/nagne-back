@@ -9,12 +9,12 @@ public class ApiResponse<T> {
 
   private final ErrorMessage message;
 
-  private final T data;
+  private final T items;
 
-  private ApiResponse(ResultType result, ErrorMessage message, T data) {
+  private ApiResponse(ResultType result, ErrorMessage message, T items) {
     this.result = result;
     this.message = message;
-    this.data = data;
+    this.items = items;
   }
 
   public static ApiResponse<?> success() {
@@ -41,7 +41,7 @@ public class ApiResponse<T> {
     return message;
   }
 
-  public T getData() {
-    return data;
+  public T getItems() {
+    return items;
   }
 }
