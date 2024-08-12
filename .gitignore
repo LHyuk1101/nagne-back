@@ -1,3 +1,6 @@
+.DS_STORE
+application-db.yml
+application-api-key.yml
 HELP.md
 .gradle
 build/
@@ -35,3 +38,5 @@ out/
 
 ### VS Code ###
 .vscode/
+src/main/resources/application-api-key.yml
+src/main/resources/application-db.yml
