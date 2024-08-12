@@ -72,24 +72,23 @@ public class TravelInfoController {
       .build()).collect(Collectors.toList());
   }
 
-//
-//
-//  @GetMapping("/find/{contentTypeId}/{areaCode}")
-//  public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
-//    @PathVariable Integer areaCode) {
-//
-//    List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
-//      areaCode);
-//
-//    return places.stream().map(place ->
-//      PlaceDTO.builder()
-//        .id(place.getId())
-//        .title(place.getTitle())
-//        .area(place.getArea())
-//        .overview(place.getOverview())
-//        .build()).collect(Collectors.toList());
-//
-//  }
+
+  @GetMapping("/find/{contentTypeId}/{areaCode}")
+  public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
+    @PathVariable Integer areaCode) {
+
+    List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
+      areaCode);
+
+    return places.stream().map(place ->
+      PlaceDTO.builder()
+        .id(place.getId())
+        .title(place.getTitle())
+        .areaCode(place.getArea().getAreaCode())
+        .overview(place.getOverview())
+        .build()).collect(Collectors.toList());
+
+  }
 //
 //  @GetMapping("/find/{areaCode}")
 //  @Transactional(readOnly = true)
