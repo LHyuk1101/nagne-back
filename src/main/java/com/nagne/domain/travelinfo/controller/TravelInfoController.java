@@ -2,6 +2,7 @@ package com.nagne.domain.travelinfo.controller;
 
 import com.nagne.domain.place.dto.PlaceDTO;
 import com.nagne.domain.place.dto.ReqPlaceDto;
+import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo;
 import com.nagne.domain.travelinfo.service.TravelInfoService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +40,6 @@ public class TravelInfoController {
     List<PlaceDTOforTravelInfo> combinedResults = new ArrayList<>();
     combinedResults.addAll(top10ContentTypeId76);
     combinedResults.addAll(top10ContentTypeId82);
-
     return ApiResponse.success(combinedResults);
 
   }
@@ -50,56 +51,29 @@ public class TravelInfoController {
     return ApiResponse.success(places);
   }
 
-//  @GetMapping("/findall")
-//  @Transactional(readOnly = true)
-//  public List<PlaceDTO> findAllPlaces() {
-//    List<Place> places = placeRepository.findAll();
-//
-//    return places.stream().map(place -> PlaceDTO.builder()
-//      .id(place.getId())
-//      .title(place.getTitle())
-//      .areaCode(place.getArea().getAreaCode())
-//      .overview(place.getOverview())
-//      .address(place.getAddress())
-//      .contactNumber("031-123-123")
-//      .contentTypeId(place.getContentTypeId())
-//      .build()).collect(Collectors.toList());
-//  }
-//
-//
-//  @GetMapping("/find/{contentTypeId}/{areaCode}")
-//  public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
-//    @PathVariable Integer areaCode) {
-//
-//    List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
-//      areaCode);
-//
-//    return places.stream().map(place ->
-//      PlaceDTO.builder()
-//        .id(place.getId())
-//        .title(place.getTitle())
-//        .areaCode(place.getArea().getAreaCode())
-//        .overview(place.getOverview())
-//        .build()).collect(Collectors.toList());
-//
-//  }
-//
-//  @GetMapping("/find/{areaCode}")
-//  @Transactional(readOnly = true)
-//  public List<PlaceDTO> findPlaecsByAreaCode(@PathVariable Integer areaCode) {
-//
-//    List<Place> places = placeRepository.findByArea_AreaCode(areaCode);
-//
-//    return places.stream().map(place -> PlaceDTO.builder()
-//
-//      .id(place.getId())
-//      .title(place.getTitle())
-//      .area(place.getArea())
-//      .contentTypeId(place.getContentTypeId())
-//      .overview(place.getOverview())
-//      .address(place.getAddress())
-//      .contactNumber("031-123-123")
-//      .build()).collect(Collectors.toList());
-//  }
+  @GetMapping("/find/{contentTypeId}/{areaCode}")
+  public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
+                                   @PathVariable Integer areaCode) {
+
+    List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
+            areaCode);
+
+    return places.stream().map(place ->
+            PlaceDTO.builder()
+                    .id(place.getId())
+                    .title(place.getTitle())
+                    .areaCode(place.getArea().getAreaCode())
+                    .overview(place.getOverview())
+                    .build()).collect(Collectors.toList());
+
+  }
+
+
+  @GetMapping("/findall/{region}")
+  public List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@PathVariable("region") String region) {
+    // findAllPlacesByRegion 메서드를 호출하여 모든 데이터를 가져옴
+    return placeRepository.findAllPlacesByRegion(region);
+  }
+
 
 }

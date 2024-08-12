@@ -36,6 +36,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
           + "WHERE pi.place.id = :id")
   List<PlaceImg> findByPlaceId(Long id);
 
+
   Optional<Place> findByTitle(String title);
 
   @Query(
@@ -72,5 +73,19 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
           @Param("region") String region,
           Pageable pageable
   );
+
+
+  @Query(
+          "SELECT new com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo(p.id, p.area, p.title, p.address, "
+                  + "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl, pi.imgUrl) "
+                  + "FROM Place p " +
+                  "LEFT JOIN Store s ON s.place.id = p.id " +
+                  "LEFT JOIN Area a ON p.area.id = a.id " +
+                  "LEFT JOIN PlaceImg pi ON pi.place.id = p.id " +
+                  "WHERE a.name = :region "
+                  + "ORDER BY p.likes DESC, p.id"
+  )
+  List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@Param("region") String region);
+
 
 }
