@@ -87,5 +87,11 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
   )
   List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@Param("region") String region);
 
+  @Query("SELECT p "
+          + "FROM Place p "
+          + "JOIN FETCH p.area "
+          + "LEFT JOIN FETCH p.placeImgs "
+          + "WHERE p.id IN :placeIds")
+  List<Place> findPlaceByPlaceId(@Param("placeIds") List<Long> placeIds);
 
 }
