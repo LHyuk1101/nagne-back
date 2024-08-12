@@ -56,6 +56,7 @@ public class LLMService {
     this.distanceCalculationService = distanceCalculationService;
   }
   
+  @Transactional
   public CompletableFuture<List<Plan>> generateAndSavePlans(PlanRequestDto request) {
     return CompletableFuture.supplyAsync(() -> {
       List<PlanRequestDto.PlaceDistance> distances = distanceCalculationService.calculateDistances(
@@ -75,7 +76,7 @@ public class LLMService {
     List<PlanRequestDto.PlaceDistance> distances) {
     StringBuilder input = new StringBuilder();
     input.append("Duration: ").append(request.getDuration()).append("\n");
-    input.append("Places:\n");
+    input.append("Place_info:\n");
     
     Map<Long, PlanRequestDto.PlaceInfo> placeMap = request.getPlaces().stream()
       .collect(Collectors.toMap(PlanRequestDto.PlaceInfo::getId, p -> p));
@@ -169,6 +170,16 @@ public class LLMService {
   public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request) {
     validatePlaceIds(dto, request.getPlaces());
     String thumbnailUrl = "default_thumbnail_url";  // 기본값 설정
+
+//    Area area = null;
+//    if (request.getAreaCode() != null) {
+//      area = placeRepository.findByArea_AreaCode(request.getAreaCode())
+//        .stream()
+//        .findFirst()
+//        .map(Place::getArea)
+//        .orElseThrow(
+//          () -> new IllegalArgumentException("Area not found with code: " + request.getAreaCode()));
+//    }
     
     if (!dto.getDayPlans().isEmpty() && dto.getDayPlans().get(0).getPlaces().size() > 1) {
       PlanResponseDto.PlaceDetail secondPlace = dto.getDayPlans().get(0).getPlaces().get(1);
@@ -195,6 +206,7 @@ public class LLMService {
       .subject(dto.getSubject())
       .startDay(request.getStartDay())
       .endDay(request.getEndDay())
+//      .area(area)
       .status(Plan.Status.BEGIN)
       .thumbnailUrl(thumbnailUrl)
       .type(Plan.PlanType.LLM)

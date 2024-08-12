@@ -37,4 +37,13 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
   
   Optional<Place> findByTitle(String title);
   
+  
+  @Query("SELECT p "
+    + "FROM Place p "
+    + "JOIN FETCH p.area "
+    + "LEFT JOIN FETCH p.placeImgs "
+    + "WHERE p.id IN :placeIds")
+  List<Place> findPlaceByPlaceId(@Param("placeIds") List<Long> placeIds);
+  
+  
 }
