@@ -1,12 +1,11 @@
 package com.nagne.domain.place.repository;
 
 import com.nagne.domain.place.dto.PlaceDTO;
-import com.nagne.domain.place.entity.Area;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.entity.PlaceImg;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,5 +36,12 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 
 
   Optional<Place> findByTitle(String title);
+
+  @Query("SELECT p "
+    + "FROM Place p "
+    + "JOIN FETCH p.area "
+    + "LEFT JOIN FETCH p.placeImgs "
+    + "WHERE p.id IN :placeIds")
+  List<Place> findPlaceByPlaceId(@Param("placeIds") List<Long> placeIds);
 
 }
