@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PlaceService {
   
+  
   private final PlaceReader placeReader;
   
   public List<PlaceDTO> fetchPlaceByRegion(ReqPlaceDto reqPlaceDto) {

@@ -45,8 +45,8 @@ values
     (34, 'CHUNGCHEONGNAMDO'),
     (35, 'GYEONGSANGBUKDO'),
     (36, 'GYEONGSANGNAMDO'),
-    (37, 'JEONBUKDO'),
-    (38, 'JEOLLANAMDO'),
+    (37, 'JEONLABUKDO'),
+    (38, 'JEONLANAMDO'),
     (39, 'JEJUDO');
 
 -- Place 데이터 삽입
