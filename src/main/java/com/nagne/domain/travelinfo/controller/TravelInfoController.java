@@ -2,19 +2,14 @@ package com.nagne.domain.travelinfo.controller;
 
 import com.nagne.domain.place.dto.PlaceDTO;
 import com.nagne.domain.place.dto.ReqPlaceDto;
-import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
+import com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo;
 import com.nagne.domain.travelinfo.service.TravelInfoService;
 import com.nagne.global.response.ApiResponse;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,6 +19,20 @@ public class TravelInfoController {
   private final PlaceRepository placeRepository;
   private final TravelInfoService travelInfoService;
 
+  @GetMapping("/find/{region}")
+  public ApiResponse<List<PlaceDTOforTravelInfo>> findPlacesByRegion(@PathVariable("region") String region) {
+    List<PlaceDTOforTravelInfo> combinedResults = travelInfoService.findPlacesByRegion(region);
+    return ApiResponse.success(combinedResults);
+  }
+
+  @GetMapping("/find/{contentTypeId}/{areaCode}")
+  public ApiResponse<List<PlaceDTOforTravelInfo>> findPlaces(@PathVariable Long contentTypeId,
+                                                             @PathVariable Integer areaCode) {
+    List<PlaceDTOforTravelInfo> result = travelInfoService.findPlaces(contentTypeId, areaCode);
+
+    return ApiResponse.success(result);
+  }
+
 
   @GetMapping("/travel")
   public ApiResponse<List<PlaceDTO>> getPlaceById(@ModelAttribute ReqPlaceDto reqPlaceDto) {
@@ -31,55 +40,11 @@ public class TravelInfoController {
     return ApiResponse.success(places);
   }
 
-
-  @GetMapping("/find/{contentTypeId}/{areaCode}")
-  public List<PlaceDTO> findPlaces(@PathVariable Long contentTypeId,
-    @PathVariable Integer areaCode) {
-
-    List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
-      areaCode);
-
-    return places.stream().map(place ->
-      PlaceDTO.builder()
-        .id(place.getId())
-        .title(place.getTitle())
-        .area(place.getArea())
-        .overview(place.getOverview())
-        .build()).collect(Collectors.toList());
-
+  @GetMapping("/findall/{region}")
+  public List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@PathVariable("region") String region) {
+    // findAllPlacesByRegion 메서드를 호출하여 모든 데이터를 가져옴
+    return placeRepository.findAllPlacesByRegion(region);
   }
 
-  @GetMapping("/find/{areaCode}")
-  @Transactional(readOnly = true)
-  public List<PlaceDTO> findPlaecsByAreaCode(@PathVariable Integer areaCode) {
 
-    List<Place> places = placeRepository.findByArea_AreaCode(areaCode);
-
-    return places.stream().map(place -> PlaceDTO.builder()
-
-      .id(place.getId())
-      .title(place.getTitle())
-      .area(place.getArea())
-      .contentTypeId(place.getContentTypeId())
-      .overview(place.getOverview())
-      .address(place.getAddress())
-      .contactNumber("031-123-123")
-      .build()).collect(Collectors.toList());
-  }
-
-  @GetMapping("/findall")
-  @Transactional(readOnly = true)
-  public List<PlaceDTO> findAllPlaces() {
-    List<Place> places = placeRepository.findAll();
-
-    return places.stream().map(place -> PlaceDTO.builder()
-      .id(place.getId())
-      .title(place.getTitle())
-      .areaCode(place.getArea().getAreaCode())
-      .overview(place.getOverview())
-      .address(place.getAddress())
-      .contactNumber("031-123-123")
-      .contentTypeId(place.getContentTypeId())
-      .build()).collect(Collectors.toList());
-  }
 }
