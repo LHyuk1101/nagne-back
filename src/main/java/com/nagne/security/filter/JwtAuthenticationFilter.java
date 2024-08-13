@@ -25,18 +25,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+  
   private final UserRepository userRepository;
   private final JwtTokenProvider jwtTokenProvider;
   private final CustomCorsFilter corsFilter;
-
+  
   @Override
   protected void doFilterInternal(@NotNull HttpServletRequest request,
     @NotNull HttpServletResponse response,
     @NotNull FilterChain filterChain) throws ServletException, IOException {
-
+    
     String jwtAccessToken = jwtTokenProvider.getJwtFromRequest(request);
-
+    
     if (jwtAccessToken != null && jwtTokenProvider.validateAccessToken(jwtAccessToken)) {
       setSecurityContext(jwtAccessToken, request);
     } else {
@@ -49,10 +49,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return;
       }
     }
-
+    
     filterChain.doFilter(request, response);
   }
-
+  
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String path = request.getRequestURI();
@@ -60,27 +60,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     return method.equals("OPTIONS") || //preflight 요청을 처리하기위해 사용
       path.startsWith("/api/auth");
   }
-
+  
   private void responseUnauthorized(HttpServletRequest request, HttpServletResponse response,
     FilterChain filterChain, String message, String newAccessToken)
     throws IOException, ServletException {
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
-
+    
     response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + newAccessToken);
-
+    
     Map<String, String> responseBody = new HashMap<>();
     responseBody.put("message", message);
     responseBody.put("status", "401");
-
+    
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonResponse = objectMapper.writeValueAsString(responseBody);
-
+    
     response.getWriter().write(jsonResponse);
     corsFilter.doFilter(request, response, filterChain);
   }
-
+  
   private void setSecurityContext(String token, HttpServletRequest request) {
     Long userId = Long.valueOf(jwtTokenProvider.getUserId(token));
     User user = userRepository.findById(userId).orElse(null);
@@ -92,6 +92,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
   }
-
+  
 }
 

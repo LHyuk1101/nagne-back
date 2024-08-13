@@ -8,13 +8,13 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface PlaceMapper {
-
+  
   PlaceMapper INSTANCE = Mappers.getMapper(PlaceMapper.class);
-
+  
   @Mapping(target = "placeUrlImages", ignore = true)
   PlaceDTO placeToPlaceDTO(Place place);
-
+  
   Place placeDTOToPlace(PlaceDTO placeDTO);
-
-
+  
+  
 }

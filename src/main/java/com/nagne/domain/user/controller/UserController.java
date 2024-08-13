@@ -29,16 +29,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-
+  
   private final UserService userService;
-
+  
   @PreAuthorize("hasAnyRole('ADMIN')")
   @GetMapping
   public ApiResponse<?> getAllUsers() {
     List<UserPostDto> userList = userService.getAllUsers();
     return ApiResponse.success(userList);
   }
-
+  
   @PostMapping
   public ApiResponse<?> saveUser(@RequestBody @Valid UserJoinDto userJoinDto,
     BindingResult bindingResult) {
@@ -48,20 +48,20 @@ public class UserController {
     userService.saveUser(userJoinDto);
     return ApiResponse.success();
   }
-
+  
   @GetMapping("/{id}")
   public ApiResponse<UserResponseDto> getUserById(@PathVariable Long id) {
     UserResponseDto userResponseDto = userService.getUserById(id);
     return ApiResponse.success(userResponseDto);
   }
-
+  
   @PutMapping("/{id}")
   public ApiResponse<UserResponseDto> updateUser(@PathVariable Long id,
     @RequestBody UserPostDto userPostDto) {
     UserResponseDto updatedUser = userService.updateUser(id, userPostDto);
     return ApiResponse.success(updatedUser);
   }
-
+  
   @DeleteMapping("/{id}")
   public ApiResponse<?> deleteUser(@PathVariable Long id) {
     userService.deleteUser(id);
