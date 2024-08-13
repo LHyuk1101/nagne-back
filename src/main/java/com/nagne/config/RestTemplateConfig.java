@@ -10,12 +10,12 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class RestTemplateConfig {
-  
+
   @Bean(name = "llmRestTemplate")
   public RestTemplate llmRestTemplate(RestTemplateBuilder builder) {
     return builder
       .additionalMessageConverters(new StringHttpMessageConverter(StandardCharsets.UTF_8))
       .build();
-    
+
   }
 }

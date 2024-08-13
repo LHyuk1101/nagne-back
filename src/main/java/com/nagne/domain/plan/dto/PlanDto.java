@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlanDto {
-  
+
   private Long id;
   private Long userId;
   private String status;
@@ -21,6 +21,7 @@ public class PlanDto {
   private int duration;
   private String thumbnailUrl;
   private List<PlaceDetail> places; // New field to store place details
+
 
 
   public PlanDto(Long id, Long userId, String status, LocalDate startDay, LocalDate endDay,String thumbnailUrl, List<PlaceDetail> places) {
@@ -45,20 +46,20 @@ public class PlanDto {
     this.areaCodeName = areaCodeName;
     this.label = label;
   }
-  
+
   private int calculateDuration() {
     return endDay != null && startDay != null ?
       (int) java.time.temporal.ChronoUnit.DAYS.between(startDay, endDay)
         + 1 : 0;
   }
-  
+
   @Getter
   @Setter
   public static class PlaceDetail {
-    
+
     private String title;
     private String contentTypeName;
-    
+
     public PlaceDetail(String title, String contentTypeName) {
       this.title = title;
       this.contentTypeName = contentTypeName;

@@ -23,11 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService {
-  
+
   private final UserRepository userRepository;
   private final PlanRepository planRepository;
   private final PasswordEncoder passwordEncoder;
-  
+
   public UserResponseDto getUserById(Long id) {
     User user = userRepository.findById(id)
       .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));

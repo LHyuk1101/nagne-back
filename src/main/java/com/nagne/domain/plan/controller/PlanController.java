@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/plans")
 public class PlanController {
-  
+
   @Autowired
   private PlanService planService;
-  
+
   @GetMapping
   public ResponseEntity<List<PlanDto>> getAllPlans() {
     List<PlanDto> plans = planService.getAllPlans();
     return ResponseEntity.ok(plans);
   }
-  
+
   @GetMapping("/{id}")
   public ResponseEntity<PlanDto> getPlanById(@PathVariable Long id) {
     PlanDto plan = planService.getPlanById(id);

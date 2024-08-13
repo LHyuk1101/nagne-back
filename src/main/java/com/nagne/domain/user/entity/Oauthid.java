@@ -23,21 +23,21 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Oauthid {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "oauth_id")
   private Long id;
-  
+
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
-  
+
   private OauthProvider provider;
-  
+
   @Column(length = 300)
   private String accessToken;
   @Column(length = 300)
   private String refreshToken;
-  
+
 }

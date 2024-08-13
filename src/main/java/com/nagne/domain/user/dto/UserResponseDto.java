@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponseDto {
-  
+
   private Long id;
   private String email;
   private String nickname;
   private Boolean termsAgreed;
-  
+
   public static UserResponseDto fromEntity(User user) {
     return UserResponseDto.builder()
       .id(user.getId())
