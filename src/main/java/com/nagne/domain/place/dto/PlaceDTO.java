@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PlaceDTO {
-
+  
   private Long id;
   private Area area;
   private Integer areaCode;
@@ -32,7 +32,7 @@ public class PlaceDTO {
   private int likes;
   private String thumbnailUrl;
   private List<String> placeUrlImages;
-
+  
   public PlaceDTO(Long id, Area area, String title, String address,
     Long contentTypeId, String overview, String contactNumber, String opentime, Double lat,
     Double lng,
@@ -50,22 +50,22 @@ public class PlaceDTO {
     this.likes = likes;
     this.thumbnailUrl = thumbnailUrl;
   }
-
+  
   public PlaceDTO addPlaceImg(List<PlaceImg> placeImgs) {
     if (this.placeUrlImages == null) {
       this.placeUrlImages = new ArrayList<>();
     }
-
+    
     if (placeImgs != null) {
       List<String> imgUrls = placeImgs.stream()
         .map(PlaceImg::getImgUrl)
         .filter(Objects::nonNull)
         .toList();
-
+      
       this.placeUrlImages.addAll(imgUrls);
     }
-
+    
     return this;
   }
-
+  
 }
