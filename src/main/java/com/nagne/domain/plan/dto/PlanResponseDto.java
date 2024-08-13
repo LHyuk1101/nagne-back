@@ -40,5 +40,6 @@ public class PlanResponseDto {
     private String placeSummary;
     private String reasoning;
     private String thumbnailUrl;
+    private String placeImgUrls;
   }
 }

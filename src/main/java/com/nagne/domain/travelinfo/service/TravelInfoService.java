@@ -20,9 +20,12 @@ public class TravelInfoService {
 
   private final PlaceReader placeReader;
 
+
   private final PlaceRepository placeRepository;
 
+
   public ResponsePlaceDto fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
+
     return placeReader.readPlace(reqPlaceDto);
   }
 
@@ -54,5 +57,6 @@ public class TravelInfoService {
 
     return combinedResults;
   }
+
 
 }

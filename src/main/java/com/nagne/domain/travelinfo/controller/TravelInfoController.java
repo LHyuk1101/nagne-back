@@ -44,6 +44,7 @@ public class TravelInfoController {
     return ApiResponse.success(places);
   }
 
+
   @GetMapping("/findall/{region}")
   public List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@PathVariable("region") String region) {
     // findAllPlacesByRegion 메서드를 호출하여 모든 데이터를 가져옴
@@ -52,3 +53,4 @@ public class TravelInfoController {
 
 
 }
+

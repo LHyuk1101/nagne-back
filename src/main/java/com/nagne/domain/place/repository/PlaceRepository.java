@@ -44,6 +44,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 
   Optional<Place> findByTitle(String title);
 
+
   @Query(
     "SELECT new com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo(p.id, p.area, p.title, p.address, "
       +
@@ -92,11 +93,13 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
   )
   List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@Param("region") String region);
 
+
   @Query("SELECT p "
     + "FROM Place p "
     + "JOIN FETCH p.area "
     + "LEFT JOIN FETCH p.placeImgs "
     + "WHERE p.id IN :placeIds")
   List<Place> findPlaceByPlaceId(@Param("placeIds") List<Long> placeIds);
+
 
 }
