@@ -35,7 +35,8 @@ spring:
     console:
       enabled: true # /h2-console 설정
 app:
-  base-url: "http://localhost:3000"
+  base-url: "http://localhost:5173"
+  base-api-url: "http://localhost:8080"
   secure-cookie: false
 
 ---
@@ -69,7 +70,8 @@ springdoc:
     enabled:true
 
 app:
-  base-url: "http://localhost:3000"
+  base-url: "http://localhost:5173"
+  base-api-url: "http://localhost:8080"
   secure-cookie: false
 
 ---
@@ -100,9 +102,8 @@ spring:
 
 app:
   base-url: "https://nagne.site"
+  base-api-url: "https://api.nagne.site"
   secure-cookie: true
-
-
 
 
 
