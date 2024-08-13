@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.nagne.domain.place.entity.Area;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.plan.dto.PlanRequestDto;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -170,33 +172,31 @@ public class LLMService {
   public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request) {
     validatePlaceIds(dto, request.getPlaces());
     String thumbnailUrl = "default_thumbnail_url";  // 기본값 설정
-
-//    Area area = null;
-//    if (request.getAreaCode() != null) {
-//      area = placeRepository.findByArea_AreaCode(request.getAreaCode())
-//        .stream()
-//        .findFirst()
-//        .map(Place::getArea)
-//        .orElseThrow(
-//          () -> new IllegalArgumentException("Area not found with code: " + request.getAreaCode()));
-//    }
+    
+    List<Long> placeIds = dto.getDayPlans().stream()
+      .flatMap(dayPlan -> dayPlan.getPlaces().stream())
+      .map(PlanResponseDto.PlaceDetail::getPlaceId)
+      .collect(Collectors.toList());
+    List<Place> places = placeRepository.findPlaceByPlaceId(placeIds);
+    Map<Long, Place> placeMap = places.stream()
+      .collect(Collectors.toMap(Place::getId, Function.identity()));
+    
+    Area area = places.isEmpty() ? null : places.get(0).getArea();
     
     if (!dto.getDayPlans().isEmpty() && dto.getDayPlans().get(0).getPlaces().size() > 1) {
       PlanResponseDto.PlaceDetail secondPlace = dto.getDayPlans().get(0).getPlaces().get(1);
       Long placeId = secondPlace.getPlaceId();
+      Place place = placeMap.get(placeId);
       
-      try {
-        Place place = placeRepository.findById(placeId)
-          .orElseThrow(() -> new IllegalArgumentException("ID가: " + placeId + "인게 없습니다."));
-        
+      if (place != null) {
         if (place.getThumbnailUrl() != null && !place.getThumbnailUrl().isEmpty()) {
           thumbnailUrl = place.getThumbnailUrl();
           log.info("두번째 장소 썸네일 url: {}", thumbnailUrl);
         } else {
-          log.warn("두번째 장소(ID: {} 에 썸네일 url 이 없음", placeId);
+          log.warn("두번째 장소(ID: {})에 썸네일 url이 없음", placeId);
         }
-      } catch (IllegalArgumentException e) {
-        log.error("두 번째 장소 찾는 중 문제가 생김: {}", e.getMessage());
+      } else {
+        log.error("두 번째 장소(ID: {})를 찾을 수 없음", placeId);
       }
     } else {
       log.info("첫 날 계획안에 장소가 없어 기본 이미지 사용");
@@ -206,7 +206,7 @@ public class LLMService {
       .subject(dto.getSubject())
       .startDay(request.getStartDay())
       .endDay(request.getEndDay())
-//      .area(area)
+      .area(area)
       .status(Plan.Status.BEGIN)
       .thumbnailUrl(thumbnailUrl)
       .type(Plan.PlanType.LLM)
@@ -216,20 +216,23 @@ public class LLMService {
     log.info("Saved plan with id: {} and thumbnail URL: {}", savedPlan.getId(),
       savedPlan.getThumbnailUrl());
     
-    List<Template> templates = createTemplates(dto, savedPlan);
+    List<Template> templates = createTemplates(dto, savedPlan, placeMap);
     templateRepository.saveAll(templates);
     log.info("Saved {} templates for plan id: {}", templates.size(), savedPlan.getId());
     
     return savedPlan;
   }
   
-  private List<Template> createTemplates(PlanResponseDto dto, Plan savedPlan) {
+  private List<Template> createTemplates(PlanResponseDto dto, Plan savedPlan,
+    Map<Long, Place> placeMap) {
     List<Template> templates = new ArrayList<>();
     for (PlanResponseDto.DayPlan dayPlan : dto.getDayPlans()) {
       for (PlanResponseDto.PlaceDetail placeDetail : dayPlan.getPlaces()) {
-        Place place = placeRepository.findById(placeDetail.getPlaceId())
-          .orElseThrow(() -> new IllegalArgumentException(
-            "Place not found with title: " + placeDetail.getPlaceId()));
+        Place place = placeMap.get(placeDetail.getPlaceId());
+        if (place == null) {
+          log.error("Place not found with id: {}", placeDetail.getPlaceId());
+          continue;  // 해당 장소를 건너뛰고 계속 진행
+        }
         
         Template template = Template.builder()
           .plan(savedPlan)
@@ -245,6 +248,31 @@ public class LLMService {
     }
     return templates;
   }
+//  private List<Template> createTemplates(PlanResponseDto dto, Plan savedPlan,
+//    Map<Long, Place> placeMap) {
+//    List<Template> templates = new ArrayList<>();
+//    for (PlanResponseDto.DayPlan dayPlan : dto.getDayPlans()) {
+//      for (PlanResponseDto.PlaceDetail placeDetail : dayPlan.getPlaces()) {
+//        Place place = placeMap.get(placeDetail.getPlaceId());
+//        if (place == null) {
+//          throw new IllegalArgumentException(
+//            "Place not found with id: " + placeDetail.getPlaceId());
+//        }
+//
+//        Template template = Template.builder()
+//          .plan(savedPlan)
+//          .place(place)
+//          .day(dayPlan.getDay())
+//          .order(placeDetail.getOrder())
+//          .moveTime(placeDetail.getMoveTime())
+//          .placeSummary(placeDetail.getPlaceSummary())
+//          .reasoning(placeDetail.getReasoning())
+//          .build();
+//        templates.add(template);
+//      }
+//    }
+//    return templates;
+//  }
   
   private PlanResponseDto createFinalResponse(Plan savedPlan, PlanResponseDto planResponse) {
     return PlanResponseDto.builder()

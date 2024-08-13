@@ -7,8 +7,11 @@ import com.nagne.domain.plan.dto.PlanRequestDto;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,11 @@ public class DistanceCalculationService {
   
   public List<PlanRequestDto.PlaceDistance> calculateDistances(
     List<PlanRequestDto.PlaceInfo> places) {
+    List<Long> placeIds = places.stream().map(PlanRequestDto.PlaceInfo::getId)
+      .collect(Collectors.toList());
+    List<Place> placeList = placeRepository.findPlaceByPlaceId(placeIds);
+    Map<Long, Place> placeMap = placeList.stream()
+      .collect(Collectors.toMap(Place::getId, Function.identity()));
     if (places.isEmpty()) {
       throw new IllegalArgumentException("No places selected");
     }
