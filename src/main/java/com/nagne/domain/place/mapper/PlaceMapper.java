@@ -11,9 +11,10 @@ public interface PlaceMapper {
 
   PlaceMapper INSTANCE = Mappers.getMapper(PlaceMapper.class);
 
-  @Mapping(target = "placeUrlImages", ignore = true)
+  @Mapping(target = "placeImgs", ignore = true)
   PlaceDTO placeToPlaceDTO(Place place);
-
+  
+  @Mapping(target = "placeImgs", ignore = true)
   Place placeDTOToPlace(PlaceDTO placeDTO);
 
 

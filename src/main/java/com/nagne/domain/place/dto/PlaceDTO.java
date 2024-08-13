@@ -2,10 +2,6 @@ package com.nagne.domain.place.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.nagne.domain.place.entity.Area;
-import com.nagne.domain.place.entity.PlaceImg;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,12 +27,12 @@ public class PlaceDTO {
   private Double lng;
   private int likes;
   private String thumbnailUrl;
-  private List<String> placeUrlImages;
+  private String placeImgs;
 
   public PlaceDTO(Long id, Area area, String title, String address,
     Long contentTypeId, String overview, String contactNumber, String opentime, Double lat,
     Double lng,
-    int likes, String thumbnailUrl) {
+    int likes, String thumbnailUrl, String placeImgs) {
     this.id = id;
     this.area = area;
     this.title = title;
@@ -49,23 +45,7 @@ public class PlaceDTO {
     this.lng = lng;
     this.likes = likes;
     this.thumbnailUrl = thumbnailUrl;
-  }
-
-  public PlaceDTO addPlaceImg(List<PlaceImg> placeImgs) {
-    if (this.placeUrlImages == null) {
-      this.placeUrlImages = new ArrayList<>();
-    }
-
-    if (placeImgs != null) {
-      List<String> imgUrls = placeImgs.stream()
-        .map(PlaceImg::getImgUrl)
-        .filter(Objects::nonNull)
-        .toList();
-
-      this.placeUrlImages.addAll(imgUrls);
-    }
-
-    return this;
+    this.placeImgs = placeImgs;
   }
 
 }
