@@ -43,10 +43,10 @@ public class TravelInfoController {
   }
 
 
-  @GetMapping("/findall/{region}")
-  public List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@PathVariable("region") String region) {
+  @GetMapping("/findall/{areaCode}")
+  public List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@PathVariable("areaCode") int areaCode) {
     // findAllPlacesByRegion 메서드를 호출하여 모든 데이터를 가져옴
-    return placeRepository.findAllPlacesByRegion(region);
+    return placeRepository.findAllPlacesByRegion(areaCode);
   }
 
 

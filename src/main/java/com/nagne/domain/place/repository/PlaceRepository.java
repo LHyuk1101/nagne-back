@@ -51,10 +51,10 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
                   "LEFT JOIN Store s ON s.place.id = p.id " +
                   "LEFT JOIN Area a ON p.area.id = a.id " +
                   "LEFT JOIN PlaceImg pi ON pi.place.id = p.id " +
-                  "WHERE a.name = :region "
+                  "WHERE a.areaCode = :areaCode "
                   + "ORDER BY p.likes DESC, p.id"
   )
-  List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@Param("region") String region);
+  List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@Param("areaCode") int areaCode);
 
   @Query("SELECT p "
           + "FROM Place p "
