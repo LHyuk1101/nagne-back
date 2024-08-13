@@ -1,18 +1,20 @@
 package com.nagne.domain.travelinfo.service;
 
+import com.nagne.domain.place.dto.PlaceDTO;
 import com.nagne.domain.place.dto.ReqPlaceDto;
 import com.nagne.domain.place.dto.ResponsePlaceDto;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.implement.PlaceReader;
 import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,27 +33,30 @@ public class TravelInfoService {
 
   public List<PlaceDTOforTravelInfo> findPlaces(Long contentTypeId, Integer areaCode) {
     List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
-      areaCode);
+            areaCode);
 
     return places.stream().map(place ->
-      PlaceDTOforTravelInfo.builder()
-        .id(place.getId())
-        .title(place.getTitle())
-        .areaCode(place.getArea().getAreaCode())
-        .overview(place.getOverview())
-        .build()).collect(Collectors.toList());
+            PlaceDTOforTravelInfo.builder()
+                    .id(place.getId())
+                    .title(place.getTitle())
+                    .areaCode(place.getArea().getAreaCode())
+                    .overview(place.getOverview())
+                    .build()).collect(Collectors.toList());
   }
 
-  public List<PlaceDTOforTravelInfo> findPlacesByRegion(String region) {
+  public List<PlaceDTO> findPlacesByRegion(int areaCode) {
     Pageable pageable = PageRequest.of(0, 10);
 
-    // 두 contentTypeId에 대한 상위 10개의 결과를 각각 가져옴
-    List<PlaceDTOforTravelInfo> top10ContentTypeId76 = placeRepository.findTop10ByRegionAndContentTypeId76OrderByLikes(
-      region, pageable);
-    List<PlaceDTOforTravelInfo> top10ContentTypeId82 = placeRepository.findTop10ByRegionAndContentTypeId82OrderByLikes(
-      region, pageable);
+    // contentTypeId 76의 상위 10개 데이터 가져오기
+    List<PlaceDTO> top10ContentTypeId76 = placeRepository.findByRegion(
+            new Long[]{76L}, areaCode, pageable);
 
-    List<PlaceDTOforTravelInfo> combinedResults = new ArrayList<>();
+    // contentTypeId 82의 상위 10개 데이터 가져오기
+    List<PlaceDTO> top10ContentTypeId82 = placeRepository.findByRegion(
+            new Long[]{82L}, areaCode, pageable);
+
+    // 쌈@뽕한 병합
+    List<PlaceDTO> combinedResults = new ArrayList<>();
     combinedResults.addAll(top10ContentTypeId76);
     combinedResults.addAll(top10ContentTypeId82);
 
