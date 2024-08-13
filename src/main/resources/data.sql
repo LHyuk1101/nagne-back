@@ -182,33 +182,33 @@ values
 
 INSERT INTO plans (plans_id, user_id, area_code, status, start_day, end_day, subject, overview, created_at, updated_at)
 VALUES
-    (1, 1, 1, 'BEGIN', '2023-09-01', '2023-09-03', '서울 역사 탐방', '서울의 역사적 명소를 둘러보는 3일 여행', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
-    (2, 2, 2, 'BEGIN', '2023-09-15', '2023-09-18', '제주도 자연 체험', '제주도의 아름다운 자연을 만끽하는 4일 여행', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
-    (3, 3, 3, 'BEGIN', '2023-10-01', '2023-10-03', '부산 먹방 여행', '부산의 맛있는 음식과 명소를 즐기는 3일 여행', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
-    (4, 4, 4, 'BEGIN', '2023-10-15', '2023-10-17', '강원도 힐링 여행', '강원도의 아름다운 자연에서 휴식을 취하는 3일 여행', '2023-08-09 10:00:00', '2023-08-09 10:00:00');
+    (1, 1, 1, 'BEGIN', '2023-09-01', '2023-09-03', 'Seoul History Tour', 'A 3-day tour visiting historical sites in Seoul', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
+    (2, 2, 2, 'BEGIN', '2023-09-15', '2023-09-18', 'Jeju Nature Experience', 'A 4-day trip to enjoy the beautiful nature of Jeju Island', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
+    (3, 3, 3, 'BEGIN', '2023-10-01', '2023-10-03', 'Busan Food Trip', 'A 3-day trip enjoying delicious food and famous spots in Busan', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
+    (4, 4, 4, 'BEGIN', '2023-10-15', '2023-10-17', 'Gangwon Healing Trip', 'A 3-day trip for relaxation in the beautiful nature of Gangwon', '2023-08-09 10:00:00', '2023-08-09 10:00:00');
 
 -- Template 데이터 삽입
 INSERT INTO templates (id, plan_id, place_id, days, orders, move_time, place_summary, reasoning) VALUES
 -- 서울 역사 탐방
-(1, 1, 1, 1, 1, 0, '조선 왕조의 법궁인 경복궁 관람', '서울 역사 탐방의 시작으로 조선의 중심이었던 경복궁을 방문합니다.'),
-(2, 1, 4, 1, 2, 30, '전통 한옥 마을인 북촌한옥마을 산책', '경복궁과 가까운 북촌한옥마을에서 전통 가옥을 구경하며 한국의 전통을 체험합니다.'),
-(3, 1, 3, 1, 3, 20, '현대적인 서울의 모습을 볼 수 있는 명동 쇼핑', '역사 탐방 후 현대 서울의 모습을 볼 수 있는 명동에서 쇼핑을 즐깁니다.'),
-(4, 1, 2, 2, 1, 30, '서울의 전경을 볼 수 있는 남산서울타워 방문', '서울의 과거와 현재를 한눈에 볼 수 있는 남산서울타워에서 서울의 전경을 감상합니다.'),
+(1, 1, 1, 1, 1, 0, 'Visit Gyeongbokgung, the main palace of the Joseon Dynasty', 'Start the Seoul History Tour by visiting Gyeongbokgung, the center of the Joseon Dynasty.'),
+(2, 1, 4, 1, 2, 30, 'Stroll around Bukchon Hanok Village, a traditional Korean village', 'Experience Korean traditions by exploring traditional houses in Bukchon Hanok Village, which is near Gyeongbokgung.'),
+(3, 1, 3, 1, 3, 20, 'Shopping in Myeongdong, where you can see modern Seoul', 'After the history tour, enjoy shopping in Myeongdong, where you can see modern Seoul.'),
+(4, 1, 2, 2, 1, 30, 'Visit Namsan Seoul Tower for a panoramic view of Seoul', 'Enjoy a panoramic view of Seoul at Namsan Seoul Tower, where you can see both the past and present of the city.'),
 
 -- 제주도 자연 체험
-(5, 2, 5, 1, 1, 0, '유네스코 세계자연유산인 성산일출봉 등반', '제주도의 상징적인 자연 명소인 성산일출봉에서 시작하여 제주의 아름다운 경관을 감상합니다.'),
-(6, 2, 8, 1, 2, 60, '우도에서 자전거 투어', '성산일출봉 근처의 우도로 이동하여 자전거를 타고 섬을 일주하며 제주의 해안 풍경을 즐깁니다.'),
-(7, 2, 6, 2, 1, 90, '중문관광단지에서 해변 휴식', '중문관광단지의 아름다운 해변에서 휴식을 취하고 다양한 해양 활동을 즐깁니다.'),
-(8, 2, 7, 3, 1, 60, '한라산국립공원 트레킹', '제주의 중심인 한라산을 등반하며 제주의 자연을 만끽합니다.'),
+(5, 2, 5, 1, 1, 0, 'Climb Seongsan Ilchulbong, a UNESCO World Natural Heritage site', 'Start by enjoying the beautiful scenery of Jeju from Seongsan Ilchulbong, an iconic natural site.'),
+(6, 2, 8, 1, 2, 60, 'Bicycle tour on Udo Island', 'Move to Udo near Seongsan Ilchulbong and enjoy cycling around the island while taking in Jeju coastal scenery.'),
+(7, 2, 6, 2, 1, 90, 'Relax at the beach in Jungmun Tourist Complex', 'Take a break at the beautiful beach in Jungmun Tourist Complex and enjoy various marine activities.'),
+(8, 2, 7, 3, 1, 60, 'Trekking in Hallasan National Park', 'Climb Hallasan, the center of Jeju, and fully enjoy Jeju nature.'),
 
 -- 부산 먹방 여행
-(9, 3, 9, 1, 1, 0, '해운대 해수욕장에서 아침 산책', '부산 여행의 시작으로 유명한 해운대 해변에서 상쾌한 아침 산책을 즐깁니다.'),
-(10, 3, 11, 1, 2, 40, '자갈치시장에서 신선한 해산물 점심', '부산의 대표적인 수산시장인 자갈치시장에서 신선한 해산물로 점심을 즐깁니다.'),
-(11, 3, 10, 2, 1, 30, '감천문화마을 탐방', '알록달록한 감천문화마을을 둘러보며 부산의 문화적 면모를 체험합니다.'),
-(12, 3, 12, 2, 2, 40, '태종대에서 해안 절경 감상', '태종대에서 부산의 아름다운 해안 절경을 감상하며 여행을 마무리합니다.'),
+(9, 3, 9, 1, 1, 0, 'Morning walk at Haeundae Beach', 'Start your Busan trip with a refreshing morning walk at the famous Haeundae Beach.'),
+(10, 3, 11, 1, 2, 40, 'Lunch with fresh seafood at Jagalchi Market', 'Enjoy a seafood lunch at Jagalchi Market, Busan’s representative seafood market.'),
+(11, 3, 10, 2, 1, 30, 'Explore Gamcheon Culture Village', 'Explore the colorful Gamcheon Culture Village and experience the cultural side of Busan.'),
+(12, 3, 12, 2, 2, 40, 'Enjoy the coastal scenery at Taejongdae', 'Finish your trip by enjoying the beautiful coastal scenery at Taejongdae.'),
 
 -- 강원도 힐링 여행
-(13, 4, 13, 1, 1, 0, '속초해변에서 일출 감상', '강원도 여행의 시작으로 속초 해변에서 아름다운 일출을 감상합니다.'),
-(14, 4, 14, 1, 2, 30, '설악산국립공원 산책', '설악산의 아름다운 계곡과 폭포를 감상하며 가벼운 산책을 즐깁니다.'),
-(15, 4, 15, 2, 1, 120, '남이섬에서 숲 체험', '아름다운 남이섬에서 울창한 숲을 산책하고 다양한 문화 체험을 즐깁니다.'),
-(16, 4, 16, 3, 1, 90, '강릉 경포대에서 월출 감상', '강릉 경포대에서 아름다운 동해의 월출을 감상하며 여행을 마무리합니다.');
+(13, 4, 13, 1, 1, 0, 'Watch the sunrise at Sokcho Beach', 'Start your Gangwon trip by watching the beautiful sunrise at Sokcho Beach.'),
+(14, 4, 14, 1, 2, 30, 'Walk in Seoraksan National Park', 'Enjoy a light walk while appreciating the beautiful valleys and waterfalls of Seoraksan.'),
+(15, 4, 15, 2, 1, 120, 'Forest experience at Nami Island', 'Stroll through the lush forest on Nami Island and enjoy various cultural experiences.'),
+(16, 4, 16, 3, 1, 90, 'Watch the moonrise at Gyeongpodae in Gangneung', 'End your trip by watching the beautiful moonrise over the East Sea at Gyeongpodae in Gangneung.');

@@ -5,8 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class TemplateDto {
-  private String title;
-  private String description;
+public class CustomTemplateDto {
+  private Long id;
+  private String subject;
+  private String overview;
   private String thumbnailUrl;
+  private String areaCode;
 }
