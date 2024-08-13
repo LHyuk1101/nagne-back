@@ -18,16 +18,23 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
 
   List<Place> findByArea_AreaCode(Integer areaCode);
 
-  @Query("SELECT new com.nagne.domain.place.dto.PlaceDTO(p.id, p.area, p.title, p.address, "
-    + "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl, pi.imgUrl ) "
-    + "FROM Place p "
-    + "LEFT JOIN Store s ON s.place.id = p.id "
-    + "LEFT JOIN p.placeImgs pi "
-    + "WHERE p.contentTypeId IN :regionIds "
-    + "AND p.area.areaCode = :areaCode "
-    + "ORDER BY p.likes DESC, p.id")
+  @Query(
+    "SELECT DISTINCT new com.nagne.domain.place.dto.PlaceDTO(p.id, p.area, p.title, p.address, "
+      + "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl, pi.imgUrl ) "
+      + "FROM Place p "
+      + "LEFT JOIN Store s ON s.place.id = p.id "
+      + "LEFT JOIN p.placeImgs pi "
+      + "WHERE p.contentTypeId IN :regionIds "
+      + "AND p.area.areaCode = :areaCode "
+      + "ORDER BY p.likes DESC, p.id")
   List<PlaceDTO> findByRegion(@Param("regionIds") Long[] regionIds, @Param("areaCode") int areaCode,
     Pageable pageable);
+
+  @Query("SELECT count(*) "
+    + "FROM Place p "
+    + "WHERE p.contentTypeId IN :regionIds "
+    + "AND p.area.areaCode = :areaCode")
+  int getTotalCountByRegion(@Param("regionIds") Long[] regionIds, @Param("areaCode") int areaCode);
 
   @Query("SELECT pi "
     + "FROM PlaceImg pi "

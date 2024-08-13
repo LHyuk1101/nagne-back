@@ -27,12 +27,12 @@ public class PlaceDTO {
   private Double lng;
   private int likes;
   private String thumbnailUrl;
-  private String placeImgs;
+  private String imgUrl;
 
   public PlaceDTO(Long id, Area area, String title, String address,
     Long contentTypeId, String overview, String contactNumber, String opentime, Double lat,
     Double lng,
-    int likes, String thumbnailUrl, String placeImgs) {
+    int likes, String thumbnailUrl, String imgUrl) {
     this.id = id;
     this.area = area;
     this.title = title;
@@ -45,7 +45,7 @@ public class PlaceDTO {
     this.lng = lng;
     this.likes = likes;
     this.thumbnailUrl = thumbnailUrl;
-    this.placeImgs = placeImgs;
+    this.imgUrl = imgUrl;
   }
 
 }
