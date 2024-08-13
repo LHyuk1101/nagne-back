@@ -32,9 +32,13 @@ public class PlanService {
         getContentTypeName(place.getContentTypeId())))
       .collect(Collectors.toList());
     
-    return new PlanDto(plan.getId(), plan.getUser().getId(), plan.getStatus().name(),
+    return new PlanDto(plan.getId(),
+      plan.getUser().getId(),
+      plan.getStatus().name(),
       plan.getStartDay(),
-      plan.getEndDay(), placeDetails);
+      plan.getEndDay(),
+      plan.getThumbnailUrl(),
+      placeDetails);
   }
   
   private String getContentTypeName(Long contentTypeId) {
