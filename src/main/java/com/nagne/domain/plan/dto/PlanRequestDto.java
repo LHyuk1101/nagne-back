@@ -14,6 +14,7 @@ public class PlanRequestDto {
   private final LocalDate startDay;
   private final LocalDate endDay;
   private final Integer areaCode;
+  private Long userId;
   
   
   @Builder

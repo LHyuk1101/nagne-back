@@ -15,6 +15,9 @@ import com.nagne.domain.plan.exception.LLMParsingException;
 import com.nagne.domain.plan.repository.PlanRepository;
 import com.nagne.domain.template.entity.Template;
 import com.nagne.domain.template.repository.TemplateRepository;
+import com.nagne.domain.user.entity.User;
+import com.nagne.domain.user.repository.UserRepository;
+import com.nagne.global.error.exception.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +45,8 @@ public class LLMService {
   private final TemplateRepository templateRepository;
   private final PlaceRepository placeRepository;
   private final DistanceCalculationService distanceCalculationService;
+  private final UserRepository userRepository;
+  
   
   @Value("${llm.api.url}")
   private String apiUrl;
@@ -50,23 +55,26 @@ public class LLMService {
     PlanRepository planRepository,
     TemplateRepository templateRepository,
     PlaceRepository placeRepository,
-    DistanceCalculationService distanceCalculationService) {
+    DistanceCalculationService distanceCalculationService,
+    UserRepository userRepository) {
     this.llmRestTemplate = llmRestTemplate;
     this.planRepository = planRepository;
     this.templateRepository = templateRepository;
     this.placeRepository = placeRepository;
     this.distanceCalculationService = distanceCalculationService;
+    this.userRepository = userRepository;
   }
   
   @Transactional
-  public CompletableFuture<PlanResponseDto> generateAndSavePlan(PlanRequestDto request) {
+  public CompletableFuture<PlanResponseDto> generateAndSavePlan(PlanRequestDto request,
+    Long userId) {
     return CompletableFuture.supplyAsync(() -> {
       List<PlanRequestDto.PlaceDistance> distances = distanceCalculationService.calculateDistances(
         request.getPlaces());
       String llmInput = createLLMInput(request, distances);
       String llmResponse = callLLMApi(llmInput);
       PlanResponseDto planResponse = parseLLMResponse(llmResponse);
-      Plan savedPlan = savePlanAndTemplates(planResponse, request);
+      Plan savedPlan = savePlanAndTemplates(planResponse, request, userId);
       return createPlanResponseDto(savedPlan);
     }).exceptionally(ex -> {
       log.error("Error generating and saving plan", ex);
@@ -211,7 +219,7 @@ public class LLMService {
   }
   
   @Transactional
-  public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request) {
+  public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request, Long userId) {
     validatePlaceIds(dto, request.getPlaces());
     String thumbnail = "default_thumbnail_url";  // 기본값 설정
     
@@ -244,6 +252,9 @@ public class LLMService {
       log.info("첫 날 계획안에 장소가 없어 기본 이미지 사용");
     }
     
+    User user = userRepository.findById(userId)
+      .orElseThrow(() -> new EntityNotFoundException("User not find" + userId));
+    
     Plan plan = Plan.builder()
       .subject(dto.getSubject())
       .startDay(request.getStartDay())
@@ -252,6 +263,7 @@ public class LLMService {
       .status(Plan.Status.BEGIN)
       .thumbnail(thumbnail)
       .type(Plan.PlanType.LLM)
+      .user(user)
       .build();
     
     Plan savedPlan = planRepository.save(plan);
