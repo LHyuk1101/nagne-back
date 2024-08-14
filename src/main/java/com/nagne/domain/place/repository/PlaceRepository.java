@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface PlaceRepository extends JpaRepository<Place, Long> {
+public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceRepositoryCustom {
 
   // Area 엔티티의 areaCode 필드를 참조하도록 수정
   List<Place> findByContentTypeIdAndArea_AreaCode(Long contentTypeId, Integer areaCode);
