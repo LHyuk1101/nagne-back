@@ -50,7 +50,7 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
       .where(
         p.contentTypeId.in(regionIds),
         p.area.areaCode.eq(areaCode),
-        searchTermContains(searchTerm)
+        searchTermLike(searchTerm)
       )
       .orderBy(p.likes.desc(), p.id.asc())
       .offset(pageable.getOffset())
@@ -59,8 +59,8 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
 
   }
 
-  private BooleanExpression searchTermContains(String searchTerm) {
+  private BooleanExpression searchTermLike(String searchTerm) {
     return StringUtils.hasText(searchTerm) ?
-      QPlace.place.title.containsIgnoreCase(searchTerm) : null;
+      QPlace.place.title.like("%" + searchTerm.trim() + "%") : null;
   }
 }
