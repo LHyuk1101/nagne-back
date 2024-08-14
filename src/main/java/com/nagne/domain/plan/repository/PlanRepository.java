@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlanRepository extends JpaRepository<Plan, Long> {
+
   List<Plan> findByArea_AreaCode(Integer areaCode);
 }

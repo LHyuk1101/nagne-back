@@ -20,4 +20,5 @@ public class CustomTemplateController {
     List<CustomTemplateDto> templates = customTemplateService.getTemplatesByAreaCode(area);
     return ApiResponse.success(templates);
   }
+
 }

@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TemplateRepository extends JpaRepository<Template, Long> {
 
-  @Query("SELECT p FROM Place p JOIN Template t ON p.id = t.place.id WHERE t.plan.id = :planId")
+  @Query("SELECT p FROM Plan p JOIN Template t JOIN Plan pl ON p.id = t.place.id WHERE t.plan.id = :planId")
   List<Place> findAllByPlanId(@Param("planId") Long planId);
 }

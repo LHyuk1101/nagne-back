@@ -27,7 +27,6 @@ public class LLMController {
     @RequestBody PlanRequestDto request) {
     return llmService.generateAndSavePlans(request).thenApply(ResponseEntity::ok)
       .exceptionally(ex -> {
-        // Log the exception
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
       });
   }
