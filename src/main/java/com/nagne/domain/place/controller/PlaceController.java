@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/place")
 public class PlaceController {
-
+  
   private final PlaceService placeService;
-
+  
   @GetMapping
   public ApiResponse<ResponsePlaceDto> getPlaceById(@ModelAttribute ReqPlaceDto reqPlaceDto) {
     ResponsePlaceDto places = placeService.fetchPlaceByRegion(reqPlaceDto);
     return ApiResponse.success(places);
   }
-
+  
 }
