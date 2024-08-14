@@ -13,6 +13,17 @@ spring:
   config:
     import: classpath:application-api-key.yml
 
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /api-docs
+    groups-order: desc
+    tags-sorter: alpha
+    operations-sorter: method
+  api-docs:
+    enabled: true
+
+
 ---
 spring.config.activate.on-profile: local
 spring:
