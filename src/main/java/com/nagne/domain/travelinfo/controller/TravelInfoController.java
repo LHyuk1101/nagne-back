@@ -26,6 +26,7 @@ public class TravelInfoController {
   private final PlaceRepository placeRepository;
   private final TravelInfoService travelInfoService;
 
+
   @GetMapping("/find/{areaCode}")
   @Operation(summary = "지역 코드별 장소를 추출", description = "서울(1)이면 서울의 식당과, 관광지 데이터를 좋아요 기준 상위10건의 데이터를 반환받는 API")
   public ApiResponse<List<PlaceDTO>> findPlacesByRegion(
@@ -39,10 +40,8 @@ public class TravelInfoController {
   public ApiResponse<List<PlaceDTOforTravelInfo>> findPlaces(@PathVariable Long contentTypeId,
     @PathVariable Integer areaCode) {
     List<PlaceDTOforTravelInfo> result = travelInfoService.findPlaces(contentTypeId, areaCode);
-
     return ApiResponse.success(result);
   }
-
 
   @GetMapping("/travel")
   @Operation(summary = "사용하지 않음")
@@ -51,13 +50,13 @@ public class TravelInfoController {
     return ApiResponse.success(places);
   }
 
-
   @GetMapping("/findall/{areaCode}")
   @Operation(summary = "지역 코드로 데이터를 모두 추출", description = "서울(1)의 관광지,숙소,식당 등 모든데이터를 추출해오는 API")
   public ApiResponse<List<PlaceDTOforTravelInfo>> findAllPlacesByRegion(
     @PathVariable("areaCode") int areaCode) {
     List<PlaceDTOforTravelInfo> allPlacesByRegion = placeRepository.findAllPlacesByRegion(areaCode);
     return ApiResponse.success(allPlacesByRegion);
+
   }
 
 
