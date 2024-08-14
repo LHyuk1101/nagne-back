@@ -1,7 +1,6 @@
 package com.nagne.domain.plan.entity;
 
 import com.nagne.domain.place.entity.Area;
-import com.nagne.domain.review.entity.Review;
 import com.nagne.domain.user.entity.User;
 import com.nagne.global.util.BaseEntity;
 import jakarta.persistence.Column;
@@ -14,11 +13,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,10 +62,10 @@ public class Plan extends BaseEntity {
   
   @Column(length = 500)
   private String thumbnail;
-  
-  @Builder.Default
-  @OneToMany(mappedBy = "plan")
-  private List<Review> reviews = new ArrayList<>();
+
+//  @Builder.Default
+//  @OneToMany(mappedBy = "plan")
+//  private List<Review> reviews = new ArrayList<>();
   
   public enum Status {
     BEGIN, END

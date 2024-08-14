@@ -44,7 +44,7 @@ public class Template {
   private String reasoning;
   
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "plan_id")
+  @JoinColumn(name = "plans_id")
   private Plan plan;
   
   @ManyToOne(fetch = FetchType.LAZY)
