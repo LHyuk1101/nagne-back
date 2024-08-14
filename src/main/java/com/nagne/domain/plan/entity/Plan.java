@@ -65,7 +65,7 @@ public class Plan extends BaseEntity {
   private String overview;
   
   @Column(length = 500)
-  private String thumbnailUrl;
+  private String thumbnail;
   
   @Builder.Default
   @OneToMany(mappedBy = "plan")
