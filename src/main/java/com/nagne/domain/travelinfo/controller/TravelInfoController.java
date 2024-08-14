@@ -1,5 +1,6 @@
 package com.nagne.domain.travelinfo.controller;
 
+import com.nagne.domain.place.dto.PlaceDTO;
 import com.nagne.domain.place.dto.ReqPlaceDto;
 import com.nagne.domain.place.dto.ResponsePlaceDto;
 import com.nagne.domain.place.repository.PlaceRepository;
@@ -22,11 +23,13 @@ public class TravelInfoController {
   private final PlaceRepository placeRepository;
   private final TravelInfoService travelInfoService;
   
-  @GetMapping("/find/{region}")
-  public ApiResponse<List<PlaceDTOforTravelInfo>> findPlacesByRegion(
-    @PathVariable("region") String region) {
-    List<PlaceDTOforTravelInfo> combinedResults = travelInfoService.findPlacesByRegion(region);
-    return ApiResponse.success(combinedResults);
+  
+  @GetMapping("/find/{areaCode}")
+  public ApiResponse<List<PlaceDTO>> findPlacesByRegion(
+    @PathVariable("areaCode") int areaCode) {
+    List<PlaceDTO> placesByRegion = travelInfoService.findPlacesByRegion(areaCode);
+    return ApiResponse.success(placesByRegion);
+    
   }
   
   @GetMapping("/find/{contentTypeId}/{areaCode}")
@@ -45,10 +48,11 @@ public class TravelInfoController {
   }
   
   
-  @GetMapping("/findall/{region}")
-  public List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@PathVariable("region") String region) {
+  @GetMapping("/findall/{areaCode}")
+  public List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@PathVariable("areaCode") int areaCode) {
+    
     // findAllPlacesByRegion 메서드를 호출하여 모든 데이터를 가져옴
-    return placeRepository.findAllPlacesByRegion(region);
+    return placeRepository.findAllPlacesByRegion(areaCode);
   }
   
   
