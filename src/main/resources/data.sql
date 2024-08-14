@@ -38,7 +38,6 @@ values
     (5, 'GWANGJU'),
     (6, 'BUSAN'),
     (7, 'ULSAN'),
-    (8, 'SEJONG'),
     (31, 'GYEONGGIDO'),
     (32, 'GANGWONDO'),
     (33, 'CHUNGCHEONGBUKDO'),
