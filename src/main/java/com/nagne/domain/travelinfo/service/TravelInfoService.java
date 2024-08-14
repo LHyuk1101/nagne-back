@@ -21,9 +21,7 @@ public class TravelInfoService {
 
   private final PlaceReader placeReader;
 
-
   private final PlaceRepository placeRepository;
-
 
   public ResponsePlaceDto fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
 
@@ -56,6 +54,7 @@ public class TravelInfoService {
 
     // 쌈@뽕한 병합
     List<PlaceDTO> combinedResults = new ArrayList<>();
+
     combinedResults.addAll(top10ContentTypeId76);
     combinedResults.addAll(top10ContentTypeId82);
 

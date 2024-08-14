@@ -12,6 +12,6 @@ public class CustomTemplateDto {
   private Long id;
   private String subject;
   private String overview;
-  private String thumbnailUrl;
+  private String thumbnail;
   private int areaCode;
 }

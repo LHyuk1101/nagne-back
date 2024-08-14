@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceRepositoryCustom {
 
   // Area 엔티티의 areaCode 필드를 참조하도록 수정
@@ -28,7 +29,9 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceReposi
       + "AND p.area.areaCode = :areaCode "
       + "ORDER BY p.likes DESC, p.id")
   List<PlaceDTO> findByRegion(@Param("regionIds") Long[] regionIds, @Param("areaCode") int areaCode,
+
     Pageable pageable);
+
 
   @Query("SELECT count(*) "
     + "FROM Place p "
@@ -40,6 +43,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceReposi
     + "FROM PlaceImg pi "
     + "WHERE pi.place.id = :id")
   List<PlaceImg> findByPlaceId(Long id);
+
 
   Optional<Place> findByTitle(String title);
 
@@ -54,6 +58,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceReposi
       + "ORDER BY p.likes DESC, p.id"
   )
   List<PlaceDTOforTravelInfo> findAllPlacesByRegion(@Param("areaCode") int areaCode);
+
 
   @Query("SELECT p "
     + "FROM Place p "
