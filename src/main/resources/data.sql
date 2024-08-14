@@ -38,25 +38,24 @@ values
     (5, 'GWANGJU'),
     (6, 'BUSAN'),
     (7, 'ULSAN'),
-    (8, 'SEJONG'),
     (31, 'GYEONGGIDO'),
     (32, 'GANGWONDO'),
     (33, 'CHUNGCHEONGBUKDO'),
     (34, 'CHUNGCHEONGNAMDO'),
     (35, 'GYEONGSANGBUKDO'),
     (36, 'GYEONGSANGNAMDO'),
-    (37, 'JEONLABUKDO'),
-    (38, 'JEONLANAMDO'),
+    (37, 'JEONBUKDO'),
+    (38, 'JEOLLANAMDO'),
     (39, 'JEJUDO');
 
 -- Place 데이터 삽입
 insert into place (area_code, title, address, content_id, content_type_id, overview, lat, lng, likes, modified_time, api_type, thumbnail_url) values
-(1, '63 Square (63스퀘어)', '50, 63-ro, Yeongdeungpo-gu, Seoul', 264122, 82, '63 Square is one of the most recognizable landmarks of Korea and the symbol of its rapid economic growth. Like its name, the building has 63 floors, 60 above-ground and 3 underground. The lobby and the outdoor garden exhibits installations created by contemporary artists. 63 Square is known for its golden glass facade, which puts up different ambiences depending on the season and the amount of sunlight. It is the best place to watch the fireworks from the Seoul International Fireworks Festival.', 37.5198673186, 126.9403285961, 0, '2024-03-05 01:35:26', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg'),
+(1, '63 Square (63스퀘어)', '50, 63-ro, Yeongdeungpo-gu, Seoul', 264122, 76, '63 Square is one of the most recognizable landmarks of Korea and the symbol of its rapid economic growth. Like its name, the building has 63 floors, 60 above-ground and 3 underground. The lobby and the outdoor garden exhibits installations created by contemporary artists. 63 Square is known for its golden glass facade, which puts up different ambiences depending on the season and the amount of sunlight. It is the best place to watch the fireworks from the Seoul International Fireworks Festival.', 37.5198673186, 126.9403285961, 0, '2024-03-05 01:35:26', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg'),
 (1, 'A Moment in Time - Live Caricature & Gallery (시간을 담다)', '20-1, Samil-daero 8-gil, Jung-gu, Seoul', 2590011, 76, 'A Moment in Time adds in aspects of Korean traditions, customs, and landmarks like hanbok, Gwanghwamun Gate, and Korean mystical animals into caricature artworks, serving as an excellent souvenir for both locals and travelers. The gallery also offers hands-on programs like coloring caricature and traditional folk art. In addition, original design products from A Moment in Time are also available, making great gifts.', 37.5627326749, 126.9901422899, 0, '2021-03-25 11:18:52', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/90/2589890_image2_1.bmp'),
 (1, 'Achasan Ecological Park (아차산생태공원)', '127, Walkerhill-ro, Gwangjin-gu, Seoul', 1747653, 76, 'Achasan Ecological Park was established under the Seoul Metropolitan Government''s Five Year Plan for Urban Green Expansion. Through various events and activities, the park provides opportunities to experience and learn about nature and its ecology. Major facilities include Eco Park, Rendezvous Square, Red Clay Road, Barefoot Path, Pine Forest, Mineral Spring, Eco Trail and pergolas.', 37.5519609256, 127.1012880282, 0, '2021-05-14 13:39:19', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/60/741860_image3_1.jpg'),
 (1, 'Achasan Mountain (아차산)', 'Acheon-dong, Guri-si, Gyeonggi-do', 1349267, 76, 'Achasan Mountain is a 295m-high mountain that stretches across Seoul and the city of Guri. Its proximity to the city makes it an accessible destination for hiking in Seoul. The hiking trails are maintained quite well, so even beginners can enjoy hiking in the mountain. From the summit of Achasan Mountain, one can enjoy the beautiful view of Seoul and the Hangang River. In fall, the mountain is famous for its fall colors as well.', 37.5529441189, 127.0998297997, 0, '2024-03-07 07:24:28', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/57/2661757_image2_1.jpg'),
 (1, 'Achasanseong Fortress (아차산성)', 'Gwangjang-dong, Gwangjin-gu, Seoul-si', 264196, 76, 'Achasanseongseong Fortress boasts magnificent views of the Hangang River and skyline. The 200m-high mountain fortress wall was built to face southeast, towards the Hangang River. It is also called Janghan-seong or Gwangjang-seong. A fierce battle was once fought here among Gogury, Baekje and Silla because of its strategic location during the period of the Three Kingdoms. King Gae-Ro of Baekje (r. 455-475) died in the war by the Goguryeo forces sent by King Jang-Su (r. 413-491) and General Ondal of Goguryeo was also killed in a battle with the Silla army in 590. Achasan Mountain is popular as a citizens'' resting place with a historical trail and a natural park including various facilities such as walkway, mountain walkway, a badminton court, a wrestling range, an archery range, various amusement facilities for children, benches, and pavilion.', 37.5538246631, 127.1048709825, 0, '2023-04-05 12:56:03', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/23/741923_image3_1.jpg'),
-(1, 'Amore Seongsu (아모레 성수)', '7 Achasan-ro 11-gil, Seongdong-gu, Seoul', 3078774, 80, 'Amore Seongsu is an experiential store presented by the cosmetics brand Amorepacific Corporation. The building was renovated from an old car repair shop and presents a unique vibe. Visitors can test products on their skin and purchase products from over 30 brands released by Amorepacific Corporation. Recommended items include the Puzzlewood Hand Cream and Vegan Brush, made using a vegan recipe and a certified-vegan. A pop-up store is operated every month in collaboration with brands from various fields worldwide, providing trendy and extraordinary experiences such as exhibitions and product testing.', 37.5446026871, 127.0590698587, 0, '2024-01-05 06:05:08', 'TOUR', ''),
+(1, 'Amore Seongsu (아모레 성수)', '7 Achasan-ro 11-gil, Seongdong-gu, Seoul', 3078774, 76, 'Amore Seongsu is an experiential store presented by the cosmetics brand Amorepacific Corporation. The building was renovated from an old car repair shop and presents a unique vibe. Visitors can test products on their skin and purchase products from over 30 brands released by Amorepacific Corporation. Recommended items include the Puzzlewood Hand Cream and Vegan Brush, made using a vegan recipe and a certified-vegan. A pop-up store is operated every month in collaboration with brands from various fields worldwide, providing trendy and extraordinary experiences such as exhibitions and product testing.', 37.5446026871, 127.0590698587, 0, '2024-01-05 06:05:08', 'TOUR', ''),
 (1, 'AMORE Spa (아모레퍼시픽 스파)', '21, Apgujeong-ro 29-gil, Gangnam-gu, Seoul', 1295190, 76, 'AmorePacific, a Korean brand, initially gained popularity in New York since its opening of AMORE Beauty Gallery & Spa in Soho, New York. The AMORE Spa is a popular spa and treatment center frequented by many international celebrities. The AMORE Spa Seoul branch, opened in April 2005, offers approximately 30 different kinds of programs. One of the most popular spa programs is Spa Therapy, which uses a diverse range of natural therapy materials including lotus flower, ginger and bamboo. Another popular program is the Halla Green Tea program, which uses green tea leaves grown in Jeju''s Hallasan Mountain. Other programs include Gold & Silver Energy Healing therapy, Mystic Bamboo Forest, facial therapies, body slimming and massages.', 37.5286678625, 127.0276620598, 0, '2020-03-26 16:03:52', 'TOUR', ''),
 (1, 'Amsa Ecological Park (암사생태공원)', '83-66, Seonsa-ro, Gangdong-gu, Seoul', 1131921, 76, 'Amsa Ecological Park (located in Amsa-dong) is a large scenic park with long winding trails passing by reeds and other beautiful plants of the Han River. It is here as well that visitors can watch the flight of Korea''s migratory birds. The Ecological Park is famous for its beautiful scenery and its lush groves of reeds and pussy willows growing alongside the natural riverside road. Wild roses, loosestrifes, and tiger lilies are in bloom from spring to fall and the observation deck gives visitors a beautiful view of Han River and the area''s wide variety of birds such as reed warblers, titmice, and swallows. The river basin and its surrounding stones are a great place to learn about nature and are home to various bugs such as beetles, river mayflies, big scarlet hairstreak butterflies, and other water insects. The Amsa Ecological Park is located nearby Godeok River Side Ecological Park and the Bicycle Theme Park, making this particular area one of the most popular tourist attractions along the Han River.', 37.5500170857, 127.1222833943, 0, '2017-01-12 10:25:12', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/96/1894496_image3_1.jpg'),
 (1, 'Apgujeong Rodeo Street (압구정 로데오거리)', 'Sinsa-dong, Gangnam-gu, Seoul', 264107, 76, 'Apgujeong Rodeo Street is a cultural street in Apgujeong full of luxury brands and multi-shops. It is a popular destination with significant foot traffic thanks to its convenient shopping opportunities, famous cafes and restaurants, and shops with unique interior design. This street is the place to experience Korean fashion and cultural trends. Nearby tourist sites include Cheongdam Fashion Street and Garosu Street of Sinsa-dong.', 37.5268766055, 127.0388971983, 0, '2024-03-18 02:57:57', 'TOUR', 'http://tong.visitkorea.or.kr/cms/resource/44/3109344_image3_1.JPG'),
@@ -179,35 +178,36 @@ values
 (38, 'http://tong.visitkorea.or.kr/cms/resource/41/1026241_image3_1.jpg'),
 (39, 'http://tong.visitkorea.or.kr/cms/resource/22/1574222_image3_1.jpg'),
 (40, 'http://tong.visitkorea.or.kr/cms/resource/09/2363709_image3_1.jpg');
----- Plan 데이터 삽입
---INSERT INTO plans (id, user_id, area_code, status, start_day, end_day, subject, over_view, created_at, updated_at) VALUES
---(1, 1, 1, 'BEGIN', '2023-09-01', '2023-09-03', '서울 역사 탐방', '서울의 역사적 명소를 둘러보는 3일 여행', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
---(2, 2, 2, 'BEGIN', '2023-09-15', '2023-09-18', '제주도 자연 체험', '제주도의 아름다운 자연을 만끽하는 4일 여행', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
---(3, 3, 3, 'BEGIN', '2023-10-01', '2023-10-03', '부산 먹방 여행', '부산의 맛있는 음식과 명소를 즐기는 3일 여행', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
---(4, 4, 4, 'BEGIN', '2023-10-15', '2023-10-17', '강원도 힐링 여행', '강원도의 아름다운 자연에서 휴식을 취하는 3일 여행', '2023-08-09 10:00:00', '2023-08-09 10:00:00');
+
+INSERT INTO plans (plans_id, user_id, area_code, status, start_day, end_day, subject, overview, created_at, updated_at)
+VALUES
+    (1, 1, 1, 'BEGIN', '2023-09-01', '2023-09-03', 'Seoul History Tour', 'A 3-day tour visiting historical sites in Seoul', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
+    (2, 2, 2, 'BEGIN', '2023-09-15', '2023-09-18', 'Jeju Nature Experience', 'A 4-day trip to enjoy the beautiful nature of Jeju Island', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
+    (3, 3, 3, 'BEGIN', '2023-10-01', '2023-10-03', 'Busan Food Trip', 'A 3-day trip enjoying delicious food and famous spots in Busan', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
+    (4, 4, 4, 'BEGIN', '2023-10-15', '2023-10-17', 'Gangwon Healing Trip', 'A 3-day trip for relaxation in the beautiful nature of Gangwon', '2023-08-09 10:00:00', '2023-08-09 10:00:00');
 
 -- Template 데이터 삽입
---INSERT INTO templates (id, plan_id, place_id, days, orders, move_time, place_summary, reasoning) VALUES
----- 서울 역사 탐방
---(1, 1, 1, 1, 1, 0, '조선 왕조의 법궁인 경복궁 관람', '서울 역사 탐방의 시작으로 조선의 중심이었던 경복궁을 방문합니다.'),
---(2, 1, 4, 1, 2, 30, '전통 한옥 마을인 북촌한옥마을 산책', '경복궁과 가까운 북촌한옥마을에서 전통 가옥을 구경하며 한국의 전통을 체험합니다.'),
---(3, 1, 3, 1, 3, 20, '현대적인 서울의 모습을 볼 수 있는 명동 쇼핑', '역사 탐방 후 현대 서울의 모습을 볼 수 있는 명동에서 쇼핑을 즐깁니다.'),
---(4, 1, 2, 2, 1, 30, '서울의 전경을 볼 수 있는 남산서울타워 방문', '서울의 과거와 현재를 한눈에 볼 수 있는 남산서울타워에서 서울의 전경을 감상합니다.'),
---
----- 제주도 자연 체험
---(5, 2, 5, 1, 1, 0, '유네스코 세계자연유산인 성산일출봉 등반', '제주도의 상징적인 자연 명소인 성산일출봉에서 시작하여 제주의 아름다운 경관을 감상합니다.'),
---(6, 2, 8, 1, 2, 60, '우도에서 자전거 투어', '성산일출봉 근처의 우도로 이동하여 자전거를 타고 섬을 일주하며 제주의 해안 풍경을 즐깁니다.'),
---(7, 2, 6, 2, 1, 90, '중문관광단지에서 해변 휴식', '중문관광단지의 아름다운 해변에서 휴식을 취하고 다양한 해양 활동을 즐깁니다.'),
---(8, 2, 7, 3, 1, 60, '한라산국립공원 트레킹', '제주의 중심인 한라산을 등반하며 제주의 자연을 만끽합니다.'),
---
----- 부산 먹방 여행
---(9, 3, 9, 1, 1, 0, '해운대 해수욕장에서 아침 산책', '부산 여행의 시작으로 유명한 해운대 해변에서 상쾌한 아침 산책을 즐깁니다.'),
---(10, 3, 11, 1, 2, 40, '자갈치시장에서 신선한 해산물 점심', '부산의 대표적인 수산시장인 자갈치시장에서 신선한 해산물로 점심을 즐깁니다.'),
---(11, 3, 10, 2, 1, 30, '감천문화마을 탐방', '알록달록한 감천문화마을을 둘러보며 부산의 문화적 면모를 체험합니다.'),
---(12, 3, 12, 2, 2, 40, '태종대에서 해안 절경 감상', '태종대에서 부산의 아름다운 해안 절경을 감상하며 여행을 마무리합니다.'),
---
----- 강원도 힐링 여행
---(13, 4, 13, 1, 1, 0, '속초해변에서 일출 감상', '강원도 여행의 시작으로 속초 해변에서 아름다운 일출을 감상합니다.'),
---(14, 4, 14, 1, 2, 30, '설악산국립공원 산책', '설악산의 아름다운 계곡과 폭포를 감상하며 가벼운 산책을 즐깁니다.'),
---(15, 4, 15, 2, 1, 120, '남이섬에서 숲 체험', '아름다운 남이섬에서 울창한 숲을 산책하고 다양한 문화 체험을 즐깁니다.'),
---(16, 4, 16, 3, 1, 90, '강릉 경포대에서 월출 감상', '강릉 경포대에서 아름다운 동해의 월출을 감상하며 여행을 마무리합니다.');
+INSERT INTO templates (id, plan_id, place_id, days, orders, move_time, place_summary, reasoning) VALUES
+-- 서울 역사 탐방
+(1, 1, 1, 1, 1, 0, 'Visit Gyeongbokgung, the main palace of the Joseon Dynasty', 'Start the Seoul History Tour by visiting Gyeongbokgung, the center of the Joseon Dynasty.'),
+(2, 1, 4, 1, 2, 30, 'Stroll around Bukchon Hanok Village, a traditional Korean village', 'Experience Korean traditions by exploring traditional houses in Bukchon Hanok Village, which is near Gyeongbokgung.'),
+(3, 1, 3, 1, 3, 20, 'Shopping in Myeongdong, where you can see modern Seoul', 'After the history tour, enjoy shopping in Myeongdong, where you can see modern Seoul.'),
+(4, 1, 2, 2, 1, 30, 'Visit Namsan Seoul Tower for a panoramic view of Seoul', 'Enjoy a panoramic view of Seoul at Namsan Seoul Tower, where you can see both the past and present of the city.'),
+
+-- 제주도 자연 체험
+(5, 2, 5, 1, 1, 0, 'Climb Seongsan Ilchulbong, a UNESCO World Natural Heritage site', 'Start by enjoying the beautiful scenery of Jeju from Seongsan Ilchulbong, an iconic natural site.'),
+(6, 2, 8, 1, 2, 60, 'Bicycle tour on Udo Island', 'Move to Udo near Seongsan Ilchulbong and enjoy cycling around the island while taking in Jeju coastal scenery.'),
+(7, 2, 6, 2, 1, 90, 'Relax at the beach in Jungmun Tourist Complex', 'Take a break at the beautiful beach in Jungmun Tourist Complex and enjoy various marine activities.'),
+(8, 2, 7, 3, 1, 60, 'Trekking in Hallasan National Park', 'Climb Hallasan, the center of Jeju, and fully enjoy Jeju nature.'),
+
+-- 부산 먹방 여행
+(9, 3, 9, 1, 1, 0, 'Morning walk at Haeundae Beach', 'Start your Busan trip with a refreshing morning walk at the famous Haeundae Beach.'),
+(10, 3, 11, 1, 2, 40, 'Lunch with fresh seafood at Jagalchi Market', 'Enjoy a seafood lunch at Jagalchi Market, Busan’s representative seafood market.'),
+(11, 3, 10, 2, 1, 30, 'Explore Gamcheon Culture Village', 'Explore the colorful Gamcheon Culture Village and experience the cultural side of Busan.'),
+(12, 3, 12, 2, 2, 40, 'Enjoy the coastal scenery at Taejongdae', 'Finish your trip by enjoying the beautiful coastal scenery at Taejongdae.'),
+
+-- 강원도 힐링 여행
+(13, 4, 13, 1, 1, 0, 'Watch the sunrise at Sokcho Beach', 'Start your Gangwon trip by watching the beautiful sunrise at Sokcho Beach.'),
+(14, 4, 14, 1, 2, 30, 'Walk in Seoraksan National Park', 'Enjoy a light walk while appreciating the beautiful valleys and waterfalls of Seoraksan.'),
+(15, 4, 15, 2, 1, 120, 'Forest experience at Nami Island', 'Stroll through the lush forest on Nami Island and enjoy various cultural experiences.'),
+(16, 4, 16, 3, 1, 90, 'Watch the moonrise at Gyeongpodae in Gangneung', 'End your trip by watching the beautiful moonrise over the East Sea at Gyeongpodae in Gangneung.');
