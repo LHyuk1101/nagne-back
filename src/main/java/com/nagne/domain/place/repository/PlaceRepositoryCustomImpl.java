@@ -1,6 +1,7 @@
 package com.nagne.domain.place.repository;
 
 import com.nagne.domain.place.dto.PlaceDTO;
+import com.nagne.domain.place.dto.ResponsePlaceDto;
 import com.nagne.domain.place.entity.QPlace;
 import com.nagne.domain.place.entity.QPlaceImg;
 import com.nagne.domain.place.entity.QStore;
@@ -21,13 +22,14 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
   }
 
   @Override
-  public List<PlaceDTO> findByRegionAndSearchTerm(Long[] regionIds, int areaCode, String searchTerm,
+  public ResponsePlaceDto findByRegionAndSearchTerm(Long[] regionIds, int areaCode,
+    String searchTerm,
     Pageable pageable) {
     QPlace p = QPlace.place;
     QStore s = QStore.store;
     QPlaceImg pi = QPlaceImg.placeImg;
 
-    return queryFactory
+    List<PlaceDTO> listDto = queryFactory
       .select(Projections.constructor(PlaceDTO.class,
         p.id,
         p.area,
@@ -56,6 +58,23 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
       .offset(pageable.getOffset())
       .limit(pageable.getPageSize())
       .fetch();
+
+    Long totalCount = queryFactory
+      .select(p.count())
+      .from(p)
+      .where(
+        p.contentTypeId.in(regionIds),
+        p.area.areaCode.eq(areaCode),
+        searchTermLike(searchTerm)
+      )
+      .fetchOne();
+
+    assert totalCount != null;
+
+    return ResponsePlaceDto.builder()
+      .placeList(listDto)
+      .totalCount(totalCount.intValue())
+      .build();
 
   }
 
