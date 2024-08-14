@@ -349,7 +349,7 @@ VALUES
 --(39, 'http://tong.visitkorea.or.kr/cms/resource/22/1574222_image3_1.jpg'),
 --(40, 'http://tong.visitkorea.or.kr/cms/resource/09/2363709_image3_1.jpg');
 --
---INSERT INTO plans (plans_id, user_id, area_code, status, start_day, end_day, subject, overview, created_at, updated_at)
+--INSERT INTO plans (plan_id, user_id, area_code, status, start_day, end_day, subject, overview, created_at, updated_at)
 --VALUES
 --    (1, 1, 1, 'BEGIN', '2023-09-01', '2023-09-03', 'Seoul History Tour', 'A 3-day tour visiting historical sites in Seoul', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
 --    (2, 2, 2, 'BEGIN', '2023-09-15', '2023-09-18', 'Jeju Nature Experience', 'A 4-day trip to enjoy the beautiful nature of Jeju Island', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),

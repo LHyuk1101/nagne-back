@@ -32,7 +32,7 @@ import org.hibernate.annotations.DynamicUpdate;
 public class Plan extends BaseEntity {
   
   @Id
-  @Column(name = "plans_id")
+  @Column(name = "plan_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   
