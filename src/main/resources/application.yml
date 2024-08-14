@@ -5,13 +5,19 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
-  #  servlet:
-  #    multipart:
-  #      enabled: true
-  #      max-request-size: 50MB
-  #      max-file-size: 50MB
   config:
     import: classpath:application-api-key.yml
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /api-docs
+    groups-order: desc
+    tags-sorter: alpha
+    operations-sorter: method
+  api-docs:
+    enabled: true
+
 
 ---
 spring.config.activate.on-profile: local
@@ -20,9 +26,6 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:core;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
-  #  servlet:
-  #    multipart:
-  #      location: D:\\down\\TMP\\image\\image
   jpa:
     hibernate:
       ddl-auto: create
@@ -53,9 +56,6 @@ spring:
     url: jdbc:mysql://${database.dev.ip}/${database.dev.name}?serverTimezone=UTC&characterEncoding=UTF-8
     username: ${database.dev.username}
     password: ${database.dev.password}
-  #  servlet:
-  #    multipart:
-  #      location: /Users/chany/Desktop/image
   jpa:
     hibernate:
       ddl-auto: none
@@ -64,6 +64,7 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
+  sql.init.mode: never
 
 springdoc:
   swagger-ui:
@@ -88,9 +89,6 @@ spring:
     url: jdbc:mysql://localhost:3306/${database.prod.name}?serverTimezone=UTC&characterEncoding=UTF-8
     username: ${database.prod.username}
     password: ${database.prod.password}
-  #  servlet:
-  #    multipart:
-  #      location: /srv/upload-files
   jpa:
     hibernate:
       ddl-auto: update
@@ -99,6 +97,7 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
+  sql.init.mode: never
 
 app:
   base-url: "https://nagne.site"

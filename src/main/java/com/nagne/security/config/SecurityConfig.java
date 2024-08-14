@@ -33,13 +33,13 @@ import org.springframework.web.filter.CorsFilter;
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
+  
   private final CustomAuthSuccessHandler customAuthSuccessHandler;
   private final JwtTokenProvider jwtTokenProvider;
   private final UserRepository userRepository;
   private final WebConfig webConfig;
   private final CustomCorsFilter customCorsFilter;
-
+  
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http)
     throws SecurityConfigurationException {
@@ -57,6 +57,8 @@ public class SecurityConfig {
             .requestMatchers("/api/login/oauth2/**").permitAll()
             .requestMatchers("/api/place/**").permitAll()
             .requestMatchers("/api/llm/**").permitAll()  // LLM API 접근 허용
+            .requestMatchers("/api/templates/**").permitAll()
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs").permitAll()
             .anyRequest().authenticated()
         )
         .oauth2Login(oauth2Login ->
@@ -82,21 +84,20 @@ public class SecurityConfig {
           UsernamePasswordAuthenticationFilter.class)
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable);
-
-      // CustomCorsFilter를 필터 체인에 추가
+      
       http.addFilterBefore(customCorsFilter, UsernamePasswordAuthenticationFilter.class);
-
+      
       return http.build();
     } catch (Exception e) {
       throw new SecurityConfigurationException("Security configuration failed");
     }
   }
-
+  
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowCredentials(true);
-
+    
     configuration.addAllowedOrigin(webConfig.getBaseUrl());
     configuration.addAllowedHeader("*");
     configuration.addAllowedMethod("GET");
@@ -105,34 +106,34 @@ public class SecurityConfig {
     configuration.addAllowedMethod("DELETE");
     configuration.addAllowedMethod("OPTIONS"); //preflight 요청을 처리하기위해 사용
     configuration.addExposedHeader("Authorization");
-
+    
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
   }
-
+  
   @Bean
   public CorsFilter corsFilter() {
     return new CorsFilter(corsConfigurationSource());
   }
-
+  
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-
+  
   @Bean
   @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
   public WebSecurityCustomizer h2ConsoleCustomizer() {
     return web -> web.ignoring()
       .requestMatchers(PathRequest.toH2Console());
   }
-
+  
   @Bean
   @ConditionalOnProperty(name = "springdoc.swagger-ui.enabled", havingValue = "true")
   public WebSecurityCustomizer swaggerCustomizer() {
     return web -> web.ignoring()
       .requestMatchers("/swagger-ui/**", "/v3/api-docs/**");
   }
-
+  
 }
