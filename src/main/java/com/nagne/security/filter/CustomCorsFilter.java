@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CustomCorsFilter extends HttpFilter {
-  
+
   @Override
   public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
     throws IOException, ServletException {

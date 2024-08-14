@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ReqPlaceDto {
-  
+
   private String[] regions;
   private int areaCode;
   private int page;
   private int size;
-  
+
 }

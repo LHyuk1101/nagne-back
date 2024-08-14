@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @Transactional(readOnly = true)
 public class PlaceReader {
-  
+
   private static final Function<String, Long> convertToLong = str -> {
     try {
       return Long.parseLong(str);
@@ -31,28 +31,28 @@ public class PlaceReader {
   };
   private final PlaceRepository placeRepository;
   private final PlaceMapper placeMapper = PlaceMapper.INSTANCE;
-  
+
   public ResponsePlaceDto readPlace(ReqPlaceDto reqPlaceDto) {
-    
+
     Long[] convertRegions = Arrays.stream(reqPlaceDto.getRegions())
       .map(convertToLong)
       .filter(Objects::nonNull)
       .toArray(Long[]::new);
     PageRequest pageRequest = PageRequest.of(reqPlaceDto.getPage() - 1, reqPlaceDto.getSize());
-    
-    List<PlaceDTO> byRegion = placeRepository.findByRegion(convertRegions,
-      reqPlaceDto.getAreaCode(), pageRequest);
+
+    List<PlaceDTO> byRegion = placeRepository.findByRegionAndSearchTerm(convertRegions,
+      reqPlaceDto.getAreaCode(), null, pageRequest);
     int totalCount = placeRepository.getTotalCountByRegion(convertRegions,
       reqPlaceDto.getAreaCode());
-    
+
     if (byRegion.isEmpty() || totalCount == 0) {
       throw new ApiException(ErrorCode.PLACE_FOUND_NOT_ERROR);
     }
-    
+
     return ResponsePlaceDto.builder()
       .placeList(byRegion)
       .totalCount(totalCount)
       .build();
-    
+
   }
 }

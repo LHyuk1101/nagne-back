@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PlanResponseDto {
-  
+
   private Long id;
   private Long userId;
   private String status;
@@ -20,19 +20,19 @@ public class PlanResponseDto {
   private Plan.PlanType type;
   private String thumbnailUrl;
   private List<DayPlan> dayPlans;
-  
+
   @Getter
   @Builder
   public static class DayPlan {
-    
+
     private int day;
     private List<PlaceDetail> places;
   }
-  
+
   @Getter
   @Builder
   public static class PlaceDetail {
-    
+
     private Long placeId;
     private String title;
     private String contentType;
