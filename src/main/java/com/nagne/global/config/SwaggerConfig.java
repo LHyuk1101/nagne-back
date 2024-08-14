@@ -22,26 +22,26 @@ public class SwaggerConfig {
     String jwt = "JWT";
     SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt);
     Components components = new Components().addSecuritySchemes(jwt, new SecurityScheme().name(jwt)
-            .type(SecurityScheme.Type.HTTP)
-            .scheme("bearer")
-            .bearerFormat("JWT"));
+      .type(SecurityScheme.Type.HTTP)
+      .scheme("bearer")
+      .bearerFormat("JWT"));
 
     return new OpenAPI()
-            .components(components)
-            .addSecurityItem(securityRequirement)
-            .info(new Info().title("나그네 backend API")
-                    .description("나그네의 BackEnd RestApi입니다.")
-                    .version("v0.0.1")
-                    .license(new License().name("Apache 2.0").url("http://springdoc.org")));
+      .components(components)
+      .addSecurityItem(securityRequirement)
+      .info(new Info().title("나그네 backend API")
+        .description("나그네의 BackEnd RestApi입니다.")
+        .version("v0.0.1")
+        .license(new License().name("Apache 2.0").url("http://springdoc.org")));
   }
 
   @Bean
   public GroupedOpenApi restApi() {
 
     return GroupedOpenApi.builder()
-            .pathsToMatch(REST_API_ROOT)
-            .group(REST_API_GROUP)
-            .build();
+      .pathsToMatch(REST_API_ROOT)
+      .group(REST_API_GROUP)
+      .build();
   }
 
 
