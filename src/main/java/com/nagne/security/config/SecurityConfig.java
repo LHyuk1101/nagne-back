@@ -42,46 +42,47 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http)
-    throws SecurityConfigurationException {
+          throws SecurityConfigurationException {
     try {
       http
-        .csrf(AbstractHttpConfigurer::disable)
-        .sessionManagement(session -> session
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
-        .authorizeHttpRequests((authorizeRequests) ->
-          authorizeRequests
-            .requestMatchers(HttpMethod.GET, "/").permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() //preflight 요청을 처리하기위해 사용
-            .requestMatchers("/api/auth/**").permitAll()
-            .requestMatchers("/api/login/oauth2/**").permitAll()
-            .requestMatchers("/api/place/**").permitAll()
-            .requestMatchers("/api/llm/**").permitAll()  // LLM API 접근 허용
-            .anyRequest().authenticated()
-        )
-        .oauth2Login(oauth2Login ->
-          oauth2Login
-            .redirectionEndpoint(redirectionEndpoint ->
-              redirectionEndpoint
-                .baseUri("/api/login/oauth2/code/*"))
-            .loginProcessingUrl("/api/login/oauth2/code/*")
-            .authorizationEndpoint(authorizationEndpoint ->
-              authorizationEndpoint
-                .baseUri("/api/login/oauth2/authorization")
-            )
-            .successHandler(customAuthSuccessHandler)
-        )
-        .logout(logout -> logout
-          .logoutUrl("/logout")
-          .logoutSuccessHandler(customAuthSuccessHandler)
-          .invalidateHttpSession(true)
-          .deleteCookies(JwtConfig.REFRESH_JWT_COOKIE_NAME)
-        )
-        .addFilterBefore(
-          new JwtAuthenticationFilter(userRepository, jwtTokenProvider, customCorsFilter),
-          UsernamePasswordAuthenticationFilter.class)
-        .formLogin(AbstractHttpConfigurer::disable)
-        .httpBasic(AbstractHttpConfigurer::disable);
+              .csrf(AbstractHttpConfigurer::disable)
+              .sessionManagement(session -> session
+                      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+              )
+              .authorizeHttpRequests((authorizeRequests) ->
+                      authorizeRequests
+                              .requestMatchers(HttpMethod.GET, "/").permitAll()
+                              .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() //preflight 요청을 처리하기위해 사용
+                              .requestMatchers("/api/auth/**").permitAll()
+                              .requestMatchers("/api/login/oauth2/**").permitAll()
+                              .requestMatchers("/api/place/**").permitAll()
+                              .requestMatchers("/api/llm/**").permitAll()// LLM API 접근 허용
+                              .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs").permitAll()
+                              .anyRequest().authenticated()
+              )
+              .oauth2Login(oauth2Login ->
+                      oauth2Login
+                              .redirectionEndpoint(redirectionEndpoint ->
+                                      redirectionEndpoint
+                                              .baseUri("/api/login/oauth2/code/*"))
+                              .loginProcessingUrl("/api/login/oauth2/code/*")
+                              .authorizationEndpoint(authorizationEndpoint ->
+                                      authorizationEndpoint
+                                              .baseUri("/api/login/oauth2/authorization")
+                              )
+                              .successHandler(customAuthSuccessHandler)
+              )
+              .logout(logout -> logout
+                      .logoutUrl("/logout")
+                      .logoutSuccessHandler(customAuthSuccessHandler)
+                      .invalidateHttpSession(true)
+                      .deleteCookies(JwtConfig.REFRESH_JWT_COOKIE_NAME)
+              )
+              .addFilterBefore(
+                      new JwtAuthenticationFilter(userRepository, jwtTokenProvider, customCorsFilter),
+                      UsernamePasswordAuthenticationFilter.class)
+              .formLogin(AbstractHttpConfigurer::disable)
+              .httpBasic(AbstractHttpConfigurer::disable);
 
       // CustomCorsFilter를 필터 체인에 추가
       http.addFilterBefore(customCorsFilter, UsernamePasswordAuthenticationFilter.class);
@@ -125,14 +126,14 @@ public class SecurityConfig {
   @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
   public WebSecurityCustomizer h2ConsoleCustomizer() {
     return web -> web.ignoring()
-      .requestMatchers(PathRequest.toH2Console());
+            .requestMatchers(PathRequest.toH2Console());
   }
 
   @Bean
   @ConditionalOnProperty(name = "springdoc.swagger-ui.enabled", havingValue = "true")
   public WebSecurityCustomizer swaggerCustomizer() {
     return web -> web.ignoring()
-      .requestMatchers("/swagger-ui/**", "/v3/api-docs/**");
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**");
   }
 
 }
