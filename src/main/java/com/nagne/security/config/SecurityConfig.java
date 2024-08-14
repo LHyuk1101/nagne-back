@@ -57,6 +57,7 @@ public class SecurityConfig {
             .requestMatchers("/api/login/oauth2/**").permitAll()
             .requestMatchers("/api/place/**").permitAll()
             .requestMatchers("/api/llm/**").permitAll()  // LLM API 접근 허용
+            .requestMatchers("/api/templates/**").permitAll()
             .anyRequest().authenticated()
         )
         .oauth2Login(oauth2Login ->
