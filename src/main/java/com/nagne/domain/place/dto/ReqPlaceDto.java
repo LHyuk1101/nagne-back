@@ -11,5 +11,6 @@ public class ReqPlaceDto {
   private int areaCode;
   private int page;
   private int size;
+  private String searchTerm;
 
 }
