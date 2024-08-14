@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 import com.nagne.domain.place.entity.ContentType;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
+import com.nagne.domain.plan.dto.DistanceRequest;
+import com.nagne.domain.plan.dto.DistanceResponse;
 import java.util.Arrays;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
