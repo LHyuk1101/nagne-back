@@ -21,6 +21,7 @@ import com.nagne.global.error.exception.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -68,18 +69,49 @@ public class LLMService {
   @Transactional
   public CompletableFuture<PlanResponseDto> generateAndSavePlan(PlanRequestDto request,
     Long userId) {
-    return CompletableFuture.supplyAsync(() -> {
+    log.info("Starting generateAndSavePlan for userId: {}", userId);
+    validateInput(request, userId);
+    
+    return CompletableFuture.supplyAsync(() -> generatePlanInternal(request, userId))
+      .exceptionally(ex -> {
+        log.error("Error generating and saving plan for userId: {}", userId, ex);
+        throw new RuntimeException("Failed to generate plan", ex);
+      });
+  }
+  
+  private void validateInput(PlanRequestDto request, Long userId) {
+    if (request == null) {
+      throw new IllegalArgumentException("Request cannot be null");
+    }
+    if (userId == null) {
+      throw new IllegalArgumentException("UserId cannot be null");
+    }
+  }
+  
+  private PlanResponseDto generatePlanInternal(PlanRequestDto request, Long userId) {
+    try {
+      log.info("Calculating distances for userId: {}", userId);
       List<PlanRequestDto.PlaceDistance> distances = distanceCalculationService.calculateDistances(
         request.getPlaces());
+      
+      log.info("Creating LLM input for userId: {}", userId);
       String llmInput = createLLMInput(request, distances);
+      
+      log.info("Calling LLM API for userId: {}", userId);
       String llmResponse = callLLMApi(llmInput);
+      
+      log.info("Parsing LLM response for userId: {}", userId);
       PlanResponseDto planResponse = parseLLMResponse(llmResponse);
+      
+      log.info("Saving plan and templates for userId: {}", userId);
       Plan savedPlan = savePlanAndTemplates(planResponse, request, userId);
+      
+      log.info("Creating final response for userId: {}", userId);
       return createPlanResponseDto(savedPlan);
-    }).exceptionally(ex -> {
-      log.error("Error generating and saving plan", ex);
-      throw new RuntimeException("Failed to generate plan", ex);
-    });
+    } catch (Exception e) {
+      log.error("Error in generatePlanInternal for userId: {}", userId, e);
+      throw new RuntimeException("Internal error while generating plan", e);
+    }
   }
   
   @Transactional(readOnly = true)
@@ -220,12 +252,15 @@ public class LLMService {
   
   @Transactional
   public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request, Long userId) {
+    log.info("Starting savePlanAndTemplates - dto: {}, request: {}, userId: {}", dto, request,
+      userId);
     validatePlaceIds(dto, request.getPlaces());
     String thumbnail = "default_thumbnail_url";  // 기본값 설정
     
     List<Long> placeIds = dto.getDayPlans().stream()
       .flatMap(dayPlan -> dayPlan.getPlaces().stream())
       .map(PlanResponseDto.PlaceDetail::getPlaceId)
+      .filter(Objects::nonNull) //널값 필터릥
       .collect(Collectors.toList());
     List<Place> places = placeRepository.findPlaceByPlaceId(placeIds);
     Map<Long, Place> placeMap = places.stream()
@@ -273,7 +308,7 @@ public class LLMService {
     List<Template> templates = createTemplates(dto, savedPlan, placeMap);
     templateRepository.saveAll(templates);
     log.info("Saved {} templates for plan id: {}", templates.size(), savedPlan.getId());
-    
+    log.info("Finished savePlanAndTemplates - savedPlan: {}", savedPlan);
     return savedPlan;
   }
   
@@ -282,10 +317,15 @@ public class LLMService {
     List<Template> templates = new ArrayList<>();
     for (PlanResponseDto.DayPlan dayPlan : dto.getDayPlans()) {
       for (PlanResponseDto.PlaceDetail placeDetail : dayPlan.getPlaces()) {
+        if (placeDetail.getPlaceId() == null) {
+          log.error("PlaceId is null in day {}", dayPlan.getDay());
+          continue;
+        }
         Place place = placeMap.get(placeDetail.getPlaceId());
         if (place == null) {
-          log.error("Place not found with id: {}", placeDetail.getPlaceId());
-          continue;  // 해당 장소를 건너뛰고 계속 진행
+          log.error("Place not found with id: {} in day {}", placeDetail.getPlaceId(),
+            dayPlan.getDay());
+          continue;
         }
         
         Template template = Template.builder()
