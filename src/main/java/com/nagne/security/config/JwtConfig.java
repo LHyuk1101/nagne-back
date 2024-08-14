@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Getter
 @Component
 public class JwtConfig {
-
+  
   public static final String REFRESH_JWT_COOKIE_NAME = "USR_JWT";
   public static final Long ACCESS_TOKEN_EXPIRATION_TIME = (long) (1000 * 60
     * 60); // Access 토큰 만료 시간 1시간

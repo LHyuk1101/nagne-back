@@ -12,18 +12,18 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class UserPostDto {
-
+  
   @Email(message = "올바른 이메일 형식이 아닙니다.")
   @NotBlank(message = "이메일은 빈 값이 들어올 수 없습니다.")
   private String email;
-
+  
   @NotBlank(message = "닉네임은 빈 값이 들어올 수 없습니다.")
   private String nickname;
-
+  
   private String profileImg;
-
+  
   private Integer nation;
-
+  
   public static UserPostDto toDto(User user) {
     return UserPostDto.builder()
       .email(user.getEmail())
@@ -32,7 +32,7 @@ public class UserPostDto {
       .nation(user.getNation())
       .build();
   }
-
+  
   public User toEntity() {
     return User.builder()
       .email(this.email)
@@ -40,7 +40,7 @@ public class UserPostDto {
       .role(UserRole.USER)
       .build();
   }
-
+  
   public User toEntity(User user) {
     return User.builder()
       .id(user.getId())

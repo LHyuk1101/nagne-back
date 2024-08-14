@@ -21,10 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService {
-
+  
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
-
+  
   @Transactional(readOnly = false)
   public void saveUser(UserJoinDto userJoinDto) throws ApiException {
     if (userRepository.findByEmail(userJoinDto.getEmail()).isPresent()) {
@@ -34,13 +34,13 @@ public class UserService {
     User user = userJoinDto.setPassword(encodedPassword).toEntity();
     userRepository.save(user);
   }
-
+  
   public UserResponseDto getUserById(Long id) {
     User user = userRepository.findById(id)
       .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
     return UserResponseDto.fromEntity(user);
   }
-
+  
   public List<UserPostDto> getAllUsers() {
     List<User> users = userRepository.findAll();
     List<UserPostDto> userPostDtos = new ArrayList<>();
@@ -50,15 +50,15 @@ public class UserService {
     }
     return userPostDtos;
   }
-
+  
   @Transactional(readOnly = false)
   public void deleteUser(Long id) {
     User user = userRepository.findById(id)
       .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
-
+    
     userRepository.delete(user);
   }
-
+  
   @Transactional(readOnly = false)
   public UserResponseDto updateUser(Long id, UserPostDto UserPostDto) {
     User user = userRepository.findById(id)
