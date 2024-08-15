@@ -9,11 +9,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PlanRepository extends JpaRepository<Plan, Long>, PlanRepositoryCustom {
-
-  @Query("SELECT new com.nagne.domain.plan.dto.PlanDto(p.id, p.user.id, p.status, p.startDay, p.endDay, p.thumbnail, a.name, p.subject)"
-    + " FROM Plan p"
-    + " LEFT JOIN p.area a"
-    + " WHERE p.user.id = :userId")
+  
+  @Query(
+    "SELECT new com.nagne.domain.plan.dto.PlanDto(p.id, p.user.id, p.status, p.startDay, p.endDay, p.thumbnail, a.name, p.subject)"
+      + " FROM Plan p"
+      + " LEFT JOIN p.area a"
+      + " WHERE p.user.id = :userId")
   List<PlanDto> findByUserId(Long userId);
 
 //  @Query("SELECT new com.nagne.domain.plan.dto.PlanDto(p.id,p.user.id, p.status, p.startDay, p.endDay, p.thumbnail, p.subject)"

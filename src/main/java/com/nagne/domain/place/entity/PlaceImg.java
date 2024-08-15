@@ -22,16 +22,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class PlaceImg {
-
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "place_img_id")
   private Long id;
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "place_id")
   private Place place;
-
+  
   @Column(length = 500)
   private String imgUrl;
 }
