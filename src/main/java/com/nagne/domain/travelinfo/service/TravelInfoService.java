@@ -25,6 +25,11 @@ public class TravelInfoService {
   private final PlaceRepository placeRepository;
   private final PlaceRepositoryCustomImpl placeRepositoryCustom;
 
+  // id를 기반으로 PlaceDTO를 가져오는 서비스 메서드
+  public PlaceDTO getPlaceById(Long id) {
+    return placeRepository.findPlaceDetailsById(id);
+  }
+
   public List<PlaceDTO> searchPlacesByRegionAndKeyword(int areaCode, String keyword) {
     return placeRepositoryCustom.searchPlacesByRegionAndKeyword(areaCode, keyword);
   }

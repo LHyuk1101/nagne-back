@@ -27,6 +27,13 @@ public class TravelInfoController {
   private final PlaceRepository placeRepository;
   private final TravelInfoService travelInfoService;
 
+  // 특정 ID의 Place 정보를 가져오는 API 엔드포인트
+  @GetMapping("/details/{id}")
+  public ApiResponse<PlaceDTO> getPlaceDetails(@PathVariable Long id) {
+    PlaceDTO placeDTO = travelInfoService.getPlaceById(id);
+    return ApiResponse.success(placeDTO);
+  }
+
   @GetMapping("/search")
   @Operation(summary = "지역 코드와 키워드로 장소 검색", description = "지역 코드와 검색 키워드로 장소를 검색하는 API")
   public ApiResponse<List<PlaceDTO>> searchPlacesByRegionAndKeyword(
