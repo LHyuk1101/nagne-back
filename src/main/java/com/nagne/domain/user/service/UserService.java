@@ -1,5 +1,7 @@
 package com.nagne.domain.user.service;
 
+import com.nagne.domain.plan.dto.PlanDto;
+import com.nagne.domain.plan.repository.PlanRepository;
 import com.nagne.domain.user.dto.UserJoinDto;
 import com.nagne.domain.user.dto.UserPostDto;
 import com.nagne.domain.user.dto.UserResponseDto;
@@ -23,17 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final PlanRepository planRepository;
   private final PasswordEncoder passwordEncoder;
-
-  @Transactional(readOnly = false)
-  public void saveUser(UserJoinDto userJoinDto) throws ApiException {
-    if (userRepository.findByEmail(userJoinDto.getEmail()).isPresent()) {
-      throw new ApiException(ErrorCode.EMAIL_ALREADY_REGISTERED);
-    }
-    String encodedPassword = passwordEncoder.encode(userJoinDto.getPassword());
-    User user = userJoinDto.setPassword(encodedPassword).toEntity();
-    userRepository.save(user);
-  }
 
   public UserResponseDto getUserById(Long id) {
     User user = userRepository.findById(id)
@@ -52,6 +45,16 @@ public class UserService {
   }
 
   @Transactional(readOnly = false)
+  public void saveUser(UserJoinDto userJoinDto) throws ApiException {
+    if (userRepository.findByEmail(userJoinDto.getEmail()).isPresent()) {
+      throw new ApiException(ErrorCode.EMAIL_ALREADY_REGISTERED);
+    }
+    String encodedPassword = passwordEncoder.encode(userJoinDto.getPassword());
+    User user = userJoinDto.setPassword(encodedPassword).toEntity();
+    userRepository.save(user);
+  }
+
+  @Transactional(readOnly = false)
   public void deleteUser(Long id) {
     User user = userRepository.findById(id)
       .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
@@ -65,5 +68,19 @@ public class UserService {
       .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
     user = userRepository.save(UserPostDto.toEntity(user));
     return UserResponseDto.fromEntity(user);
+  }
+
+  public List<PlanDto> getUserPlanList(Long userId) {
+    List<PlanDto> planDtoList= null;
+    try {
+      planDtoList = planRepository.findByUserId(userId);
+    }
+    catch (Exception e) {
+      if(planDtoList == null) {
+        throw new ApiException("해당 유저의 plan 정보를 찾을 수 없습니다.", ErrorCode.ENTITY_NOT_FOUND);
+      }
+      throw new ApiException("유저 플랜 정보 조회중 오류 발생", ErrorCode.ENTITY_NOT_FOUND);
+    }
+    return planDtoList;
   }
 }

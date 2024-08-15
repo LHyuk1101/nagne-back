@@ -23,8 +23,11 @@ public class TravelInfoService {
 
   private final PlaceRepository placeRepository;
 
-  public ResponsePlaceDto fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
+  public List<PlaceDTO> searchPlacesByRegionAndKeyword(int areaCode, String keyword) {
+    return placeRepository.searchPlacesByRegionAndKeyword(areaCode, keyword);
+  }
 
+  public ResponsePlaceDto fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
     return placeReader.readPlace(reqPlaceDto);
   }
 
@@ -45,11 +48,11 @@ public class TravelInfoService {
     Pageable pageable = PageRequest.of(0, 10);
 
     // contentTypeId 76의 상위 10개 데이터 가져오기
-    List<PlaceDTO> top10ContentTypeId76 = placeRepository.findByRegion(
+    List<PlaceDTO> top10ContentTypeId76 = placeRepository.findTopLikesByRegion(
       new Long[]{76L}, areaCode, pageable);
 
     // contentTypeId 82의 상위 10개 데이터 가져오기
-    List<PlaceDTO> top10ContentTypeId82 = placeRepository.findByRegion(
+    List<PlaceDTO> top10ContentTypeId82 = placeRepository.findTopLikesByRegion(
       new Long[]{82L}, areaCode, pageable);
 
     // 쌈@뽕한 병합
