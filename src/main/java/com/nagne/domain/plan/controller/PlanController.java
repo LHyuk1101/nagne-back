@@ -1,7 +1,7 @@
 package com.nagne.domain.plan.controller;
 
 import com.nagne.domain.plan.dto.PlanDto;
-import com.nagne.domain.plan.dto.PlanResponseDto;
+import com.nagne.domain.plan.dto.PlanUserResponseDto;
 import com.nagne.domain.plan.service.PlanService;
 import com.nagne.global.error.ErrorCode;
 import com.nagne.global.response.ApiResponse;
@@ -28,8 +28,8 @@ public class PlanController {
   
   @GetMapping("/{id}")
   public ApiResponse<?> getPlanById(@PathVariable Long id) {
-    PlanResponseDto planResponseDto = planService.getPlanById(id);
-    return planResponseDto != null ? ApiResponse.success(planResponseDto) : ApiResponse.error(
+    PlanUserResponseDto planUserResponseDto = planService.getPlanById(id);
+    return planUserResponseDto != null ? ApiResponse.success(planUserResponseDto) : ApiResponse.error(
       ErrorCode.INTERNAL_SERVER_ERROR);
   }
 }
