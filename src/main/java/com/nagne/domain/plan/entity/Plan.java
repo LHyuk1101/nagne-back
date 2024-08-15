@@ -67,8 +67,17 @@ public class Plan extends BaseEntity {
 //  @OneToMany(mappedBy = "plan")
 //  private List<Review> reviews = new ArrayList<>();
 
+
+  @Getter
   public enum Status {
-    BEGIN, END
+    BEGIN("BEGIN")
+    , END("END");
+
+    Status(String name) {
+     this.name = name;
+    }
+
+    private String name;
   }
 
   public enum PlanType {
