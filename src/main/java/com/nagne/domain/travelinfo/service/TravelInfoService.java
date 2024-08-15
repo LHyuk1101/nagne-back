@@ -6,6 +6,7 @@ import com.nagne.domain.place.dto.ResponsePlaceDto;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.implement.PlaceReader;
 import com.nagne.domain.place.repository.PlaceRepository;
+import com.nagne.domain.place.repository.PlaceRepositoryCustomImpl;
 import com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +23,10 @@ public class TravelInfoService {
   private final PlaceReader placeReader;
 
   private final PlaceRepository placeRepository;
+  private final PlaceRepositoryCustomImpl placeRepositoryCustom;
 
   public List<PlaceDTO> searchPlacesByRegionAndKeyword(int areaCode, String keyword) {
-    return placeRepository.searchPlacesByRegionAndKeyword(areaCode, keyword);
+    return placeRepositoryCustom.searchPlacesByRegionAndKeyword(areaCode, keyword);
   }
 
   public ResponsePlaceDto fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {

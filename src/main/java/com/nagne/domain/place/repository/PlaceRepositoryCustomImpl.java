@@ -26,6 +26,39 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
     this.queryFactory = new JPAQueryFactory(em);
   }
 
+  @Override
+  public List<PlaceDTO> searchPlacesByRegionAndKeyword(int areaCode, String keyword) {
+    QPlace place = QPlace.place;
+    QStore store = QStore.store;
+    QPlaceImg placeImg = QPlaceImg.placeImg;
+
+    return queryFactory
+      .select(Projections.constructor(PlaceDTO.class,
+        place.id,
+        place.area,
+        place.title,
+        place.address,
+        place.contentTypeId,
+        place.overview,
+        store.contactNumber.coalesce(""),
+        store.openTime.coalesce(""),
+        place.lat,
+        place.lng,
+        place.likes,
+        place.thumbnailUrl,
+        placeImg.imgUrl
+      ))
+      .from(place)
+      .leftJoin(store).on(store.place.id.eq(place.id))
+      .leftJoin(place.placeImgs, placeImg)
+      .where(
+        place.area.areaCode.eq(areaCode),
+        place.title.containsIgnoreCase(keyword) // keyword를 포함하는 title 검색
+      )
+      .orderBy(place.likes.desc(), place.id.asc())
+      .fetch();
+  }
+
   /**
    * @param regionIds  - 시/도 코드
    * @param areaCode   - 지역 코드
