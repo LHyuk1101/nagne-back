@@ -72,7 +72,6 @@ public class UserController {
   @GetMapping("/{userId}/plans")
   public ApiResponse<?> getUserPlans(@PathVariable Long userId) {
     List<PlanDto> userPlanListDto = userService.getUserPlanList(userId);
-
     if(userPlanListDto == null) {
       return ApiResponse.success(null);
     }

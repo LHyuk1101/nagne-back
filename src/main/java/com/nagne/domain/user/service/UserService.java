@@ -71,13 +71,16 @@ public class UserService {
   }
 
   public List<PlanDto> getUserPlanList(Long userId) {
-
-    List<PlanDto> planDtoList = planRepository.findByUserId(userId);
-
-    if(planDtoList == null) {
-      throw new ApiException("해당 유저의 plan 정보를 찾을 수 없습니다.", ErrorCode.NO_RESOURCE_FOUND);
+    List<PlanDto> planDtoList= null;
+    try {
+      planDtoList = planRepository.findByUserId(userId);
     }
-
+    catch (Exception e) {
+      if(planDtoList == null) {
+        throw new ApiException("해당 유저의 plan 정보를 찾을 수 없습니다.", ErrorCode.ENTITY_NOT_FOUND);
+      }
+      throw new ApiException("유저 플랜 정보 조회중 오류 발생", ErrorCode.ENTITY_NOT_FOUND);
+    }
     return planDtoList;
   }
 }

@@ -171,7 +171,7 @@ public class LLMService {
   @Transactional
   public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request) {
     validatePlaceIds(dto, request.getPlaces());
-    String thumbnailUrl = "default_thumbnail_url";  // 기본값 설정
+    String thumbnail = "default_thumbnail_url";  // 기본값 설정
 
     List<Long> placeIds = dto.getDayPlans().stream()
       .flatMap(dayPlan -> dayPlan.getPlaces().stream())
@@ -190,8 +190,8 @@ public class LLMService {
 
       if (place != null) {
         if (place.getThumbnailUrl() != null && !place.getThumbnailUrl().isEmpty()) {
-          thumbnailUrl = place.getThumbnailUrl();
-          log.info("두번째 장소 썸네일 url: {}", thumbnailUrl);
+          thumbnail = place.getThumbnailUrl();
+          log.info("두번째 장소 썸네일 url: {}", thumbnail);
         } else {
           log.warn("두번째 장소(ID: {})에 썸네일 url이 없음", placeId);
         }
@@ -208,13 +208,13 @@ public class LLMService {
       .endDay(request.getEndDay())
       .area(area)
       .status(Plan.Status.BEGIN)
-      .thumbnailUrl(thumbnailUrl)
+      .thumbnail(thumbnail)
       .type(Plan.PlanType.LLM)
       .build();
 
     Plan savedPlan = planRepository.save(plan);
     log.info("Saved plan with id: {} and thumbnail URL: {}", savedPlan.getId(),
-      savedPlan.getThumbnailUrl());
+      savedPlan.getThumbnail());
 
     List<Template> templates = createTemplates(dto, savedPlan, placeMap);
     templateRepository.saveAll(templates);
