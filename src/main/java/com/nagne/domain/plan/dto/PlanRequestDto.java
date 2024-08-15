@@ -39,6 +39,8 @@ public class PlanRequestDto {
     private String name;
     private Long contentType;
     private String overview;
+    private double latitude;
+    private double longitude;
 
   }
 

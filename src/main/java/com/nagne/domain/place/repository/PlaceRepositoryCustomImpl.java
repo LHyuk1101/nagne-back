@@ -13,6 +13,11 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
+/*
+ * 파일명: PlaceRepositoryCustomImpl.java
+ * 작성자: ruu
+ * 작성일자: 2024.08.15
+ */
 public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
 
   private final JPAQueryFactory queryFactory;
@@ -21,6 +26,13 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
     this.queryFactory = new JPAQueryFactory(em);
   }
 
+  /**
+   * @param regionIds  - 시/도 코드
+   * @param areaCode   - 지역 코드
+   * @param searchTerm - 검색어
+   * @param pageable   - 페이지 네이션 관련
+   * @return ResponsePlaceDto - 페이지를 포함한 정보를 담고 있는 Response
+   */
   @Override
   public ResponsePlaceDto findByRegionAndSearchTerm(Long[] regionIds, int areaCode,
     String searchTerm,
