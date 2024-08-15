@@ -15,9 +15,13 @@ import com.nagne.domain.plan.exception.LLMParsingException;
 import com.nagne.domain.plan.repository.PlanRepository;
 import com.nagne.domain.template.entity.Template;
 import com.nagne.domain.template.repository.TemplateRepository;
+import com.nagne.domain.user.entity.User;
+import com.nagne.domain.user.repository.UserRepository;
+import com.nagne.global.error.exception.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -42,6 +46,8 @@ public class LLMService {
   private final TemplateRepository templateRepository;
   private final PlaceRepository placeRepository;
   private final DistanceCalculationService distanceCalculationService;
+  private final UserRepository userRepository;
+
 
   @Value("${llm.api.url}")
   private String apiUrl;
@@ -50,28 +56,104 @@ public class LLMService {
     PlanRepository planRepository,
     TemplateRepository templateRepository,
     PlaceRepository placeRepository,
-    DistanceCalculationService distanceCalculationService) {
+    DistanceCalculationService distanceCalculationService,
+    UserRepository userRepository) {
     this.llmRestTemplate = llmRestTemplate;
     this.planRepository = planRepository;
     this.templateRepository = templateRepository;
     this.placeRepository = placeRepository;
     this.distanceCalculationService = distanceCalculationService;
+    this.userRepository = userRepository;
   }
 
   @Transactional
-  public CompletableFuture<List<Plan>> generateAndSavePlans(PlanRequestDto request) {
-    return CompletableFuture.supplyAsync(() -> {
+  public CompletableFuture<PlanResponseDto> generateAndSavePlan(PlanRequestDto request,
+    Long userId) {
+    log.info("Starting generateAndSavePlan for userId: {}", userId);
+    validateInput(request, userId);
+
+    return CompletableFuture.supplyAsync(() -> generatePlanInternal(request, userId))
+      .exceptionally(ex -> {
+        log.error("Error generating and saving plan for userId: {}", userId, ex);
+        throw new RuntimeException("Failed to generate plan", ex);
+      });
+  }
+
+  private void validateInput(PlanRequestDto request, Long userId) {
+    if (request == null) {
+      throw new IllegalArgumentException("Request cannot be null");
+    }
+    if (userId == null) {
+      throw new IllegalArgumentException("UserId cannot be null");
+    }
+  }
+
+  private PlanResponseDto generatePlanInternal(PlanRequestDto request, Long userId) {
+    try {
+      log.info("Calculating distances for userId: {}", userId);
       List<PlanRequestDto.PlaceDistance> distances = distanceCalculationService.calculateDistances(
         request.getPlaces());
+
+      log.info("Creating LLM input for userId: {}", userId);
       String llmInput = createLLMInput(request, distances);
+
+      log.info("Calling LLM API for userId: {}", userId);
       String llmResponse = callLLMApi(llmInput);
+
+      log.info("Parsing LLM response for userId: {}", userId);
       PlanResponseDto planResponse = parseLLMResponse(llmResponse);
-      Plan savedPlan = savePlanAndTemplates(planResponse, request);
-      return List.of(savedPlan);
-    }).exceptionally(ex -> {
-      log.error("Error generating and saving plans", ex);
-      return List.of(); // 빈 리스트를 반환하여 예외 상황 처리
-    });
+
+      log.info("Saving plan and templates for userId: {}", userId);
+      Plan savedPlan = savePlanAndTemplates(planResponse, request, userId);
+
+      log.info("Creating final response for userId: {}", userId);
+      return createPlanResponseDto(savedPlan);
+    } catch (Exception e) {
+      log.error("Error in generatePlanInternal for userId: {}", userId, e);
+      throw new RuntimeException("Internal error while generating plan", e);
+    }
+  }
+
+  @Transactional(readOnly = true)
+  public PlanResponseDto createPlanResponseDto(Plan plan) {
+    List<Template> templates = templateRepository.findAllByPlanIdWithPlace(plan.getId());
+
+    Map<Integer, List<PlanResponseDto.PlaceDetail>> placeDetailsByDay = templates.stream()
+      .collect(Collectors.groupingBy(Template::getDay,
+        Collectors.mapping(this::convertTemplateToPlaceDetail, Collectors.toList())));
+
+    List<PlanResponseDto.DayPlan> dayPlans = placeDetailsByDay.entrySet().stream()
+      .map(entry -> PlanResponseDto.DayPlan.builder()
+        .day(entry.getKey())
+        .places(entry.getValue())
+        .build())
+      .collect(Collectors.toList());
+
+    return PlanResponseDto.builder()
+      .id(plan.getId())
+      .userId(plan.getUser() != null ? plan.getUser().getId() : null)
+      .status(plan.getStatus().name())
+      .startDay(plan.getStartDay())
+      .endDay(plan.getEndDay())
+      .areaCode(plan.getArea() != null ? plan.getArea().getAreaCode() : null)
+      .subject(plan.getSubject())
+      .type(plan.getType())
+      .thumbnailUrl(plan.getThumbnail())
+      .dayPlans(dayPlans)
+      .build();
+  }
+
+  private PlanResponseDto.PlaceDetail convertTemplateToPlaceDetail(Template template) {
+    return PlanResponseDto.PlaceDetail.builder()
+      .placeId(template.getPlace().getId())
+      .title(template.getPlace().getTitle())
+      .contentType(template.getPlace().getContentTypeId().toString())
+      .order(template.getOrder())
+      .moveTime(template.getMoveTime())
+      .placeSummary(template.getPlaceSummary())
+      .reasoning(template.getReasoning())
+      .placeImgUrls(template.getPlace().getThumbnailUrl())
+      .build();
   }
 
   private String createLLMInput(PlanRequestDto request,
@@ -169,13 +251,16 @@ public class LLMService {
   }
 
   @Transactional
-  public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request) {
+  public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request, Long userId) {
+    log.info("Starting savePlanAndTemplates - dto: {}, request: {}, userId: {}", dto, request,
+      userId);
     validatePlaceIds(dto, request.getPlaces());
     String thumbnail = "default_thumbnail_url";  // 기본값 설정
 
     List<Long> placeIds = dto.getDayPlans().stream()
       .flatMap(dayPlan -> dayPlan.getPlaces().stream())
       .map(PlanResponseDto.PlaceDetail::getPlaceId)
+      .filter(Objects::nonNull) //널값 필터릥
       .collect(Collectors.toList());
     List<Place> places = placeRepository.findPlaceByPlaceId(placeIds);
     Map<Long, Place> placeMap = places.stream()
@@ -202,6 +287,9 @@ public class LLMService {
       log.info("첫 날 계획안에 장소가 없어 기본 이미지 사용");
     }
 
+    User user = userRepository.findById(userId)
+      .orElseThrow(() -> new EntityNotFoundException("User not find" + userId));
+
     Plan plan = Plan.builder()
       .subject(dto.getSubject())
       .startDay(request.getStartDay())
@@ -210,6 +298,7 @@ public class LLMService {
       .status(Plan.Status.BEGIN)
       .thumbnail(thumbnail)
       .type(Plan.PlanType.LLM)
+      .user(user)
       .build();
 
     Plan savedPlan = planRepository.save(plan);
@@ -219,7 +308,7 @@ public class LLMService {
     List<Template> templates = createTemplates(dto, savedPlan, placeMap);
     templateRepository.saveAll(templates);
     log.info("Saved {} templates for plan id: {}", templates.size(), savedPlan.getId());
-
+    log.info("Finished savePlanAndTemplates - savedPlan: {}", savedPlan);
     return savedPlan;
   }
 
@@ -228,10 +317,15 @@ public class LLMService {
     List<Template> templates = new ArrayList<>();
     for (PlanResponseDto.DayPlan dayPlan : dto.getDayPlans()) {
       for (PlanResponseDto.PlaceDetail placeDetail : dayPlan.getPlaces()) {
+        if (placeDetail.getPlaceId() == null) {
+          log.error("PlaceId is null in day {}", dayPlan.getDay());
+          continue;
+        }
         Place place = placeMap.get(placeDetail.getPlaceId());
         if (place == null) {
-          log.error("Place not found with id: {}", placeDetail.getPlaceId());
-          continue;  // 해당 장소를 건너뛰고 계속 진행
+          log.error("Place not found with id: {} in day {}", placeDetail.getPlaceId(),
+            dayPlan.getDay());
+          continue;
         }
 
         Template template = Template.builder()

@@ -40,8 +40,8 @@ public class PlaceReader {
       .toArray(Long[]::new);
     PageRequest pageRequest = PageRequest.of(reqPlaceDto.getPage() - 1, reqPlaceDto.getSize());
 
-    List<PlaceDTO> byRegion = placeRepository.findByRegion(convertRegions,
-      reqPlaceDto.getAreaCode(), pageRequest);
+    List<PlaceDTO> byRegion = placeRepository.findByRegionAndSearchTerm(convertRegions,
+      reqPlaceDto.getAreaCode(), null, pageRequest);
     int totalCount = placeRepository.getTotalCountByRegion(convertRegions,
       reqPlaceDto.getAreaCode());
 

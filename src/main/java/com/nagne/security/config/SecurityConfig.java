@@ -57,6 +57,8 @@ public class SecurityConfig {
             .requestMatchers("/api/login/oauth2/**").permitAll()
             .requestMatchers("/api/place/**").permitAll()
             .requestMatchers("/api/llm/**").permitAll()  // LLM API 접근 허용
+            .requestMatchers("/api/templates/**").permitAll()
+            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs").permitAll()
             .anyRequest().authenticated()
         )
         .oauth2Login(oauth2Login ->
@@ -83,7 +85,6 @@ public class SecurityConfig {
         .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable);
 
-      // CustomCorsFilter를 필터 체인에 추가
       http.addFilterBefore(customCorsFilter, UsernamePasswordAuthenticationFilter.class);
 
       return http.build();
