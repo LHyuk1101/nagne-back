@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,6 +26,16 @@ public class TravelInfoController {
 
   private final PlaceRepository placeRepository;
   private final TravelInfoService travelInfoService;
+
+  @GetMapping("/search")
+  @Operation(summary = "지역 코드와 키워드로 장소 검색", description = "지역 코드와 검색 키워드로 장소를 검색하는 API")
+  public ApiResponse<List<PlaceDTO>> searchPlacesByRegionAndKeyword(
+    @RequestParam("areaCode") int areaCode,
+    @RequestParam("keyword") String keyword) {
+    List<PlaceDTO> searchResults = travelInfoService.searchPlacesByRegionAndKeyword(areaCode,
+      keyword);
+    return ApiResponse.success(searchResults);
+  }
 
 
   @GetMapping("/find/{areaCode}")

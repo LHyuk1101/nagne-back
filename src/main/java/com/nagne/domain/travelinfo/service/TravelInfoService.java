@@ -23,8 +23,11 @@ public class TravelInfoService {
 
   private final PlaceRepository placeRepository;
 
-  public ResponsePlaceDto fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
+  public List<PlaceDTO> searchPlacesByRegionAndKeyword(int areaCode, String keyword) {
+    return placeRepository.searchPlacesByRegionAndKeyword(areaCode, keyword);
+  }
 
+  public ResponsePlaceDto fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
     return placeReader.readPlace(reqPlaceDto);
   }
 
