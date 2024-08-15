@@ -29,7 +29,8 @@ public class CustomOAuth2FailureHandler implements AuthenticationFailureHandler 
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     corsFilter.setCorsHeaders(request, response);
     response.setStatus(ErrorCode.USER_UNAUTHORIZED.getStatus());
-    String jsonResponse = objectMapper.writeValueAsString(ApiResponse.error(ErrorCode.USER_UNAUTHORIZED, "Authentication failed. Please try again."));
+    String jsonResponse = objectMapper.writeValueAsString(
+      ApiResponse.error(ErrorCode.USER_UNAUTHORIZED, "Authentication failed. Please try again."));
     response.getWriter().write(jsonResponse);
   }
 }

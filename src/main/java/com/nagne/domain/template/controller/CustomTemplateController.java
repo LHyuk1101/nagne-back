@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class CustomTemplateController {
-  
+
   private final CustomTemplateService customTemplateService;
-  
+
   @GetMapping("/api/templates")
   public ApiResponse<List<CustomTemplateDto>> getTemplates(@RequestParam int area) {
     List<CustomTemplateDto> templates = customTemplateService.getTemplatesByAreaCode(area);
     return ApiResponse.success(templates);
   }
-  
+
 }

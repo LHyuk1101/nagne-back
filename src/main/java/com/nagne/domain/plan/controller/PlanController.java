@@ -16,20 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/plans")
 public class PlanController {
-  
+
   @Autowired
   private PlanService planService;
-  
+
   @GetMapping
   public ResponseEntity<List<PlanDto>> getAllPlans() {
     List<PlanDto> plans = planService.getAllPlans();
     return ResponseEntity.ok(plans);
   }
-  
+
   @GetMapping("/{id}")
   public ApiResponse<?> getPlanById(@PathVariable Long id) {
     PlanUserResponseDto planUserResponseDto = planService.getPlanById(id);
-    return planUserResponseDto != null ? ApiResponse.success(planUserResponseDto) : ApiResponse.error(
-      ErrorCode.INTERNAL_SERVER_ERROR);
+    return planUserResponseDto != null ? ApiResponse.success(planUserResponseDto)
+      : ApiResponse.error(
+        ErrorCode.INTERNAL_SERVER_ERROR);
   }
 }

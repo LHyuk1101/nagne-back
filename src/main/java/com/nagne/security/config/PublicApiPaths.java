@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.util.AntPathMatcher;
 
 public final class PublicApiPaths {
+
   public static final List<String> PATHS = List.of(
     "/api/auth/**",
     "/api/login/**",

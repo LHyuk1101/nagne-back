@@ -25,7 +25,9 @@ public class PlanUserResponseDto {
   private Plan.PlanType type;
   private List<DayPlan> dayPlans;
 
-  public PlanUserResponseDto(Long id, Long userId, Plan.Status status, LocalDate startDay, LocalDate endDay,Integer areaCode, String areaCodeName, String subject, PlanType type, String thumbnailUrl) {
+  public PlanUserResponseDto(Long id, Long userId, Plan.Status status, LocalDate startDay,
+    LocalDate endDay, Integer areaCode, String areaCodeName, String subject, PlanType type,
+    String thumbnailUrl) {
     this.id = id;
     this.userId = userId;
     this.status = status.getName();

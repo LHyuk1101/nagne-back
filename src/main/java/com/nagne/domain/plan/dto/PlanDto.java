@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlanDto {
-  
+
   private Long id;
   private Long userId;
   private String status;
@@ -22,7 +22,7 @@ public class PlanDto {
   private String thumbnail;
   private int duration;
   private List<PlaceDTO> placeDTOs;
-  
+
   public PlanDto(Long id, Long userId, Status status, LocalDate startDay, LocalDate endDay,
     String thumbnail, String areaCodeName, String subject) {
     this.id = id;
@@ -35,7 +35,7 @@ public class PlanDto {
     this.areaCodeName = areaCodeName;
     this.subject = subject;
   }
-  
+
   public PlanDto(Long id, Long userId, Status status, LocalDate startDay, LocalDate endDay,
     String subject, String thumbnail) {
     this.id = id;
@@ -47,7 +47,7 @@ public class PlanDto {
     this.duration = calculateDuration();
     this.thumbnail = thumbnail;
   }
-  
+
   private int calculateDuration() {
     return endDay != null && startDay != null ?
       (int) java.time.temporal.ChronoUnit.DAYS.between(startDay, endDay)

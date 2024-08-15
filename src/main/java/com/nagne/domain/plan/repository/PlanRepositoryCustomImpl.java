@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
-  
+
   private final JPAQueryFactory queryFactory;
-  
+
   public PlanRepositoryCustomImpl(EntityManager em) {
     this.queryFactory = new JPAQueryFactory(em);
     ;
   }
-  
+
   @Override
   public PlanUserResponseDto findByPlanId(Long planId) {
     QTemplate t = QTemplate.template;
@@ -30,7 +30,7 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
     QPlace p = QPlace.place;
     QStore s = QStore.store;
     QPlaceImg pi = QPlaceImg.placeImg;
-    
+
     // Plan 정보 추출
     PlanUserResponseDto planUserResponseDto = queryFactory
       .select(Projections.constructor(
@@ -50,7 +50,7 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
       .from(plan)
       .where(plan.id.eq(planId))
       .fetchFirst();
-    
+
     // TemplateDto 목록을 추출하여 처리
     List<TemplateDto> templateDtoList = queryFactory
       .select(Projections.constructor(
@@ -74,7 +74,7 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
       .where(t.plan.id.eq(planId))
       .orderBy(t.day.asc(), t.order.asc())
       .fetch();
-    
+
     List<PlanUserResponseDto.DayPlan> dayPlans = templateDtoList.stream()
       .collect(Collectors.groupingBy(
         TemplateDto::getDays,
@@ -97,7 +97,7 @@ public class PlanRepositoryCustomImpl implements PlanRepositoryCustom {
         .places(entry.getValue())
         .build())
       .collect(Collectors.toList());
-    
+
     return PlanUserResponseDto.builder()
       .id(planUserResponseDto.getId())
       .userId(planUserResponseDto.getUserId())

@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class DistanceResponse {
-  
+
   private List<Double> distances;
   private List<String> placeTitles;
   private List<String> placeContentTypeNames;

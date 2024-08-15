@@ -22,10 +22,10 @@ import org.hibernate.annotations.DynamicInsert;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Area {
-  
+
   @Id
   private Integer areaCode;
-  
+
   @Column(length = 100)
   private String name;
 }

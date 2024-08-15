@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class PlanService {
-  
+
   private final PlanRepository planRepository;
-  
+
   public List<PlanDto> getAllPlans() {
     return null; //Todo: 모든 플랜 조회가 어디서 필요하지?
   }
-  
+
   public PlanUserResponseDto getPlanById(Long planId) {
     PlanUserResponseDto planUserResponseDto = null;
     try {
