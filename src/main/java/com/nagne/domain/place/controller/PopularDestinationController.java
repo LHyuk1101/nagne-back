@@ -1,7 +1,7 @@
-package com.nagne.controller;
+package com.nagne.domain.place.controller;
 
-import com.nagne.dto.PopularDestinationDto;
-import com.nagne.service.PopularDestinationService;
+import com.nagne.domain.place.dto.PopularDestinationDto;
+import com.nagne.domain.place.service.PopularDestinationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
