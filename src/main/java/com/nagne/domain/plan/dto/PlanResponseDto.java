@@ -18,6 +18,7 @@ public class PlanResponseDto {
   private Integer areaCode;
   private String subject;
   private Plan.PlanType type;
+  private String thumbnailUrl;
   private List<DayPlan> dayPlans;
 
   @Getter
@@ -39,7 +40,6 @@ public class PlanResponseDto {
     private int moveTime;
     private String placeSummary;
     private String reasoning;
-    private String thumbnailUrl;
     private String placeImgUrls;
   }
 }
