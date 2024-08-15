@@ -18,18 +18,17 @@ public enum ErrorCode {
   
   // USER
   EMAIL_ALREADY_REGISTERED(400, "U001", "Email already registered", LogLevel.ERROR),
-  OAUTH2_CREATE_USER_ERROR(500, "U002", "Error occurred while creating OAuth2 user",
-    LogLevel.ERROR),
-  
+  OAUTH2_CREATE_USER_ERROR(500, "U002", "Error occurred while creating OAuth2 user", LogLevel.ERROR),
+
   // Secure
   SECURITY_CONFIGURATION_ERROR(500, "S001", "Security Configuration Error", LogLevel.ERROR),
-  AUTHENTICATION_FAILURE(401, "S002", "Authentication Failure", LogLevel.ERROR),
+  USER_UNAUTHORIZED(401, "S002", "Authentication is required to access this resource", LogLevel.ERROR ),
+  AUTHENTICATION_FAILURE(401, "S003", "Authentication Failure", LogLevel.ERROR),
   INVALID_REFRESH_TOKEN(401, "S004", "Invalid refresh token", LogLevel.ERROR),
-  
-  
+  FORBIDDEN(403, "S005", "Access denied: Insufficient permissions", LogLevel.ERROR),
+
   // Place
   PLACE_FOUND_NOT_ERROR(404, "P001", "Place Entity Not Found", LogLevel.ERROR),
-  
   ;
   
   private final String code;

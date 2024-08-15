@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler,
+public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler,
   LogoutSuccessHandler {
   
   private final JwtTokenProvider jwtTokenProvider;
