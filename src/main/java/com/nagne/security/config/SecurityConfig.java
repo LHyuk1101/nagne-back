@@ -59,6 +59,7 @@ public class SecurityConfig {
             .requestMatchers("/api/llm/**").permitAll()  // LLM API 접근 허용
             .requestMatchers("/api/templates/**").permitAll()
             .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs").permitAll()
+            .requestMatchers("/api/populardestinations/**").permitAll()
             .anyRequest().authenticated()
         )
         .oauth2Login(oauth2Login ->
