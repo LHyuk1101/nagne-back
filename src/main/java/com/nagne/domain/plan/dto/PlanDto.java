@@ -1,7 +1,6 @@
 package com.nagne.domain.plan.dto;
 
 import com.nagne.domain.place.dto.PlaceDTO;
-import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.plan.entity.Plan.Status;
 import java.time.LocalDate;
 import java.util.List;
