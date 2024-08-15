@@ -181,7 +181,7 @@ values
 (40, 'http://tong.visitkorea.or.kr/cms/resource/09/2363709_image3_1.jpg');
 
 -- Plan 데이터 삽입
-INSERT INTO plans (user_id, area_code, status, start_day, end_day, subject, overview, thumbnail_url, created_at, updated_at) VALUES
+INSERT INTO plans (user_id, area_code, status, start_day, end_day, subject, overview, thumbnail, created_at, updated_at) VALUES
 (2, 1, 'BEGIN', '2023-09-01', '2023-09-03', '서울 역사 탐방', '서울의 역사적 명소를 둘러보는 3일 여행', 'https://media.istockphoto.com/id/1470153983/ko/%EC%82%AC%EC%A7%84/%EB%A1%AF%EB%8D%B0%EC%9B%94%EB%93%9C%ED%83%80%EC%9B%8C-%EC%84%9C%EC%9A%B8-%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD.jpg?s=2048x2048&w=is&k=20&c=W7PkziEX0IEOdwD9sFz4YXNeq3cmT5gU7zp8kk0sFkc=' ,'2023-08-09 10:00:00', '2023-08-09 10:00:00'),
 (2, 39, 'BEGIN', '2023-09-15', '2023-09-18', '제주도 자연 체험', '제주도의 아름다운 자연을 만끽하는 4일 여행','https://media.istockphoto.com/id/1813273616/ko/%EC%82%AC%EC%A7%84/%EC%A0%9C%EC%A3%BC%EB%8F%84%EC%9D%98-%EC%95%BD%EC%B2%9C%EC%82%AC%EC%99%80-%EB%8F%8C%ED%95%98%EB%A3%A8%EB%B0%A9-%ED%95%9C%EA%B5%AD.jpg?s=2048x2048&w=is&k=20&c=XnfGsrv1k-VMl4MLgpj9lVyeKyd6P3zC6Mm6kggEnxA=', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
 (2, 6, 'BEGIN', '2023-10-01', '2023-10-03', '부산 먹방 여행', '부산의 맛있는 음식과 명소를 즐기는 3일 여행','https://cdn.pixabay.com/photo/2021/09/01/14/57/gamcheon-culture-village-6591589_1280.jpg', '2023-08-09 10:00:00', '2023-08-09 10:00:00'),
