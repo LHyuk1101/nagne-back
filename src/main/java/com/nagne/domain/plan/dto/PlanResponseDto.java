@@ -7,10 +7,13 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @Builder
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class PlanResponseDto {
 
   private Long id;
@@ -21,7 +24,10 @@ public class PlanResponseDto {
   private Integer areaCode;
   private String areaCodeName;
   private String subject;
+  private String thumbnailUrl;
   private Plan.PlanType type;
+  private List<DayPlan> dayPlans;
+  
 
   public PlanResponseDto(Long id, Long userId, Plan.Status status, LocalDate startDay, LocalDate endDay,Integer areaCode, String areaCodeName, String subject, PlanType type, String thumbnailUrl) {
     this.id = id;
@@ -35,9 +41,7 @@ public class PlanResponseDto {
     this.type = type;
     this.thumbnailUrl = thumbnailUrl;
   }
-
-  private String thumbnailUrl;
-  private List<DayPlan> dayPlans;
+  
 
   @Getter
   @Builder

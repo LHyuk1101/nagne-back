@@ -198,7 +198,6 @@ public class LLMService {
         String.class);
       return response.getBody();
     } catch (Exception e) {
-      log.error("Failed to call LLM API: ", e);
       throw new RuntimeException("Error occurred while calling LLM API", e);
     }
   }
@@ -206,8 +205,6 @@ public class LLMService {
 
   private PlanResponseDto parseLLMResponse(String llmResponse) {
     try {
-      log.debug("LLM response: {}", llmResponse);
-
       ObjectMapper jsonMapper = new ObjectMapper();
       JsonNode jsonNode = jsonMapper.readTree(llmResponse);
       String yamlString = jsonNode.get("text").asText();
@@ -223,14 +220,10 @@ public class LLMService {
 
       // Debugging 추가
       if (planResponseDto.getDayPlans() == null || planResponseDto.getDayPlans().isEmpty()) {
-        log.error("Day plans are missing or empty in the LLM response: {}", yamlString);
         throw new LLMParsingException("Day plans are missing in the LLM response.");
       }
-
-      log.debug("Parsed plan: {}", planResponseDto);
       return planResponseDto;
     } catch (Exception e) {
-      log.error("Failed to parse response: {}. Error: {}", llmResponse, e.getMessage(), e);
       throw new LLMParsingException("Error occurred while parsing LLM response", e);
     }
   }
@@ -276,7 +269,7 @@ public class LLMService {
       if (place != null) {
         if (place.getThumbnailUrl() != null && !place.getThumbnailUrl().isEmpty()) {
           thumbnail = place.getThumbnailUrl();
-          log.info("두번째 장소 썸네일 url: {}", thumbnail);
+         
         } else {
           log.warn("두번째 장소(ID: {})에 썸네일 url이 없음", placeId);
         }
