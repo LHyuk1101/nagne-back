@@ -6,6 +6,7 @@ import com.nagne.domain.place.dto.ResponsePlaceDto;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.implement.PlaceReader;
 import com.nagne.domain.place.repository.PlaceRepository;
+import com.nagne.domain.place.repository.PlaceRepositoryCustomImpl;
 import com.nagne.domain.travelinfo.dto.PlaceDTOforTravelInfo;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,27 +23,10 @@ public class TravelInfoService {
   private final PlaceReader placeReader;
 
   private final PlaceRepository placeRepository;
+  private final PlaceRepositoryCustomImpl placeRepositoryCustom;
 
   public List<PlaceDTO> searchPlacesByRegionAndKeyword(int areaCode, String keyword) {
-    List<Object[]> results = placeRepository.searchPlacesByRegionAndKeyword(areaCode, keyword);
-
-    // 결과를 PlaceDTO로 매핑
-    return results.stream().map(row -> PlaceDTO.builder()
-      .id(((Number) row[0]).longValue())
-      .areaCode(((Number) row[1]).intValue())
-      .title((String) row[2])
-      .address((String) row[3])
-      .contentTypeId(((Number) row[4]).longValue())
-      .overview((String) row[5])
-      .contactNumber((String) row[6])
-      .opentime((String) row[7])
-      .lat((Double) row[8])
-      .lng((Double) row[9])
-      .likes(((Number) row[10]).intValue())
-      .thumbnailUrl((String) row[11])
-      .imgUrl((String) row[12])
-      .build()
-    ).collect(Collectors.toList());
+    return placeRepositoryCustom.searchPlacesByRegionAndKeyword(areaCode, keyword);
   }
 
   public ResponsePlaceDto fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
