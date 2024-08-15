@@ -28,20 +28,20 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtTokenProvider {
-
+  
   private final JwtConfig jwtConfig;
   private final PrincipalDetailsService principalDetailsService;
   @Value("${app.secure-cookie}")
   private boolean secureCookies;
-
+  
   public String generateAccessToken(User user) {
-
+    
     Claims claims = Jwts.claims();
     claims.put("userID", user.getId());
     claims.put("userEmail", user.getEmail());
     claims.put("nickname", user.getNickname());
     claims.put("role", user.getRole().getRoleName());
-
+    
     long now = System.currentTimeMillis();
     return Jwts.builder()
       .setClaims(claims)
@@ -51,15 +51,15 @@ public class JwtTokenProvider {
         Base64.getEncoder().encodeToString(jwtConfig.getSecretKey().getBytes()))
       .compact();
   }
-
+  
   public String generateRefreshToken(User user) {
-
+    
     Claims claims = Jwts.claims();
     claims.put("userID", user.getId());
     claims.put("userEmail", user.getEmail());
     claims.put("nickname", user.getNickname());
     claims.put("role", user.getRole().getRoleName());
-
+    
     long now = System.currentTimeMillis();
     return Jwts.builder()
       .setClaims(claims)
@@ -69,11 +69,11 @@ public class JwtTokenProvider {
         Base64.getEncoder().encodeToString(jwtConfig.getSecretKey().getBytes()))
       .compact();
   }
-
+  
   public String getUserId(String token) {
     return parseToken(token).get("userID").toString();
   }
-
+  
   public Authentication getAuthentication(String token) {
     Claims claims = parseToken(token);
     UserDetails userDetails = principalDetailsService.loadUserByUsername(
@@ -81,14 +81,14 @@ public class JwtTokenProvider {
     return new UsernamePasswordAuthenticationToken(userDetails, "",
       userDetails.getAuthorities());
   }
-
+  
   public Claims parseToken(String token) {
     return Jwts.parser()
       .setSigningKey(jwtConfig.getSecretKey().getBytes())
       .parseClaimsJws(token)
       .getBody();
   }
-
+  
   public boolean validateAccessToken(String token) {
     try {
       parseToken(token);
@@ -100,7 +100,7 @@ public class JwtTokenProvider {
     }
     return false;
   }
-
+  
   public boolean validateRefreshToken(String token) {
     try {
       parseToken(token);  // parseToken에서 유효성 검사
@@ -110,7 +110,7 @@ public class JwtTokenProvider {
     }
     return false;
   }
-
+  
   public String updateAccessToken(String refreshToken) {
     if (validateRefreshToken(refreshToken)) {
       String userId = getUserId(refreshToken);
@@ -120,7 +120,7 @@ public class JwtTokenProvider {
     }
     throw new ApiException("Invalid refresh token.", ErrorCode.INVALID_REFRESH_TOKEN);
   }
-
+  
   public String updateRefreshToken(String refreshToken) {
     if (validateRefreshToken(refreshToken)) {
       String userId = getUserId(refreshToken);
@@ -130,15 +130,15 @@ public class JwtTokenProvider {
     }
     throw new ApiException("Invalid refresh token.", ErrorCode.INVALID_REFRESH_TOKEN);
   }
-
-
+  
+  
   public String getJwtFromRequest(HttpServletRequest request) {
     String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
     return (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
       ? authorizationHeader.substring(7)
       : null;
   }
-
+  
   public String getRefreshTokenFromCookies(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
     return (cookies == null) ? null : Arrays.stream(cookies)
@@ -147,7 +147,7 @@ public class JwtTokenProvider {
       .findFirst()
       .orElse(null);
   }
-
+  
   public Cookie setRefreshTokenToCookies(String token) {
     Cookie cookie = new Cookie(JwtConfig.REFRESH_JWT_COOKIE_NAME, token);
     cookie.setHttpOnly(true);

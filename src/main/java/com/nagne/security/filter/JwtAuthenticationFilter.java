@@ -24,18 +24,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+  
   private final UserRepository userRepository;
   private final JwtTokenProvider jwtTokenProvider;
   private final CustomCorsFilter corsFilter;
-
+  
   @Override
   protected void doFilterInternal(@NotNull HttpServletRequest request,
     @NotNull HttpServletResponse response,
     @NotNull FilterChain filterChain) throws ServletException, IOException {
-
+    
     String jwtAccessToken = jwtTokenProvider.getJwtFromRequest(request);
-
+    
     if (jwtAccessToken != null && jwtTokenProvider.validateAccessToken(jwtAccessToken)) {
       setSecurityContext(jwtAccessToken, request);
     } else {
@@ -47,10 +47,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return;
       }
     }
-
+    
     filterChain.doFilter(request, response);
   }
-
+  
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String path = request.getRequestURI();
@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     String jsonResponse = objectMapper.writeValueAsString(ApiResponse.error(ErrorCode.USER_UNAUTHORIZED, "If the issue persists, please clear your browser cookies and try again."));
     response.getWriter().write(jsonResponse);
   }
-
+  
   private void setSecurityContext(String token, HttpServletRequest request) {
     Long userId = Long.valueOf(jwtTokenProvider.getUserId(token));
     User user = userRepository.findById(userId).orElse(null);
@@ -78,6 +78,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
   }
-
+  
 }
 

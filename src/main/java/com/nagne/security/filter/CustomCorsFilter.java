@@ -18,6 +18,7 @@ public class CustomCorsFilter extends HttpFilter {
   public void setCorsHeaders(HttpServletRequest request, HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+
     String origin = request.getHeader("Origin");
     if (origin != null) {
       response.setHeader("Access-Control-Allow-Origin", origin);

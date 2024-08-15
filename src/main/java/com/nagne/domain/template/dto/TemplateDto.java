@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class TemplateDto {
-
+  
   private Long id;
   private int days;
   private int order;
@@ -19,8 +19,9 @@ public class TemplateDto {
   private String placeSummary;
   private String reasoning;
   private String placeImgUrls;
-
-  public TemplateDto(Long id, Integer days, Integer order, Integer moveTime, Long placeId, String title,
+  
+  public TemplateDto(Long id, Integer days, Integer order, Integer moveTime, Long placeId,
+    String title,
     Long contentTypeId, String placeSummary, String reasoning, String placeImgUrls) {
     this.id = id;
     this.days = days;

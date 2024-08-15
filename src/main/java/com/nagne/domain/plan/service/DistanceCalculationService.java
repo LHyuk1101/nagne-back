@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class DistanceCalculationService {
-
+  
   private final PlaceRepository placeRepository;
-
+  
   public DistanceCalculationService(PlaceRepository placeRepository) {
     this.placeRepository = placeRepository;
   }
-
+  
   public List<PlanRequestDto.PlaceDistance> calculateDistances(
     List<PlanRequestDto.PlaceInfo> places) {
     List<Long> placeIds = places.stream().map(PlanRequestDto.PlaceInfo::getId)
@@ -35,29 +35,29 @@ public class DistanceCalculationService {
     if (places.isEmpty()) {
       throw new IllegalArgumentException("No places selected");
     }
-
+    
     List<PlanRequestDto.PlaceDistance> distances = new ArrayList<>();
     PlanRequestDto.PlaceInfo basePlace = findBasePlace(places);
     Set<Long> visitedPlaces = new HashSet<>();
     visitedPlaces.add(basePlace.getId());
-
+    
     PlanRequestDto.PlaceInfo currentPlace = basePlace;
-
+    
     for (int i = 0; i < places.size() - 1; i++) {
       PlanRequestDto.PlaceInfo nearestPlace = null;
       double nearestDistance = Double.MAX_VALUE;
-
+      
       for (PlanRequestDto.PlaceInfo place : places) {
         if (!visitedPlaces.contains(place.getId())) {
           double distance = calculateDistance(currentPlace.getId(), place.getId());
-
+          
           if (distance < nearestDistance) {
             nearestDistance = distance;
             nearestPlace = place;
           }
         }
       }
-
+      
       if (nearestPlace != null) {
         distances.add(PlanRequestDto.PlaceDistance.builder()
           .fromPlaceId(currentPlace.getId())
@@ -68,10 +68,10 @@ public class DistanceCalculationService {
         currentPlace = nearestPlace;
       }
     }
-
+    
     return distances;
   }
-
+  
   private PlanRequestDto.PlaceInfo findBasePlace(List<PlanRequestDto.PlaceInfo> places) {
     Optional<PlanRequestDto.PlaceInfo> accommodation = places.stream()
       .filter(place -> {
@@ -81,29 +81,23 @@ public class DistanceCalculationService {
         return placeEntity.getContentTypeId().equals(ContentType.B.getType());
       })
       .findFirst();
-
+    
     if (accommodation.isPresent()) {
-      log.info("Found accommodation as base place: {}", accommodation.get().getName());
       return accommodation.get();
     } else {
       PlanRequestDto.PlaceInfo firstPlace = places.get(0);
-      log.warn("No accommodation found. Using first place as base: {}", firstPlace.getName());
       return firstPlace;
     }
   }
-
+  
   private double calculateDistance(Long placeId1, Long placeId2) {
     Place place1 = placeRepository.findById(placeId1)
       .orElseThrow(() -> new IllegalArgumentException("Place not found with id: " + placeId1));
     Place place2 = placeRepository.findById(placeId2)
       .orElseThrow(() -> new IllegalArgumentException("Place not found with id: " + placeId2));
-
-    // 위도와 경도 값 로그 확인
-    log.debug("Place1: {}, Lat: {}, Lng: {}", place1.getTitle(), place1.getLat(), place1.getLng());
-    log.debug("Place2: {}, Lat: {}, Lng: {}", place2.getTitle(), place2.getLat(), place2.getLng());
-
+    
     final int R = 6371; // 지구의 반지름 (km)
-
+    
     double latDistance = Math.toRadians(place2.getLat() - place1.getLat());
     double lonDistance = Math.toRadians(place2.getLng() - place1.getLng());
     double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
@@ -111,7 +105,7 @@ public class DistanceCalculationService {
       * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
     double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     double distance = R * c;
-
+    
     return Math.round(distance * 10.0) / 10.0; // 소수점 첫번째 자리까지 반올림.
   }
 }

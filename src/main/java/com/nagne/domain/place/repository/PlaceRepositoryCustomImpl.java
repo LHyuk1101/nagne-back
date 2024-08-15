@@ -19,19 +19,19 @@ import org.springframework.util.StringUtils;
  * 작성일자: 2024.08.15
  */
 public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
-
+  
   private final JPAQueryFactory queryFactory;
-
+  
   public PlaceRepositoryCustomImpl(EntityManager em) {
     this.queryFactory = new JPAQueryFactory(em);
   }
-
+  
   @Override
   public List<PlaceDTO> searchPlacesByRegionAndKeyword(int areaCode, String keyword) {
     QPlace place = QPlace.place;
     QStore store = QStore.store;
     QPlaceImg placeImg = QPlaceImg.placeImg;
-
+    
     return queryFactory
       .select(Projections.constructor(PlaceDTO.class,
         place.id,
@@ -58,7 +58,7 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
       .orderBy(place.likes.desc(), place.id.asc())
       .fetch();
   }
-
+  
   /**
    * @param regionIds  - 시/도 코드
    * @param areaCode   - 지역 코드
@@ -73,7 +73,7 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
     QPlace p = QPlace.place;
     QStore s = QStore.store;
     QPlaceImg pi = QPlaceImg.placeImg;
-
+    
     List<PlaceDTO> listDto = queryFactory
       .select(Projections.constructor(PlaceDTO.class,
         p.id,
@@ -103,7 +103,7 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
       .offset(pageable.getOffset())
       .limit(pageable.getPageSize())
       .fetch();
-
+    
     Long totalCount = queryFactory
       .select(p.count())
       .from(p)
@@ -113,16 +113,16 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
         searchTermLike(searchTerm)
       )
       .fetchOne();
-
+    
     assert totalCount != null;
-
+    
     return ResponsePlaceDto.builder()
       .placeList(listDto)
       .totalCount(totalCount.intValue())
       .build();
-
+    
   }
-
+  
   private BooleanExpression searchTermLike(String searchTerm) {
     return StringUtils.hasText(searchTerm) ?
       QPlace.place.title.like("%" + searchTerm.trim() + "%") : null;

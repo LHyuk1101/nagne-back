@@ -20,7 +20,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
+  
   /**
    * javax.validation.Valid or @Validated 으로 binding error 발생시 발생한다. HttpMessageConverter 에서 등록한
    * HttpMessageConverter binding 못할경우 발생 주로 @RequestBody, @RequestPart 어노테이션에서 발생
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
       ApiResponse.error(ErrorCode.INVALID_INPUT_VALUE),
       HttpStatus.valueOf(ErrorCode.INVALID_INPUT_VALUE.getStatus()));
   }
-
+  
   /**
    * @ModelAttribut 으로 binding error 발생시 BindException 발생한다. ref
    * https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
       ErrorCode.INVALID_INPUT_VALUE, e.getBindingResult());
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
-
+  
   /**
    * enum type 일치하지 않아 binding 못할 경우 발생 주로 @RequestParam enum으로 binding 못했을 경우 발생
    */
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     final ErrorResponse response = ErrorResponse.of(e);
     return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
   }
-
+  
   /**
    * 지원하지 않은 HTTP method 호출 할 경우 발생
    */
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
       ErrorCode.METHOD_NOT_ALLOWED);
     return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
   }
-
+  
   /**
    * 존재 하지 않는 URL 주소를 입력 했을 때 발생함
    */
@@ -79,7 +79,7 @@ public class GlobalExceptionHandler {
       ErrorCode.NO_HANDLER_FOUND);
     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
   }
-
+  
   /**
    * 리소스를 찾을 수 없는 경우 발생함
    */
@@ -90,7 +90,7 @@ public class GlobalExceptionHandler {
       ErrorCode.NO_RESOURCE_FOUND);
     return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
   }
-
+  
   /**
    * Authentication 객체가 필요한 권한을 보유하지 않은 경우 발생합
    */
@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(response, HttpStatus.valueOf(
       ErrorCode.HANDLE_ACCESS_DENIED.getStatus()));
   }
-
+  
   /**
    * @PreAuthorize에서 올바른 권한이 없을 경우 발생함.
    */
@@ -119,7 +119,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(ApiException.class)
   public ResponseEntity<ApiResponse<?>> handleApiException(ApiException e) {
     final ErrorCode errorCode = e.getErrorCode();
-
+    
     switch (errorCode.getLogLevel()) {
       case ERROR -> log.error(errorCode.getMessage());
       case WARN -> log.warn(errorCode.getMessage());
@@ -128,7 +128,7 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(ApiResponse.error(e.getErrorCode()),
       HttpStatus.valueOf(e.getErrorCode().getStatus()));
   }
-
+  
   /**
    * 개발자가 캐치하지 못해서 나오는 원인 불명의 에러 또는 의도된 checkedException 처리가 되어야합니다.
    * <p>
