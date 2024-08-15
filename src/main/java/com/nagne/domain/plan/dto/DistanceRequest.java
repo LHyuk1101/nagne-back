@@ -7,6 +7,6 @@ import lombok.Getter;
 @Getter
 @Builder
 public class DistanceRequest {
-  
+
   private List<Long> placeIds;
 }

@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/place")
 @Tag(name = "PlaceController")
 public class PlaceController {
-  
+
   private final PlaceService placeService;
-  
+
   @GetMapping
   @Operation(summary = "RequestDto: Regions, areaCode, page, size", description = "지역에 따른 관광지 등등 조건 타입의 데이터를 가져옵니다.")
   public ApiResponse<ResponsePlaceDto> getPlaceById(@ModelAttribute ReqPlaceDto reqPlaceDto) {
     ResponsePlaceDto places = placeService.fetchPlaceByRegion(reqPlaceDto);
     return ApiResponse.success(places);
   }
-  
+
 }

@@ -27,7 +27,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     AuthenticationException authException) throws ApiException, IOException {
     corsFilter.setCorsHeaders(request, response);
     response.setStatus(ErrorCode.USER_UNAUTHORIZED.getStatus());
-    String jsonResponse = objectMapper.writeValueAsString(ApiResponse.error(ErrorCode.USER_UNAUTHORIZED, "We couldn't find your authentication information. Please sign up for an account and try again."));
+    String jsonResponse = objectMapper.writeValueAsString(
+      ApiResponse.error(ErrorCode.USER_UNAUTHORIZED,
+        "We couldn't find your authentication information. Please sign up for an account and try again."));
     response.getWriter().write(jsonResponse);
   }
 }

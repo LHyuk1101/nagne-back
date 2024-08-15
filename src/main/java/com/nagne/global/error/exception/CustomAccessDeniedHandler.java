@@ -13,18 +13,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+
   private final ObjectMapper objectMapper;
   private final CustomCorsFilter corsFilter;
+
   public CustomAccessDeniedHandler(ObjectMapper objectMapper, CustomCorsFilter corsFilter) {
     this.objectMapper = objectMapper;
     this.corsFilter = corsFilter;
   }
+
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response,
     AccessDeniedException accessDeniedException) throws IOException {
     corsFilter.setCorsHeaders(request, response);
     response.setStatus(ErrorCode.FORBIDDEN.getStatus());
-    String jsonResponse = objectMapper.writeValueAsString(ApiResponse.error(ErrorCode.FORBIDDEN, ""));
+    String jsonResponse = objectMapper.writeValueAsString(
+      ApiResponse.error(ErrorCode.FORBIDDEN, ""));
     response.getWriter().write(jsonResponse);
   }
 

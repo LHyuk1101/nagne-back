@@ -11,18 +11,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomTemplateService {
-  
+
   private final CustomTemplateRepository customTemplateRepository;
-  
+
   public List<CustomTemplateDto> getTemplatesByAreaCode(int areaCode) {
-    
+
     List<CustomTemplateDto> templates = customTemplateRepository.findCustomTemplateByAreaCode(
       areaCode);
-    
+
     if (templates.isEmpty()) {
       throw new ApiException(ErrorCode.ENTITY_NOT_FOUND);
     }
-    
+
     return templates;
   }
 }
