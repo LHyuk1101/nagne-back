@@ -1,13 +1,16 @@
 package com.nagne.domain.plan.dto;
 
 import com.nagne.domain.plan.entity.Plan;
+import com.nagne.domain.plan.entity.Plan.PlanType;
 import java.time.LocalDate;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class PlanResponseDto {
 
   private Long id;
@@ -16,8 +19,23 @@ public class PlanResponseDto {
   private LocalDate startDay;
   private LocalDate endDay;
   private Integer areaCode;
+  private String areaCodeName;
   private String subject;
   private Plan.PlanType type;
+
+  public PlanResponseDto(Long id, Long userId, Plan.Status status, LocalDate startDay, LocalDate endDay,Integer areaCode, String areaCodeName, String subject, PlanType type, String thumbnailUrl) {
+    this.id = id;
+    this.userId = userId;
+    this.status = status.getName();
+    this.startDay = startDay;
+    this.endDay = endDay;
+    this.areaCode = areaCode;
+    this.areaCodeName = areaCodeName;
+    this.subject = subject;
+    this.type = type;
+    this.thumbnailUrl = thumbnailUrl;
+  }
+
   private String thumbnailUrl;
   private List<DayPlan> dayPlans;
 
