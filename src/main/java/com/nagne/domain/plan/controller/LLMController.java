@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/llm")
 public class LLMController {
-
+  
   private static final Logger log = LoggerFactory.getLogger(LLMController.class);
-
+  
   private final LLMService llmService;
-
+  
   public LLMController(LLMService llmService) {
     this.llmService = llmService;
   }
-
+  
   @PostMapping("/create-plan")
   public CompletableFuture<ResponseEntity<PlanResponseDto>> generatePlan(
     @RequestBody PlanRequestDto request) {
-
+    
     Long userId = request.getUserId();  // 요청하고 userId를 받아옴
     return llmService.generateAndSavePlan(request, userId)
       .thenApply(ResponseEntity::ok)

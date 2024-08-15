@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ResponsePlaceDto {
-
+  
   private List<PlaceDTO> placeList;
-
+  
   private int totalCount;
-
+  
 }
