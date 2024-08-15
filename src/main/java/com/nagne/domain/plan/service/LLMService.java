@@ -69,12 +69,10 @@ public class LLMService {
   @Transactional
   public CompletableFuture<PlanResponseDto> generateAndSavePlan(PlanRequestDto request,
     Long userId) {
-    log.info("Starting generateAndSavePlan for userId: {}", userId);
     validateInput(request, userId);
 
     return CompletableFuture.supplyAsync(() -> generatePlanInternal(request, userId))
       .exceptionally(ex -> {
-        log.error("Error generating and saving plan for userId: {}", userId, ex);
         throw new RuntimeException("Failed to generate plan", ex);
       });
   }
@@ -90,26 +88,19 @@ public class LLMService {
 
   private PlanResponseDto generatePlanInternal(PlanRequestDto request, Long userId) {
     try {
-      log.info("Calculating distances for userId: {}", userId);
       List<PlanRequestDto.PlaceDistance> distances = distanceCalculationService.calculateDistances(
         request.getPlaces());
-
-      log.info("Creating LLM input for userId: {}", userId);
+      
       String llmInput = createLLMInput(request, distances);
-
-      log.info("Calling LLM API for userId: {}", userId);
+      
       String llmResponse = callLLMApi(llmInput);
-
-      log.info("Parsing LLM response for userId: {}", userId);
+      
       PlanResponseDto planResponse = parseLLMResponse(llmResponse);
-
-      log.info("Saving plan and templates for userId: {}", userId);
+      
       Plan savedPlan = savePlanAndTemplates(planResponse, request, userId);
-
-      log.info("Creating final response for userId: {}", userId);
+      
       return createPlanResponseDto(savedPlan);
     } catch (Exception e) {
-      log.error("Error in generatePlanInternal for userId: {}", userId, e);
       throw new RuntimeException("Internal error while generating plan", e);
     }
   }
@@ -245,8 +236,6 @@ public class LLMService {
 
   @Transactional
   public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request, Long userId) {
-    log.info("Starting savePlanAndTemplates - dto: {}, request: {}, userId: {}", dto, request,
-      userId);
     validatePlaceIds(dto, request.getPlaces());
     String thumbnail = "default_thumbnail_url";  // 기본값 설정
 
@@ -269,15 +258,8 @@ public class LLMService {
       if (place != null) {
         if (place.getThumbnailUrl() != null && !place.getThumbnailUrl().isEmpty()) {
           thumbnail = place.getThumbnailUrl();
-         
-        } else {
-          log.warn("두번째 장소(ID: {})에 썸네일 url이 없음", placeId);
         }
-      } else {
-        log.error("두 번째 장소(ID: {})를 찾을 수 없음", placeId);
       }
-    } else {
-      log.info("첫 날 계획안에 장소가 없어 기본 이미지 사용");
     }
 
     User user = userRepository.findById(userId)
@@ -295,13 +277,9 @@ public class LLMService {
       .build();
 
     Plan savedPlan = planRepository.save(plan);
-    log.info("Saved plan with id: {} and thumbnail URL: {}", savedPlan.getId(),
-      savedPlan.getThumbnail());
 
     List<Template> templates = createTemplates(dto, savedPlan, placeMap);
     templateRepository.saveAll(templates);
-    log.info("Saved {} templates for plan id: {}", templates.size(), savedPlan.getId());
-    log.info("Finished savePlanAndTemplates - savedPlan: {}", savedPlan);
     return savedPlan;
   }
 
@@ -311,13 +289,11 @@ public class LLMService {
     for (PlanResponseDto.DayPlan dayPlan : dto.getDayPlans()) {
       for (PlanResponseDto.PlaceDetail placeDetail : dayPlan.getPlaces()) {
         if (placeDetail.getPlaceId() == null) {
-          log.error("PlaceId is null in day {}", dayPlan.getDay());
           continue;
         }
         Place place = placeMap.get(placeDetail.getPlaceId());
         if (place == null) {
-          log.error("Place not found with id: {} in day {}", placeDetail.getPlaceId(),
-            dayPlan.getDay());
+            dayPlan.getDay();
           continue;
         }
 

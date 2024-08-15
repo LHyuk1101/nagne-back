@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class PlanResponseDto {
 
   private Long id;
@@ -28,19 +27,6 @@ public class PlanResponseDto {
   private Plan.PlanType type;
   private List<DayPlan> dayPlans;
   
-
-  public PlanResponseDto(Long id, Long userId, Plan.Status status, LocalDate startDay, LocalDate endDay,Integer areaCode, String areaCodeName, String subject, PlanType type, String thumbnailUrl) {
-    this.id = id;
-    this.userId = userId;
-    this.status = status.getName();
-    this.startDay = startDay;
-    this.endDay = endDay;
-    this.areaCode = areaCode;
-    this.areaCodeName = areaCodeName;
-    this.subject = subject;
-    this.type = type;
-    this.thumbnailUrl = thumbnailUrl;
-  }
   
 
   @Getter

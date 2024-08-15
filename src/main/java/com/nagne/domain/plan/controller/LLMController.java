@@ -33,7 +33,6 @@ public class LLMController {
     return llmService.generateAndSavePlan(request, userId)
       .thenApply(ResponseEntity::ok)
       .exceptionally(ex -> {
-        log.error("Error generating plan", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
       });
   }
