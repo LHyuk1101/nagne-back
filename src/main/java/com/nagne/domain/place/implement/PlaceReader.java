@@ -1,6 +1,5 @@
 package com.nagne.domain.place.implement;
 
-import com.nagne.domain.place.dto.PlaceDTO;
 import com.nagne.domain.place.dto.ReqPlaceDto;
 import com.nagne.domain.place.dto.ResponsePlaceDto;
 import com.nagne.domain.place.mapper.PlaceMapper;
@@ -8,7 +7,6 @@ import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.global.error.ErrorCode;
 import com.nagne.global.error.exception.ApiException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
@@ -40,19 +38,14 @@ public class PlaceReader {
       .toArray(Long[]::new);
     PageRequest pageRequest = PageRequest.of(reqPlaceDto.getPage() - 1, reqPlaceDto.getSize());
 
-    List<PlaceDTO> byRegion = placeRepository.findByRegionAndSearchTerm(convertRegions,
-      reqPlaceDto.getAreaCode(), null, pageRequest);
-    int totalCount = placeRepository.getTotalCountByRegion(convertRegions,
-      reqPlaceDto.getAreaCode());
+    ResponsePlaceDto byRegion = placeRepository.findByRegionAndSearchTerm(convertRegions,
+      reqPlaceDto.getAreaCode(), reqPlaceDto.getSearchTerm(), pageRequest);
 
-    if (byRegion.isEmpty() || totalCount == 0) {
+    if (byRegion.getPlaceList().isEmpty() || byRegion.getTotalCount() == 0) {
       throw new ApiException(ErrorCode.PLACE_FOUND_NOT_ERROR);
     }
 
-    return ResponsePlaceDto.builder()
-      .placeList(byRegion)
-      .totalCount(totalCount)
-      .build();
+    return byRegion;
 
   }
 }
