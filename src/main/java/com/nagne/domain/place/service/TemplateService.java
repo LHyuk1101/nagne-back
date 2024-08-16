@@ -3,12 +3,12 @@ package com.nagne.domain.place.service;
 import com.nagne.domain.place.entity.ContentType;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
+import com.nagne.domain.plan.dto.DistanceRequest;
+import com.nagne.domain.plan.dto.DistanceResponse;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.nagne.domain.plan.dto.DistanceRequest;
-import com.nagne.domain.plan.dto.DistanceResponse;
 
 @Service
 public class TemplateService {

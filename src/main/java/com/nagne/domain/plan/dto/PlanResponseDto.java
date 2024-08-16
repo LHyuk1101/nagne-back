@@ -1,14 +1,15 @@
 package com.nagne.domain.plan.dto;
 
 import com.nagne.domain.plan.entity.Plan;
+import java.time.LocalDate;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Getter
 @Builder
+@AllArgsConstructor
 public class PlanResponseDto {
 
   private Long id;
@@ -17,9 +18,12 @@ public class PlanResponseDto {
   private LocalDate startDay;
   private LocalDate endDay;
   private Integer areaCode;
+  private String areaCodeName;
   private String subject;
+  private String thumbnailUrl;
   private Plan.PlanType type;
   private List<DayPlan> dayPlans;
+
 
   @Getter
   @Builder
@@ -40,6 +44,6 @@ public class PlanResponseDto {
     private int moveTime;
     private String placeSummary;
     private String reasoning;
-    private String thumbnailUrl;
+    private String placeImgUrls;
   }
 }

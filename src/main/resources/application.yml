@@ -5,13 +5,19 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: none
-#  servlet:
-#    multipart:
-#      enabled: true
-#      max-request-size: 50MB
-#      max-file-size: 50MB
   config:
     import: classpath:application-api-key.yml
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /api-docs
+    groups-order: desc
+    tags-sorter: alpha
+    operations-sorter: method
+  api-docs:
+    enabled: true
+
 
 ---
 spring.config.activate.on-profile: local
@@ -20,9 +26,6 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:core;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     username: sa
-#  servlet:
-#    multipart:
-#      location: D:\\down\\TMP\\image\\image
   jpa:
     hibernate:
       ddl-auto: create
@@ -35,7 +38,8 @@ spring:
     console:
       enabled: true # /h2-console 설정
 app:
-  base-url: "http://localhost:3000"
+  base-url: "http://localhost:5173"
+  base-api-url: "http://localhost:8080"
   secure-cookie: false
 
 ---
@@ -52,28 +56,21 @@ spring:
     url: jdbc:mysql://${database.dev.ip}/${database.dev.name}?serverTimezone=UTC&characterEncoding=UTF-8
     username: ${database.dev.username}
     password: ${database.dev.password}
-#  servlet:
-#    multipart:
-#      location: /Users/chany/Desktop/image
-  sql: # mysql에서는 data.sql를 빌드시 실행하려면 추가해야됨.
-    init:
-      mode: always
   jpa:
-    hibernate:
-      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
-    defer-datasource-initialization: true #data.sql 파일의 실행이 DB가 연결되고 난 이후에 실행되도록 설정
+  sql.init.mode: never
 
 springdoc:
   swagger-ui:
     enabled:true
 
 app:
-  base-url: "http://localhost:3000"
+  base-url: "http://localhost:5173"
+  base-api-url: "http://localhost:8080"
   secure-cookie: false
 
 ---
@@ -90,23 +87,18 @@ spring:
     url: jdbc:mysql://localhost:3306/${database.prod.name}?serverTimezone=UTC&characterEncoding=UTF-8
     username: ${database.prod.username}
     password: ${database.prod.password}
-#  servlet:
-#    multipart:
-#      location: /srv/upload-files
   jpa:
-    hibernate:
-      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
+  sql.init.mode: never
 
 app:
   base-url: "https://nagne.site"
+  base-api-url: "https://api.nagne.site"
   secure-cookie: true
-
-
 
 
 

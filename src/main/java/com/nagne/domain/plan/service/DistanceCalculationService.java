@@ -4,14 +4,16 @@ import com.nagne.domain.place.entity.ContentType;
 import com.nagne.domain.place.entity.Place;
 import com.nagne.domain.place.repository.PlaceRepository;
 import com.nagne.domain.plan.dto.PlanRequestDto;
-import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -25,6 +27,11 @@ public class DistanceCalculationService {
 
   public List<PlanRequestDto.PlaceDistance> calculateDistances(
     List<PlanRequestDto.PlaceInfo> places) {
+    List<Long> placeIds = places.stream().map(PlanRequestDto.PlaceInfo::getId)
+      .collect(Collectors.toList());
+    List<Place> placeList = placeRepository.findPlaceByPlaceId(placeIds);
+    Map<Long, Place> placeMap = placeList.stream()
+      .collect(Collectors.toMap(Place::getId, Function.identity()));
     if (places.isEmpty()) {
       throw new IllegalArgumentException("No places selected");
     }
@@ -75,7 +82,12 @@ public class DistanceCalculationService {
       })
       .findFirst();
 
-    return accommodation.orElse(places.get(0));
+    if (accommodation.isPresent()) {
+      return accommodation.get();
+    } else {
+      PlanRequestDto.PlaceInfo firstPlace = places.get(0);
+      return firstPlace;
+    }
   }
 
   private double calculateDistance(Long placeId1, Long placeId2) {
@@ -83,10 +95,6 @@ public class DistanceCalculationService {
       .orElseThrow(() -> new IllegalArgumentException("Place not found with id: " + placeId1));
     Place place2 = placeRepository.findById(placeId2)
       .orElseThrow(() -> new IllegalArgumentException("Place not found with id: " + placeId2));
-
-    // 위도와 경도 값 로그 확인
-    log.debug("Place1: {}, Lat: {}, Lng: {}", place1.getTitle(), place1.getLat(), place1.getLng());
-    log.debug("Place2: {}, Lat: {}, Lng: {}", place2.getTitle(), place2.getLat(), place2.getLng());
 
     final int R = 6371; // 지구의 반지름 (km)
 
@@ -98,6 +106,6 @@ public class DistanceCalculationService {
     double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     double distance = R * c;
 
-    return Math.round(distance);
+    return Math.round(distance * 10.0) / 10.0; // 소수점 첫번째 자리까지 반올림.
   }
 }

@@ -1,9 +1,9 @@
 package com.nagne.domain.user.controller;
 
+import com.nagne.domain.plan.dto.PlanDto;
 import com.nagne.domain.user.dto.UserJoinDto;
 import com.nagne.domain.user.dto.UserPostDto;
 import com.nagne.domain.user.dto.UserResponseDto;
-import com.nagne.domain.user.entity.User;
 import com.nagne.domain.user.service.UserService;
 import com.nagne.global.error.ErrorCode;
 import com.nagne.global.error.exception.ApiException;
@@ -67,5 +67,14 @@ public class UserController {
   public ApiResponse<?> deleteUser(@PathVariable Long id) {
     userService.deleteUser(id);
     return ApiResponse.success();
+  }
+
+  @GetMapping("/{userId}/plans")
+  public ApiResponse<?> getUserPlans(@PathVariable Long userId) {
+    List<PlanDto> userPlanListDto = userService.getUserPlanList(userId);
+    if (userPlanListDto == null) {
+      return ApiResponse.success(null);
+    }
+    return ApiResponse.success(userPlanListDto);
   }
 }
