@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PlaceService {
-
+  
   private final PlaceReader placeReader;
-
+  
   public ResponsePlaceDto fetchPlaceByRegion(ReqPlaceDto reqPlaceDto) {
-
+    
     return placeReader.readPlace(reqPlaceDto);
   }
-
-
+  
+  
 }

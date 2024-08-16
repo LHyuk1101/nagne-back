@@ -24,28 +24,28 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User extends BaseEntity {
-
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id")
   private Long id;
-
+  
   @Column(nullable = false, unique = true)
   private String email;
-
+  
   private String password;
-
+  
   @Column(nullable = false)
   private String nickname;
-
+  
   private Integer nation;
-
+  
   private String profileImg;
-
+  
   @Enumerated(EnumType.STRING)
   private UserRole role;
-
+  
   private Boolean termAgreed;
-
+  
 }
 
