@@ -3,7 +3,6 @@ package com.nagne.domain.plan.controller;
 import com.nagne.domain.plan.dto.PlanRequestDto;
 import com.nagne.domain.plan.dto.PlanResponseDto;
 import com.nagne.domain.plan.service.LLMService;
-import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 
 @RestController
 @RequestMapping("/api/llm")
@@ -24,16 +24,22 @@ public class LLMController {
   public LLMController(LLMService llmService) {
     this.llmService = llmService;
   }
-
+  
   @PostMapping("/create-plan")
-  public CompletableFuture<ResponseEntity<PlanResponseDto>> generatePlan(
+  public DeferredResult<ResponseEntity<PlanResponseDto>> generatePlan(
     @RequestBody PlanRequestDto request) {
-
     Long userId = request.getUserId();  // 요청하고 userId를 받아옴
-    return llmService.generateAndSavePlan(request, userId)
+    DeferredResult<ResponseEntity<PlanResponseDto>> deferredResult = new DeferredResult<>(60000L);
+    llmService.generateAndSavePlan(request, userId)
       .thenApply(ResponseEntity::ok)
       .exceptionally(ex -> {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-      });
+      })
+      .thenAccept(deferredResult::setResult);
+    deferredResult.onTimeout(() -> deferredResult.setErrorResult(
+      ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body("Request timeout occurred.")));
+    return deferredResult;
   }
+  
 }
+
