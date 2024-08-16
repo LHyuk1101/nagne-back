@@ -125,6 +125,6 @@ public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
 
   private BooleanExpression searchTermLike(String searchTerm) {
     return StringUtils.hasText(searchTerm) ?
-      QPlace.place.title.like("%" + searchTerm.trim() + "%") : null;
+      QPlace.place.title.containsIgnoreCase(searchTerm.trim()) : null;
   }
 }
