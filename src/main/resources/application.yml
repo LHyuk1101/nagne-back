@@ -18,6 +18,8 @@ springdoc:
   api-docs:
     enabled: true
 
+logging:
+  config: classpath:logback-${spring.profiles.active}.xml
 
 ---
 spring.config.activate.on-profile: local
@@ -41,7 +43,6 @@ app:
   base-url: "http://localhost:5173"
   base-api-url: "http://localhost:8080"
   secure-cookie: false
-
 ---
 spring.config.import: classpath:application-db.yml
 spring.config.activate.on-profile: dev
@@ -100,5 +101,8 @@ app:
   base-api-url: "https://api.nagne.site"
   secure-cookie: true
 
+logging:
+  discord:
+    webhook-uri-local: ${DISCORD_WEBHOOK_PROD_URL}
 
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+  <appender class="com.nagne.global.logger.CustomDiscordAppender" name="DISCORD">
+    <avatarUrl>
+      https://img.freepik.com/premium-photo/server-logs-analysis-closeup-developing-programming-and-coding-technologies-developer-working-on-web-sites-codes-in-office_372999-779.jpg
+    </avatarUrl>
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %logger{40} [%-5level] %msg %n</pattern>
+    </layout>
+    <tts>false</tts>
+    <username>Spring-Server-log</username>
+    <webhookUri>${DISCORD_WEBHOOK_URI}</webhookUri>
+  </appender>
+  <!--Discord Log-->
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="Console">
+    <encoder>
+      <Pattern>[콘솔] %d{HH:mm:ss.SSS} [%-5level] %logger{36} - %msg%n</Pattern>
+    </encoder>
+  </appender>
+  <appender class="ch.qos.logback.classic.AsyncAppender" name="ASYNC_DISCORD">
+    <appender-ref ref="DISCORD"/>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+  </appender>
+
+  <!--Consol appender 설정-->
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+  <root level="INFO">
+    <appender-ref ref="Console"/>
+    <appender-ref ref="ASYNC_DISCORD"/>
+  </root>
+
+  <!--로그 레벨 지정-->
+  <springProperty name="DISCORD_WEBHOOK_URI" source="logging.discord.webhook-uri-local"/>
+</configuration>
