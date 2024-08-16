@@ -27,7 +27,7 @@ public class Template {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name= "template_id")
+  @Column(name = "template_id")
   private Long id;
 
   @Column(name = "days")

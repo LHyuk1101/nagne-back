@@ -83,11 +83,9 @@ public class DistanceCalculationService {
       .findFirst();
 
     if (accommodation.isPresent()) {
-      log.info("Found accommodation as base place: {}", accommodation.get().getName());
       return accommodation.get();
     } else {
       PlanRequestDto.PlaceInfo firstPlace = places.get(0);
-      log.warn("No accommodation found. Using first place as base: {}", firstPlace.getName());
       return firstPlace;
     }
   }
@@ -97,10 +95,6 @@ public class DistanceCalculationService {
       .orElseThrow(() -> new IllegalArgumentException("Place not found with id: " + placeId1));
     Place place2 = placeRepository.findById(placeId2)
       .orElseThrow(() -> new IllegalArgumentException("Place not found with id: " + placeId2));
-
-    // 위도와 경도 값 로그 확인
-    log.debug("Place1: {}, Lat: {}, Lng: {}", place1.getTitle(), place1.getLat(), place1.getLng());
-    log.debug("Place2: {}, Lat: {}, Lng: {}", place2.getTitle(), place2.getLat(), place2.getLng());
 
     final int R = 6371; // 지구의 반지름 (km)
 

@@ -1,8 +1,8 @@
 package com.nagne.domain.plan.repository;
 
-import com.nagne.domain.plan.dto.PlanResponseDto;
+import com.nagne.domain.plan.dto.PlanUserResponseDto;
 
 public interface PlanRepositoryCustom {
 
-  PlanResponseDto findByPlanId(Long planId);
+  PlanUserResponseDto findByPlanId(Long planId);
 }

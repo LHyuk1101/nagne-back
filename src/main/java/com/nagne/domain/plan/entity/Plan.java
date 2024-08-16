@@ -70,11 +70,10 @@ public class Plan extends BaseEntity {
 
   @Getter
   public enum Status {
-    BEGIN("BEGIN")
-    , END("END");
+    BEGIN("BEGIN"), END("END");
 
     Status(String name) {
-     this.name = name;
+      this.name = name;
     }
 
     private String name;

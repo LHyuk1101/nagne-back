@@ -6,10 +6,12 @@ import java.nio.file.AccessDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -99,6 +101,16 @@ public class GlobalExceptionHandler {
       ErrorCode.HANDLE_ACCESS_DENIED);
     return new ResponseEntity<>(response, HttpStatus.valueOf(
       ErrorCode.HANDLE_ACCESS_DENIED.getStatus()));
+  }
+
+  /**
+   * @PreAuthorize에서 올바른 권한이 없을 경우 발생함.
+   */
+  @ExceptionHandler(AuthorizationDeniedException.class)
+  @ResponseStatus(HttpStatus.FORBIDDEN)
+  public ApiResponse<?> handleAuthorizationException(AuthorizationDeniedException ex) {
+    // 로깅 등 필요한 처리를 여기서 수행할 수 있습니다.
+    return ApiResponse.error(ErrorCode.FORBIDDEN);
   }
 
   /**

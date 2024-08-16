@@ -2,11 +2,14 @@ package com.nagne.security.config;
 
 import com.nagne.config.WebConfig;
 import com.nagne.domain.user.repository.UserRepository;
+import com.nagne.global.error.exception.CustomAccessDeniedHandler;
 import com.nagne.global.error.exception.SecurityConfigurationException;
+import com.nagne.security.filter.CustomAuthenticationEntryPoint;
 import com.nagne.security.filter.CustomCorsFilter;
 import com.nagne.security.filter.JwtAuthenticationFilter;
 import com.nagne.security.jwt.JwtTokenProvider;
-import com.nagne.security.oauth.CustomAuthSuccessHandler;
+import com.nagne.security.oauth.CustomOAuth2FailureHandler;
+import com.nagne.security.oauth.CustomOAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -34,14 +37,17 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final CustomAuthSuccessHandler customAuthSuccessHandler;
+  private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
+  private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
+  private final CustomAccessDeniedHandler customAccessDeniedHandler;
   private final JwtTokenProvider jwtTokenProvider;
   private final UserRepository userRepository;
   private final WebConfig webConfig;
   private final CustomCorsFilter customCorsFilter;
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http)
+  public SecurityFilterChain securityFilterChain(HttpSecurity http,
+    CustomAuthenticationEntryPoint customAuthenticationEntryPoint)
     throws SecurityConfigurationException {
     try {
       http
@@ -51,15 +57,8 @@ public class SecurityConfig {
         )
         .authorizeHttpRequests((authorizeRequests) ->
           authorizeRequests
-            .requestMatchers(HttpMethod.GET, "/").permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() //preflight 요청을 처리하기위해 사용
-            .requestMatchers("/api/auth/**").permitAll()
-            .requestMatchers("/api/login/oauth2/**").permitAll()
-            .requestMatchers("/api/place/**").permitAll()
-            .requestMatchers("/api/llm/**").permitAll()  // LLM API 접근 허용
-            .requestMatchers("/api/templates/**").permitAll()
-            .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs").permitAll()
-            .requestMatchers("/api/populardestinations/**").permitAll()
+            .requestMatchers(HttpMethod.OPTIONS).permitAll() //preflight 요청을 처리하기위해 사용
+            .requestMatchers(PublicApiPaths.PATHS.toArray(new String[0])).permitAll()
             .anyRequest().authenticated()
         )
         .oauth2Login(oauth2Login ->
@@ -72,21 +71,28 @@ public class SecurityConfig {
               authorizationEndpoint
                 .baseUri("/api/login/oauth2/authorization")
             )
-            .successHandler(customAuthSuccessHandler)
+            .successHandler(customOAuth2SuccessHandler)
+            .failureHandler(customOAuth2FailureHandler)
         )
         .logout(logout -> logout
           .logoutUrl("/logout")
-          .logoutSuccessHandler(customAuthSuccessHandler)
+          .logoutSuccessHandler(customOAuth2SuccessHandler)
           .invalidateHttpSession(true)
           .deleteCookies(JwtConfig.REFRESH_JWT_COOKIE_NAME)
         )
+        .addFilterBefore(customCorsFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(
           new JwtAuthenticationFilter(userRepository, jwtTokenProvider, customCorsFilter),
           UsernamePasswordAuthenticationFilter.class)
         .formLogin(AbstractHttpConfigurer::disable)
-        .httpBasic(AbstractHttpConfigurer::disable);
-
-      http.addFilterBefore(customCorsFilter, UsernamePasswordAuthenticationFilter.class);
+        .httpBasic(AbstractHttpConfigurer::disable)
+        .exceptionHandling(exceptionHandling ->
+          exceptionHandling
+            .authenticationEntryPoint(customAuthenticationEntryPoint)
+        )
+        .exceptionHandling(exceptions -> exceptions
+          .accessDeniedHandler(customAccessDeniedHandler)
+        );
 
       return http.build();
     } catch (Exception e) {
@@ -134,7 +140,7 @@ public class SecurityConfig {
   @ConditionalOnProperty(name = "springdoc.swagger-ui.enabled", havingValue = "true")
   public WebSecurityCustomizer swaggerCustomizer() {
     return web -> web.ignoring()
-      .requestMatchers("/swagger-ui/**", "/v3/api-docs/**");
+      .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**");
   }
 
 }

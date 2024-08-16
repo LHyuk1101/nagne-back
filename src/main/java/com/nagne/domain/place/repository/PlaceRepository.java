@@ -12,17 +12,30 @@ import org.springframework.data.repository.query.Param;
 
 public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceRepositoryCustom {
 
-  @Query(
-    "SELECT DISTINCT new com.nagne.domain.place.dto.PlaceDTO(p.id, p.area, p.title, p.address, "
-      + "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), p.lat, p.lng, p.likes, p.thumbnailUrl, pi.imgUrl) "
-      + "FROM Place p "
-      + "LEFT JOIN Store s ON s.place.id = p.id "
-      + "LEFT JOIN p.placeImgs pi "
-      + "WHERE p.area.areaCode = :areaCode "
-      + "AND (LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))) "
-      + "ORDER BY p.likes DESC, p.id")
-  List<PlaceDTO> searchPlacesByRegionAndKeyword(@Param("areaCode") int areaCode,
-    @Param("keyword") String keyword);
+  // id를 기반으로 Place 정보를 가져오는 쿼리
+  @Query("SELECT new com.nagne.domain.place.dto.PlaceDTO(p.id, p.area, p.title, p.address, "
+    + "p.contentTypeId, p.overview, COALESCE(s.contactNumber, ''), COALESCE(s.openTime, ''), "
+    + "p.lat, p.lng, p.likes, p.thumbnailUrl, pi.imgUrl) "
+    + "FROM Place p "
+    + "LEFT JOIN Store s ON s.place.id = p.id "
+    + "LEFT JOIN p.placeImgs pi "
+    + "WHERE p.id = :id")
+  PlaceDTO findPlaceDetailsById(@Param("id") Long id);
+
+//  @Query(
+//    value = "SELECT p.place_id, p.area_code, p.title, p.address, p.content_type_id, p.overview, "
+//      + "COALESCE(s.contact_number, '') AS contact_number, COALESCE(s.open_time, '') AS open_time, "
+//      + "p.lat, p.lng, p.likes, p.thumbnail_url, pi.img_url "
+//      + "FROM place p "
+//      + "LEFT JOIN store s ON s.place_id = p.place_id "
+//      + "LEFT JOIN place_img pi ON pi.place_id = p.place_id "
+//      + "WHERE p.area_code = :areaCode "
+//      + "AND MATCH(p.title) AGAINST(:keyword IN BOOLEAN MODE) "
+//      + "ORDER BY p.likes DESC, p.place_id",
+//    nativeQuery = true
+//  )
+//  List<Object[]> searchPlacesByRegionAndKeyword(@Param("areaCode") int areaCode,
+//    @Param("keyword") String keyword);
 
   // Area 엔티티의 areaCode 필드를 참조하도록 수정
   List<Place> findByContentTypeIdAndArea_AreaCode(Long contentTypeId, Integer areaCode);

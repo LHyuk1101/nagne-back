@@ -20,7 +20,8 @@ public class TemplateDto {
   private String reasoning;
   private String placeImgUrls;
 
-  public TemplateDto(Long id, Integer days, Integer order, Integer moveTime, Long placeId, String title,
+  public TemplateDto(Long id, Integer days, Integer order, Integer moveTime, Long placeId,
+    String title,
     Long contentTypeId, String placeSummary, String reasoning, String placeImgUrls) {
     this.id = id;
     this.days = days;
