@@ -103,6 +103,6 @@ app:
 
 logging:
   discord:
-    webhook-uri-local: ${DISCORD_WEBHOOK_PROD_URL}
+    webhook-uri-prod: ${DISCORD_WEBHOOK_PROD_URL}
 
 
