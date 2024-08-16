@@ -304,7 +304,7 @@ values (1, 'http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg'),
        (40, 'http://tong.visitkorea.or.kr/cms/resource/09/2363709_image3_1.jpg');
 
 -- Plan 데이터 삽입
-INSERT INTO plans (user_id, area_code, status, start_day, end_day, subject, overview, thumbnail_url,
+INSERT INTO plans (user_id, area_code, status, start_day, end_day, subject, overview, thumbnail,
                    created_at, updated_at)
 VALUES (2, 1, 'BEGIN', '2023-09-01', '2023-09-03', '서울 역사 탐방', '서울의 역사적 명소를 둘러보는 3일 여행',
         'https://media.istockphoto.com/id/1470153983/ko/%EC%82%AC%EC%A7%84/%EB%A1%AF%EB%8D%B0%EC%9B%94%EB%93%9C%ED%83%80%EC%9B%8C-%EC%84%9C%EC%9A%B8-%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD.jpg?s=2048x2048&w=is&k=20&c=W7PkziEX0IEOdwD9sFz4YXNeq3cmT5gU7zp8kk0sFkc=',
