@@ -10,7 +10,8 @@ public final class PublicApiPaths {
     "/api/login/**",
     "/api/place/**",
     "/api/templates/**",
-    "/api/llm/**"
+    "/api/llm/**",
+    "/api/populardestinations/**"
 //    "/api/users/**"
   );
 

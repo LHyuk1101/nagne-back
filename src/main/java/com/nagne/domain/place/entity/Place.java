@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -69,6 +70,9 @@ public class Place extends BaseEntity {
   @Builder.Default
   @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
   private List<PlaceImg> placeImgs = new ArrayList<>();
+
+  @OneToOne(mappedBy = "place", fetch = FetchType.LAZY)
+  private Store store;
 
   public enum ApiType {
     TOUR, GOOGLE, NONE
