@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/populardestinations")
 public class PopularDestinationController {
+  
   private final PopularDestinationService popularDestinationService;
-
+  
   @GetMapping
   public ResponseEntity<List<PopularDestinationDto>> getPopularDestinations() {
     List<PopularDestinationDto> popularDestinations = popularDestinationService.getTop4PopularDestinations();

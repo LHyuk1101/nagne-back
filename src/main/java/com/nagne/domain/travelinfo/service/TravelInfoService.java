@@ -19,29 +19,29 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class TravelInfoService {
-
+  
   private final PlaceReader placeReader;
-
+  
   private final PlaceRepository placeRepository;
   private final PlaceRepositoryCustomImpl placeRepositoryCustom;
-
+  
   // id를 기반으로 PlaceDTO를 가져오는 서비스 메서드
   public PlaceDTO getPlaceById(Long id) {
     return placeRepository.findPlaceDetailsById(id);
   }
-
+  
   public List<PlaceDTO> searchPlacesByRegionAndKeyword(int areaCode, String keyword) {
     return placeRepositoryCustom.searchPlacesByRegionAndKeyword(areaCode, keyword);
   }
-
+  
   public ResponsePlaceDto fetchPlaceByAreaName(ReqPlaceDto reqPlaceDto) {
     return placeReader.readPlace(reqPlaceDto);
   }
-
+  
   public List<PlaceDTOforTravelInfo> findPlaces(Long contentTypeId, Integer areaCode) {
     List<Place> places = placeRepository.findByContentTypeIdAndArea_AreaCode(contentTypeId,
       areaCode);
-
+    
     return places.stream().map(place ->
       PlaceDTOforTravelInfo.builder()
         .id(place.getId())
@@ -50,26 +50,26 @@ public class TravelInfoService {
         .overview(place.getOverview())
         .build()).collect(Collectors.toList());
   }
-
+  
   public List<PlaceDTO> findPlacesByRegion(int areaCode) {
     Pageable pageable = PageRequest.of(0, 10);
-
+    
     // contentTypeId 76의 상위 10개 데이터 가져오기
     List<PlaceDTO> top10ContentTypeId76 = placeRepository.findTopLikesByRegion(
       new Long[]{76L}, areaCode, pageable);
-
+    
     // contentTypeId 82의 상위 10개 데이터 가져오기
     List<PlaceDTO> top10ContentTypeId82 = placeRepository.findTopLikesByRegion(
       new Long[]{82L}, areaCode, pageable);
-
+    
     // 쌈@뽕한 병합
     List<PlaceDTO> combinedResults = new ArrayList<>();
-
+    
     combinedResults.addAll(top10ContentTypeId76);
     combinedResults.addAll(top10ContentTypeId82);
-
+    
     return combinedResults;
   }
-
-
+  
+  
 }

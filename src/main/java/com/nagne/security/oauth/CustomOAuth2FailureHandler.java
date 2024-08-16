@@ -14,15 +14,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomOAuth2FailureHandler implements AuthenticationFailureHandler {
-
+  
   private final CustomCorsFilter corsFilter;
   private final ObjectMapper objectMapper;
-
+  
   public CustomOAuth2FailureHandler(CustomCorsFilter corsFilter, ObjectMapper objectMapper) {
     this.corsFilter = corsFilter;
     this.objectMapper = objectMapper;
   }
-
+  
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
     AuthenticationException exception) throws IOException, ServletException {

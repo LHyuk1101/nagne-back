@@ -13,15 +13,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
+  
   private final ObjectMapper objectMapper;
   private final CustomCorsFilter corsFilter;
-
+  
   public CustomAuthenticationEntryPoint(ObjectMapper objectMapper, CustomCorsFilter corsFilter) {
     this.objectMapper = objectMapper;
     this.corsFilter = corsFilter;
   }
-
+  
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
     AuthenticationException authException) throws ApiException, IOException {

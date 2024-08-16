@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CustomCorsFilter extends HttpFilter {
-
+  
   public void setCorsHeaders(HttpServletRequest request, HttpServletResponse response) {
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
+    
     String origin = request.getHeader("Origin");
     if (origin != null) {
       response.setHeader("Access-Control-Allow-Origin", origin);
@@ -29,7 +29,7 @@ public class CustomCorsFilter extends HttpFilter {
       "Authorization, Content-Type, X-Requested-With");
     response.setHeader("Access-Control-Expose-Headers", "Authorization");
   }
-
+  
   @Override
   public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
     throws IOException, ServletException {

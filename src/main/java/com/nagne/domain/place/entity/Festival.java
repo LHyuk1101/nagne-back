@@ -20,18 +20,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 public class Festival {
-
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "festival_id")
   private Long id;
-
+  
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "place_id")
   private Place place;
-
+  
   private LocalDate eventStartDate;
-
+  
   private LocalDate eventEndDate;
-
+  
 }

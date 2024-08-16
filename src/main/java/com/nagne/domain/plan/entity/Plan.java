@@ -30,55 +30,55 @@ import org.hibernate.annotations.DynamicUpdate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Plan extends BaseEntity {
-
+  
   @Id
   @Column(name = "plan_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private User user;
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "area_code")
   private Area area;
-
+  
   @Enumerated(EnumType.STRING)
   private Status status;
-
+  
   @Enumerated(EnumType.ORDINAL)
   @Column(columnDefinition = "TINYINT")
   private PlanType type;
-
+  
   private LocalDate startDay;
-
+  
   private LocalDate endDay;
-
+  
   private String subject;
-
+  
   @Column(columnDefinition = "LONGTEXT")
   private String overview;
-
+  
   @Column(length = 500)
   private String thumbnail;
 
 //  @Builder.Default
 //  @OneToMany(mappedBy = "plan")
 //  private List<Review> reviews = new ArrayList<>();
-
-
+  
+  
   @Getter
   public enum Status {
     BEGIN("BEGIN"), END("END");
-
+    
     Status(String name) {
       this.name = name;
     }
-
+    
     private String name;
   }
-
+  
   public enum PlanType {
     LLM, CUSTOM
   }

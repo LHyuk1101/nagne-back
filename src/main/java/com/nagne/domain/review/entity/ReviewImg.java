@@ -22,26 +22,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ReviewImg {
-
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
+  
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "review_id")
   private Review review;
-
+  
   private Integer byteSize;
-
+  
   private Integer height;
-
+  
   private Integer width;
-
+  
   @Column(length = 100)
   private String domain;
-
+  
   @Column(length = 500)
   private String domainPath;
-
+  
   private Boolean thumbnailYn;
 }

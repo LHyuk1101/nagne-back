@@ -16,11 +16,11 @@ import org.springframework.web.context.request.async.DeferredResult;
 @RestController
 @RequestMapping("/api/llm")
 public class LLMController {
-
+  
   private static final Logger log = LoggerFactory.getLogger(LLMController.class);
-
+  
   private final LLMService llmService;
-
+  
   public LLMController(LLMService llmService) {
     this.llmService = llmService;
   }
