@@ -29,26 +29,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Review extends BaseEntity {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
   private User user;
-  
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "plan_id")
   private Plan plan;
-  
+
   @Column(columnDefinition = "LONGTEXT")
   private String text;
-  
+
   private Integer voteCount;
-  
+
   private Long contentsId;
-  
+
   @Builder.Default
   @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ReviewImg> reviewImgs = new ArrayList<>();

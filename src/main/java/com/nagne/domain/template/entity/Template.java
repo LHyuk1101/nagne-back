@@ -24,29 +24,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Template {
-  
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "template_id")
   private Long id;
-  
+
   @Column(name = "days")
   private Integer day;
-  
+
   @Column(name = "orders")
   private Integer order;
-  
+
   private Integer moveTime;
-  
+
   @Column(columnDefinition = "LONGTEXT")
   private String placeSummary;
-  
+
   @Column(columnDefinition = "LONGTEXT")
   private String reasoning;
-  
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "plan_id")
   private Plan plan;
-  
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "place_id")
   private Place place;

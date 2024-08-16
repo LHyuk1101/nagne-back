@@ -13,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-  
-  
+
+
   private final String REST_API_ROOT = "/api/**";
-  
+
   private final String REST_API_GROUP = "REST API";
-  
+
   @Bean
   public OpenAPI springShopOpenAPI() {
     String jwt = "JWT";
@@ -27,7 +27,7 @@ public class SwaggerConfig {
       .type(SecurityScheme.Type.HTTP)
       .scheme("bearer")
       .bearerFormat("JWT"));
-    
+
     return new OpenAPI()
       .components(components)
       .addSecurityItem(securityRequirement)
@@ -36,15 +36,15 @@ public class SwaggerConfig {
         .version("v0.0.1")
         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
   }
-  
+
   @Bean
   public GroupedOpenApi restApi() {
-    
+
     return GroupedOpenApi.builder()
       .pathsToMatch(REST_API_ROOT)
       .group(REST_API_GROUP)
       .build();
   }
-  
-  
+
+
 }
