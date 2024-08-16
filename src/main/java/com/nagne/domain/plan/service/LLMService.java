@@ -237,7 +237,7 @@ public class LLMService {
   @Transactional
   public Plan savePlanAndTemplates(PlanResponseDto dto, PlanRequestDto request, Long userId) {
     validatePlaceIds(dto, request.getPlaces());
-    String thumbnail = "default_thumbnail_url";  // 기본값 설정
+    String thumbnail = "";  // 기본값 설정
 
     List<Long> placeIds = dto.getDayPlans().stream()
       .flatMap(dayPlan -> dayPlan.getPlaces().stream())
