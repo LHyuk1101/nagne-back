@@ -36,7 +36,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-
+  
   private final CustomOAuth2SuccessHandler customOAuth2SuccessHandler;
   private final CustomOAuth2FailureHandler customOAuth2FailureHandler;
   private final CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -44,7 +44,7 @@ public class SecurityConfig {
   private final UserRepository userRepository;
   private final WebConfig webConfig;
   private final CustomCorsFilter customCorsFilter;
-
+  
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http,
     CustomAuthenticationEntryPoint customAuthenticationEntryPoint)
@@ -93,18 +93,18 @@ public class SecurityConfig {
         .exceptionHandling(exceptions -> exceptions
           .accessDeniedHandler(customAccessDeniedHandler)
         );
-
+      
       return http.build();
     } catch (Exception e) {
       throw new SecurityConfigurationException("Security configuration failed");
     }
   }
-
+  
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowCredentials(true);
-
+    
     configuration.addAllowedOrigin(webConfig.getBaseUrl());
     configuration.addAllowedHeader("*");
     configuration.addAllowedMethod("GET");
@@ -113,34 +113,34 @@ public class SecurityConfig {
     configuration.addAllowedMethod("DELETE");
     configuration.addAllowedMethod("OPTIONS"); //preflight 요청을 처리하기위해 사용
     configuration.addExposedHeader("Authorization");
-
+    
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
   }
-
+  
   @Bean
   public CorsFilter corsFilter() {
     return new CorsFilter(corsConfigurationSource());
   }
-
+  
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
-
+  
   @Bean
   @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
   public WebSecurityCustomizer h2ConsoleCustomizer() {
     return web -> web.ignoring()
       .requestMatchers(PathRequest.toH2Console());
   }
-
+  
   @Bean
   @ConditionalOnProperty(name = "springdoc.swagger-ui.enabled", havingValue = "true")
   public WebSecurityCustomizer swaggerCustomizer() {
     return web -> web.ignoring()
       .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api-docs/**");
   }
-
+  
 }

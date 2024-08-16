@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class CustomTemplateDto {
-
+  
   private Long id;
   private String subject;
   private String overview;

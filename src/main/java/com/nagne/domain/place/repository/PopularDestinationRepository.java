@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PopularDestinationRepository extends JpaRepository<Place, Long> {
-
+  
   @Query("SELECT p FROM Place p " +
     "LEFT JOIN FETCH p.store s " +
     "LEFT JOIN FETCH p.placeImgs img " +
-    "ORDER BY p.likes DESC "+
+    "ORDER BY p.likes DESC " +
     "limit 4")
   List<Place> findTop4ByLikes();
 }

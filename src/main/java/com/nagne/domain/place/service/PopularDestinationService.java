@@ -11,19 +11,20 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PopularDestinationService {
-
+  
   private final PopularDestinationRepository popularDestinationRepository;
-
+  
   public List<PopularDestinationDto> getTop4PopularDestinations() {
     List<Place> places = popularDestinationRepository.findTop4ByLikes();
-
+    
     return places.stream()
       .map(place -> PopularDestinationDto.builder()
         .id(place.getId())
         .address(place.getAddress())
         .contactNumber(place.getStore() != null ? place.getStore().getContactNumber() : null)
         .imgUrl(
-          place.getPlaceImgs() != null && !place.getPlaceImgs().isEmpty() ? place.getPlaceImgs().get(0).getImgUrl()
+          place.getPlaceImgs() != null && !place.getPlaceImgs().isEmpty() ? place.getPlaceImgs()
+            .get(0).getImgUrl()
             : null)
         .likes(place.getLikes())
         .thumbnailUrl(place.getThumbnailUrl())

@@ -11,20 +11,20 @@ import java.nio.charset.StandardCharsets;
 import net.minidev.json.JSONObject;
 
 public class CustomDiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
-
+  
   private String webhookUri;
   private Layout<ILoggingEvent> layout;
-
+  
   @Override
   protected void append(ILoggingEvent eventObject) {
     if (!isStarted()) {
       return;
     }
-
+    
     String message = layout.doLayout(eventObject);
     sendMessageToDiscord(message, eventObject);
   }
-
+  
   private void sendMessageToDiscord(String message, ILoggingEvent event) {
     try {
       URL url = new URL(webhookUri);
@@ -32,15 +32,15 @@ public class CustomDiscordAppender extends UnsynchronizedAppenderBase<ILoggingEv
       connection.setRequestMethod("POST");
       connection.setRequestProperty("Content-Type", "application/json");
       connection.setDoOutput(true);
-
+      
       JSONObject json = new JSONObject();
       json.put("content", formatMessage(message, event));
-
+      
       try (OutputStream os = connection.getOutputStream()) {
         byte[] input = json.toString().getBytes(StandardCharsets.UTF_8);
         os.write(input, 0, input.length);
       }
-
+      
       int responseCode = connection.getResponseCode();
       if (responseCode != HttpURLConnection.HTTP_OK
         && responseCode != HttpURLConnection.HTTP_NO_CONTENT) {
@@ -50,30 +50,30 @@ public class CustomDiscordAppender extends UnsynchronizedAppenderBase<ILoggingEv
       addError("Error sending log message to Discord", e);
     }
   }
-
+  
   private String formatMessage(String message, ILoggingEvent event) {
     StringBuilder sb = new StringBuilder();
     sb.append("**").append(event.getLevel()).append("** - ");
     sb.append(event.getLoggerName()).append("\n");
     sb.append("Thread: ").append(event.getThreadName()).append("\n");
     sb.append("```\n").append(message).append("\n```");
-
+    
     if (event.getThrowableProxy() != null) {
       sb.append("\nException: ").append(event.getThrowableProxy().getClassName())
         .append(" - ").append(event.getThrowableProxy().getMessage());
     }
-
+    
     return sb.toString();
   }
-
+  
   public void setWebhookUri(String webhookUri) {
     this.webhookUri = webhookUri;
   }
-
+  
   public void setLayout(Layout<ILoggingEvent> layout) {
     this.layout = layout;
   }
-
+  
   @Override
   public void start() {
     if (this.webhookUri == null) {

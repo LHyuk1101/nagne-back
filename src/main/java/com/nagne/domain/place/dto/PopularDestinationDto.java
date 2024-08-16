@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PopularDestinationDto {
+  
   private Long id;
   private String address;
   private String contactNumber;

@@ -12,7 +12,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class PlanUserResponseDto {
-
+  
   private Long id;
   private Long userId;
   private String status;
@@ -24,7 +24,7 @@ public class PlanUserResponseDto {
   private String thumbnailUrl;
   private Plan.PlanType type;
   private List<DayPlan> dayPlans;
-
+  
   public PlanUserResponseDto(Long id, Long userId, Plan.Status status, LocalDate startDay,
     LocalDate endDay, Integer areaCode, String areaCodeName, String subject, PlanType type,
     String thumbnailUrl) {
@@ -39,19 +39,19 @@ public class PlanUserResponseDto {
     this.type = type;
     this.thumbnailUrl = thumbnailUrl;
   }
-
+  
   @Getter
   @Builder
   public static class DayPlan {
-
+    
     private int day;
     private List<PlaceDetail> places;
   }
-
+  
   @Getter
   @Builder
   public static class PlaceDetail {
-
+    
     private Long placeId;
     private String title;
     private String contentType;

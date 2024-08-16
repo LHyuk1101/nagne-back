@@ -7,16 +7,16 @@ import org.springframework.context.annotation.Configuration;
 import java.time.Duration;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
+@Configuration
+public class RestTemplateConfig {
   
-  @Configuration
-  public class RestTemplateConfig {
-    
-    @Bean(name = "llmRestTemplate")
-    public RestTemplate llmRestTemplate(RestTemplateBuilder builder) {
-      return builder
-        .setConnectTimeout(Duration.ofSeconds(80))
-        .setReadTimeout(Duration.ofSeconds(80))
-        .additionalMessageConverters(new StringHttpMessageConverter(StandardCharsets.UTF_8))
-        .build();
-    }
+  @Bean(name = "llmRestTemplate")
+  public RestTemplate llmRestTemplate(RestTemplateBuilder builder) {
+    return builder
+      .setConnectTimeout(Duration.ofSeconds(80))
+      .setReadTimeout(Duration.ofSeconds(80))
+      .additionalMessageConverters(new StringHttpMessageConverter(StandardCharsets.UTF_8))
+      .build();
   }
+}
