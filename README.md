@@ -43,6 +43,8 @@
 - **react-query**: 서버 상태를 관리하고, 데이터 페칭 로직을 효율적으로 관리
 - **react-datepicker**: 날짜 선택을 위한 컴포넌트
 - **swiper**: 슬라이더/캐러셀 구현을 위한 라이브러리
+- **react-query**: 데이터 패칭 관리를 react-query를 사용해서 구현했습니다.
+- **axios**: 데이터 패칭은 axios를 사용합니다.
 
 ### Docker
 - **Docker**: 개발 및 배포 환경 유지를 위해 Docker를 사용
